@@ -15,7 +15,7 @@ public class PeerDiscovery {
 	public static Node parentNode;
 	public static final String broadcastAddress = "255.255.255.255";
 	public static final int broadcastPort = 50008;
-	private static int broadcastInterval = 10;
+	private static int broadcastInterval = 5000;
 
 	private Thread threadListener;
 	private Thread threadBroadcaster;
