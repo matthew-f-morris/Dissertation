@@ -13,38 +13,38 @@ import java.net.InetAddress;
 public class PeerDiscovery {
 	
 	public static Node parentNode;
+	public static final String broadcastAddress = "255.255.255.255";
+	public static final int broadcastPort = 50008;
+	private static int broadcastInterval = 2500;
+	
 	private Thread threadListener;
 	private Thread threadBroadcaster;
 	private BroadcastListener listener;
-	private Broadcaster broadcaster;
-	public static final String broadcastAddress = "255.255.255.255";
-	public static final int broadcastPort = 50008;
-	
-	private static InetAddress inetAddress;
-	private static long interval;
-	
+	private Broadcaster broadcaster;	
 	private static boolean isRunning = true;
 	
-	public PeerDiscovery(Node node, long interval) {
+	private static InetAddress inetAddress;
+	
+	public PeerDiscovery(Node node) {
 
-		PeerDiscovery.interval = interval;
 		PeerDiscovery.parentNode = node;
 		
 		try {
 			
 			PeerDiscovery.inetAddress = InetAddress.getLocalHost();
 			
-		} catch (Exception e) {
-			
+		} catch (Exception e) {			
 			System.out.println(e);
 			e.printStackTrace();
 		}
+		
+		startDiscovery();
 	}
 	
-	public void startDiscovery(int times) {
+	public void startDiscovery() {
 		
 		listener = new BroadcastListener();
-        broadcaster = new Broadcaster(times);        
+        broadcaster = new Broadcaster();        
         
         if(threadBroadcaster == null) {
         	threadBroadcaster = new Thread(broadcaster);
@@ -58,16 +58,10 @@ public class PeerDiscovery {
 	}
 		
 	class Broadcaster implements Runnable {
-		
-		int times = -1;
-		
-		public Broadcaster(int times) {
-			this.times = times;
-		}
 
 		public void run() {
 			
-			//System.out.println("[PEER DISCOVERY] Broadcast started...");			
+			System.out.println("[PEER DISCOVERY] Broadcast started...");			
 					
 			try {			
 				
@@ -84,14 +78,14 @@ public class PeerDiscovery {
 				
 				byte[] messageByte = bos.toByteArray();
 				
-				for (int i = 0; i < times ; i++) {
+				while(isRunning) {
 					
-					//System.out.println("[PEER DISCOVERY] Broadcasting packet...");
+					System.out.println("[PEER DISCOVERY] Broadcasting packet...");
 					socket.send(new DatagramPacket(messageByte, messageByte.length, address, PeerDiscovery.broadcastPort));
 					
 					try {
 						
-						Thread.sleep(PeerDiscovery.interval);
+						Thread.sleep(PeerDiscovery.broadcastInterval);
 					}
 					
 					catch (InterruptedException e){
@@ -133,7 +127,7 @@ public class PeerDiscovery {
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(bis));
 					
 					PeerData data = (PeerData) ois.readObject();
-					//System.out.println("[PEER DISCOVERY] Response recieved from: " + data.getHostname() + "\n");
+					System.out.println("[PEER DISCOVERY] Response recieved from: " + data.getHostname() + "\n");
 					PeerDiscovery.parentNode.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort());
 					ois.close();
 				}

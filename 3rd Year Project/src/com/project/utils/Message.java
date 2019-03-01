@@ -11,7 +11,7 @@ public class Message implements Serializable{
 		text += msg;
 	}
 	
-	public String getNumber() {		
+	public String getText() {		
 		return text;
 	}
 }

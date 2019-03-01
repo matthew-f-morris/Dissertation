@@ -14,8 +14,6 @@ public class Node {
 	
 	private static InetAddress localhost;
 	private static int commPort = 50010;
-	private static int numberOfBroadcasts = 20;
-	private static int broadcastInterval = 2000;
 
     private PeerDiscovery peerDiscoverer;
     private MessageController msgController;
@@ -24,7 +22,8 @@ public class Node {
     	    
     	String hostname = null;
     	
-    	try {    		
+    	try {    	
+    		
     		localhost = InetAddress.getLocalHost();
 			hostname = localhost.getHostName();
 			
@@ -43,9 +42,7 @@ public class Node {
     	peers = new Hashtable<String, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
 
-    	peerDiscoverer = new PeerDiscovery(this, broadcastInterval);
-    	peerDiscoverer.startDiscovery(Node.numberOfBroadcasts);
-    	
+    	peerDiscoverer = new PeerDiscovery(this);    	
     	msgController = new MessageController(peers);    	
     }
     

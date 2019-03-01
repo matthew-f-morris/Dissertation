@@ -30,6 +30,7 @@ public class MessageController {
 	}
 	
 	private void initializeThreads() {
+		System.out.println("Init threads MC");
 		senderChecker = new SenderChecker();
 		threadMessageController = new Thread(senderChecker);
 		threadMessageController.start();
@@ -42,7 +43,7 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 
 		messagesRecieved.add(message);
-		System.out.println("[MESSAGE CONTROLLER] Message added to Queue, Number: " + message.getNumber());
+		System.out.println("[MESSAGE CONTROLLER] Message added to Queue, Number: " + message.getText());
 	}
 
 	private boolean checkEmptySend() {
@@ -78,7 +79,7 @@ public class MessageController {
 		} else {
 
 			for (Message msg : messagesToSend) {
-				System.out.println("[MESSAGE CONTROLLER] Messaages To Send: " + msg.getNumber());
+				System.out.println("[MESSAGE CONTROLLER] Messaages To Send: " + msg.getText());
 			}
 
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesToSend.size());
@@ -93,7 +94,7 @@ public class MessageController {
 		} else {
 
 			for (Message msg : messagesRecieved) {
-				System.out.print("[MESSAGE CONTROLLER] Messaages Recieved: " + msg.getNumber());
+				System.out.print("[MESSAGE CONTROLLER] Messaages Recieved: " + msg.getText());
 			}
 
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesRecieved.size());
@@ -103,6 +104,8 @@ public class MessageController {
 	class SenderChecker extends Thread {
 
 		public void run() {
+			
+			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
 			
 			while(isRunning) {
 				
@@ -119,7 +122,7 @@ public class MessageController {
 					
 					for(PeerData peer : peers.values()) {
 						sender.sendMessage(peer.getAddress(), toSend);
-						//System.out.println("DEBUG | " + peer.getAddress().getHostAddress());
+						System.out.println("DEBUG | " + peer.getAddress().getHostAddress());
 					}
 					
 				} else {
