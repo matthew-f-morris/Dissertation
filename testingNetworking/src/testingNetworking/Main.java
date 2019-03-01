@@ -1,14 +1,13 @@
 package testingNetworking;
 
-import java.io.IOException;
-
 import testingNetworking.Test; 
 
 public class Main {
 
 	public static void main (String[] args) {
+	
+		Test test = new Test();
+		test.go();
 		
-		Message message = new Message();
-		System.out.println("[MESSAGE CONTROLLER] Message Number: " + message.getNumber());				
 	}
 }
