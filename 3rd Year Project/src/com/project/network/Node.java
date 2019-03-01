@@ -38,7 +38,7 @@ public class Node {
     
     public void initialise() {  
     	
-    	System.out.println("[NODE] Initialising Node...\n");
+    	System.out.println("[NODE] Initialising Node...");
     	
     	peers = new Hashtable<String, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
@@ -46,7 +46,7 @@ public class Node {
     	peerDiscoverer = new PeerDiscovery(this, broadcastInterval);
     	peerDiscoverer.startDiscovery(Node.numberOfBroadcasts);
     	
-    	msgController = new MessageController(this);    	
+    	msgController = new MessageController(peers);    	
     }
     
 	public void addPeer(String uuid, String hostname, InetAddress address, int port) {
@@ -64,9 +64,14 @@ public class Node {
 		msgController.queueToSend(message);
 	}
 	
-	public void getNewMessage() {
-		Message temp = msgController.getNewMessage();
-		temp.getNumber();
+	public void viewMessages(String text) {
+		
+		if(text.equals("Send")) {
+			msgController.peekSend();
+			
+		} else {
+			msgController.peekRecieved();
+		}
 	}
 	
 	public void viewMessages() {

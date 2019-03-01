@@ -1,86 +1,133 @@
 package com.project.network;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 import com.project.utils.Message;
 
 public class MessageController {
-	
-	private Node node;
+
+	private Hashtable<String, PeerData> peers;
 	private MessageSender sender;
 	private MessageReciever reciever;
 	private LinkedList<Message> messagesRecieved;
 	private LinkedList<Message> messagesToSend;
+	private final int sendInterval = 1000;
 	
-	public MessageController(Node node) {
-		
-		this.node = node;		
+	private boolean isRunning = true;
+	private Thread threadMessageController;
+	private SenderChecker senderChecker;
+
+	public MessageController(Hashtable<String, PeerData> peers) {
+
+		this.peers = peers;
 		sender = new MessageSender(this);
 		reciever = new MessageReciever(this);
 		messagesRecieved = new LinkedList<Message>();
 		messagesToSend = new LinkedList<Message>();
+		
+		initializeThreads();
 	}
 	
+	private void initializeThreads() {
+		senderChecker = new SenderChecker();
+		threadMessageController = new Thread(senderChecker);
+		threadMessageController.start();
+	}
+
 	public void queueToSend(Message message) {
 		messagesToSend.add(message);
 	}
-	
-	public void sendMessage(PeerData data, Message message) { 		
-		sender.sendMessage(data.getAddress(), message);
-	}
 
 	public void addToRecieved(Message message) {
-		System.out.println("[MESSAGE CONTROLLER] Message Number: " + message.getNumber());
-	}	
-		
+
+		messagesRecieved.add(message);
+		System.out.println("[MESSAGE CONTROLLER] Message added to Queue, Number: " + message.getNumber());
+	}
+
 	private boolean checkEmptySend() {
-		if(messagesToSend.size() <= 0 ) {
+
+		if (messagesToSend.size() <= 0) {
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
-	
+
 	private boolean checkEmptyRecieved() {
-		if(messagesRecieved.size() <= 0 ) {
+
+		if (messagesRecieved.size() <= 0) {
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
-	
+
 	public Message getNewMessage() {
-		
-		if(checkEmptyRecieved()) {
-			return new Message(-1);
+
+		if (checkEmptyRecieved()) {
+			return new Message(null);
 		} else {
 			return messagesRecieved.removeFirst();
 		}
 	}
-	
-	public void peekSend() {		
-		
-		if(checkEmptySend()) {
+
+	public void peekSend() {
+
+		if (checkEmptySend()) {
 			System.out.println("[MESSAGE CONTROLLER] Messages to send is empty!");
-			
+
 		} else {
-			
-			for(Message msg : messagesToSend) {
+
+			for (Message msg : messagesToSend) {
 				System.out.println("[MESSAGE CONTROLLER] Messaages To Send: " + msg.getNumber());
 			}
-			
+
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesToSend.size());
-		}		
+		}
 	}
-	
-	public void peekRecieved() {		
-		
-		if(checkEmptyRecieved()) {
+
+	public void peekRecieved() {
+
+		if (checkEmptyRecieved()) {
 			System.out.println("[MESSAGE CONTROLLER] Recieved Messages is empty!");
-			
+
 		} else {
-			
-			for(Message msg : messagesRecieved) {
+
+			for (Message msg : messagesRecieved) {
 				System.out.print("[MESSAGE CONTROLLER] Messaages Recieved: " + msg.getNumber());
 			}
-			
+
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesRecieved.size());
-		}		
-	}	
+		}
+	}
+
+	class SenderChecker extends Thread {
+
+		public void run() {
+			
+			while(isRunning) {
+				
+				try {
+					
+					Thread.sleep(sendInterval);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				if(messagesToSend.size() >= 1) {
+					
+					Message toSend = messagesToSend.removeLast();
+					
+					for(PeerData peer : peers.values()) {
+						sender.sendMessage(peer.getAddress(), toSend);
+						//System.out.println("DEBUG | " + peer.getAddress().getHostAddress());
+					}
+					
+				} else {
+					System.out.println("No messages to send");
+				}
+			}
+			
+			System.out.println("[MESSAGE CONTROLLER] SenderChecker Thread terminated...");
+		}
+	}
 }

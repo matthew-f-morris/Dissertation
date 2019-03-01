@@ -67,7 +67,7 @@ public class PeerDiscovery {
 
 		public void run() {
 			
-			System.out.println("[PEER DISCOVERY] Broadcast started...");			
+			//System.out.println("[PEER DISCOVERY] Broadcast started...");			
 					
 			try {			
 				
@@ -86,7 +86,7 @@ public class PeerDiscovery {
 				
 				for (int i = 0; i < times ; i++) {
 					
-					System.out.println("[PEER DISCOVERY] Broadcasting packet...\n");
+					//System.out.println("[PEER DISCOVERY] Broadcasting packet...");
 					socket.send(new DatagramPacket(messageByte, messageByte.length, address, PeerDiscovery.broadcastPort));
 					
 					try {
@@ -133,7 +133,7 @@ public class PeerDiscovery {
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(bis));
 					
 					PeerData data = (PeerData) ois.readObject();
-					System.out.println("[PEER DISCOVERY] Response recieved from: " + data.getHostname() + "\n");
+					//System.out.println("[PEER DISCOVERY] Response recieved from: " + data.getHostname() + "\n");
 					PeerDiscovery.parentNode.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort());
 					ois.close();
 				}
@@ -149,54 +149,3 @@ public class PeerDiscovery {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-//public void broadcast(int times) throws IOException {
-//
-//DatagramSocket socket = new DatagramSocket();
-//InetAddress address = InetAddress.getByName(PeerDiscovery.broadcastAddress);
-//		
-//try {			
-//	
-//	ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//	ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
-//	
-//	oos.flush();
-//	oos.writeObject(PeerDiscovery.parentNode.nodeInfo);
-//	oos.flush();
-//	oos.close();
-//	
-//	byte[] messageByte = bos.toByteArray();
-//	
-//	for (int i = 0; i < times ; i++) {
-//		
-//		System.out.println("Broadcasting packet...\n");
-//		socket.send(new DatagramPacket(messageByte, messageByte.length, address, PeerDiscovery.broadcastPort));
-//		
-//		try {
-//			
-//			Thread.sleep(PeerDiscovery.interval);
-//		}
-//		
-//		catch (InterruptedException e){
-//			System.out.println(e);
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	socket.close();
-//}
-//
-//catch (Exception e) {
-//	System.out.println(e);
-//	e.printStackTrace();
-//}
-//
-//System.out.println("Thread Ended");	   
-//}

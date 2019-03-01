@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.UUID;
 
-public class PeerData implements Serializable, Cloneable {
+public class PeerData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

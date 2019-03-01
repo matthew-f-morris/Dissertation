@@ -16,6 +16,7 @@ public class MessageReciever {
 	
 	public MessageReciever(MessageController controller) {
 		this.controller = controller;
+		startRecieving();
 	}
 	
 	public void startRecieving() {
