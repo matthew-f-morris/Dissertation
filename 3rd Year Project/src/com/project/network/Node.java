@@ -2,7 +2,6 @@ package com.project.network;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -15,8 +14,8 @@ public class Node {
 	
 	private static InetAddress localhost;
 	private static int commPort = 50010;
-	private static int numberOfBroadcasts = 10;
-	private static int broadcastInterval = 4000;
+	private static int numberOfBroadcasts = 20;
+	private static int broadcastInterval = 2000;
 
     private PeerDiscovery peerDiscoverer;
     private MessageController msgController;
@@ -57,11 +56,7 @@ public class Node {
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
     		
-    		try {
-				System.out.println("Added New Peer: " + InetAddress.getLocalHost().toString());
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
+    		System.out.println("Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
     }
 	
