@@ -25,18 +25,11 @@ public class MessageReciever {
 	public void startRecieving() {
 		
 		serversocket = new ClientServerSocket();
+		
 		if(threadServerSocket == null) {
 			threadServerSocket = new Thread(serversocket);
 			threadServerSocket.start();
 		}
-		
-		//http://www.java2s.com/Code/Java/Network-Protocol/Startnewthreadforeachclient.htm
-		//accept connection, start a thread to deal with it
-		
-		//while(isRunning) {
-			
-			
-		//}		
 	}
 	
 	class ClientServerSocket extends Thread {
@@ -49,10 +42,10 @@ public class MessageReciever {
 				
 				servSocket = new ServerSocket(commPort);
 				
-			} catch (IOException e1) {
+			} catch (IOException e) {
 				
-				System.out.println(e1);
-				e1.printStackTrace();
+				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -83,15 +76,13 @@ public class MessageReciever {
 		
 		public void run() {
 			
-			//Recieve Messages and send them to the message controller
-			//using controller reference in class above
-			
 			try {
 
 				ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
 				Message message = (Message) ois.readObject();
 				
 				controller.addToRecieved(message);
+				System.out.println("[MESSAGE RECIEVER] Message Recieved: " + message.getText());
 				
 			} catch (IOException | ClassNotFoundException e) {
 				System.out.println(e);

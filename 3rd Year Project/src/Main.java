@@ -1,14 +1,26 @@
+import java.util.Scanner;
+
 import com.project.network.Node;
 import com.project.utils.Message;
 
 public class Main {
 	
+	static Scanner scanner;
+	
 	public static void main (String[] args) {
+		
+		scanner = new Scanner(System.in);
 		
 		Node node = new Node();
 		node.initialise();	
 		node.queueToSend(new Message("TO ALL!"));
-		//node.viewMessages("Send");
+		
+		while(true) {
+			
+			String text = scanner.nextLine();
+			node.queueToSend(new Message(text));
+			
+		}
 	}
 }
 
