@@ -40,7 +40,6 @@ public class MessageSender {
 			
 			try {
 				
-				System.out.println("DEBUG| " + address.getHostAddress());
 				Socket socket = new Socket(address, commPort);
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 				

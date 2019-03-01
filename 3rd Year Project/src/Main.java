@@ -7,10 +7,8 @@ public class Main {
 		
 		Node node = new Node();
 		node.initialise();	
-		System.out.println("CHECKPOINT 1");
-		node.queueToSend(new Message("IronWorks!"));
-		System.out.println("CHECKPOINT 2");
-		node.viewMessages("Send");
+		node.queueToSend(new Message("TO ALL!"));
+		//node.viewMessages("Send");
 	}
 }
 

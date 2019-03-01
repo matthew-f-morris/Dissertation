@@ -13,7 +13,7 @@ public class MessageController {
 	private LinkedList<Message> messagesRecieved;
 	private LinkedList<Message> messagesToSend;
 	private final int sendInterval = 1000;
-	
+
 	private boolean isRunning = true;
 	private Thread threadMessageController;
 	private SenderChecker senderChecker;
@@ -25,12 +25,11 @@ public class MessageController {
 		reciever = new MessageReciever(this);
 		messagesRecieved = new LinkedList<Message>();
 		messagesToSend = new LinkedList<Message>();
-		
+
 		initializeThreads();
 	}
-	
+
 	private void initializeThreads() {
-		System.out.println("Init threads MC");
 		senderChecker = new SenderChecker();
 		threadMessageController = new Thread(senderChecker);
 		threadMessageController.start();
@@ -38,12 +37,13 @@ public class MessageController {
 
 	public void queueToSend(Message message) {
 		messagesToSend.add(message);
+		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message.getText());
 	}
 
 	public void addToRecieved(Message message) {
 
 		messagesRecieved.add(message);
-		System.out.println("[MESSAGE CONTROLLER] Message added to Queue, Number: " + message.getText());
+		System.out.println("[MESSAGE CONTROLLER] Message Recieved: " + message.getText());
 	}
 
 	private boolean checkEmptySend() {
@@ -104,32 +104,28 @@ public class MessageController {
 	class SenderChecker extends Thread {
 
 		public void run() {
-			
+
 			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
-			
-			while(isRunning) {
-				
+
+			while (isRunning) {
+
 				try {
-					
+
 					Thread.sleep(sendInterval);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
-				if(messagesToSend.size() >= 1) {
-					
+
+				if (messagesToSend.size() >= 1) {
+
 					Message toSend = messagesToSend.removeLast();
-					
-					for(PeerData peer : peers.values()) {
+
+					for (PeerData peer : peers.values()) {
 						sender.sendMessage(peer.getAddress(), toSend);
-						System.out.println("DEBUG | " + peer.getAddress().getHostAddress());
 					}
-					
-				} else {
-					System.out.println("No messages to send");
 				}
 			}
-			
+
 			System.out.println("[MESSAGE CONTROLLER] SenderChecker Thread terminated...");
 		}
 	}

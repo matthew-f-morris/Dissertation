@@ -14,6 +14,9 @@ public class MessageReciever {
 	private ServerSocket servSocket = null;
 	private MessageController controller = null;
 	
+	private Thread threadServerSocket;
+	private ClientServerSocket serversocket;
+	
 	public MessageReciever(MessageController controller) {
 		this.controller = controller;
 		startRecieving();
@@ -21,33 +24,53 @@ public class MessageReciever {
 	
 	public void startRecieving() {
 		
-		System.out.println("[MESSAGE RECIEVER] Message Listener Running...");
-		
-		try {
-			
-			servSocket = new ServerSocket(commPort);
-			
-		} catch (IOException e1) {
-			
-			System.out.println(e1);
-			e1.printStackTrace();
+		serversocket = new ClientServerSocket();
+		if(threadServerSocket == null) {
+			threadServerSocket = new Thread(serversocket);
+			threadServerSocket.start();
 		}
 		
 		//http://www.java2s.com/Code/Java/Network-Protocol/Startnewthreadforeachclient.htm
 		//accept connection, start a thread to deal with it
 		
-		while(isRunning) {
+		//while(isRunning) {
+			
+			
+		//}		
+	}
+	
+	class ClientServerSocket extends Thread {
+		
+		public ClientServerSocket() {
+			
+			System.out.println("[MESSAGE RECIEVER] Message Listener Running...");
 			
 			try {
 				
-				Socket socket = servSocket.accept();
-				new ClientHandler(socket).start();
+				servSocket = new ServerSocket(commPort);
 				
-			} catch (IOException e) {
-				System.out.println(e);
-				e.printStackTrace();
+			} catch (IOException e1) {
+				
+				System.out.println(e1);
+				e1.printStackTrace();
 			}
-		}		
+		}
+		
+		public void run() {
+			
+			while(isRunning) {
+				
+				try {
+					
+					Socket socket = servSocket.accept();
+					new ClientHandler(socket).start();
+					
+				} catch (IOException e) {
+					System.out.println(e);
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	class ClientHandler extends Thread {
