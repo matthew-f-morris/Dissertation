@@ -2,6 +2,8 @@ package com.project.network;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -17,6 +19,8 @@ public class Node {
 
     private PeerDiscovery peerDiscoverer;
     private MessageController msgController;
+    
+    public String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     
     public Node() {
     	    
@@ -43,7 +47,7 @@ public class Node {
     	peers.put(nodeInfo.getUuid(), nodeInfo);
 
     	peerDiscoverer = new PeerDiscovery(this);    	
-    	msgController = new MessageController(peers);    	
+    	msgController = new MessageController(peers, nodeInfo.getUuid());    	
     }
     
 	public void addPeer(String uuid, String hostname, InetAddress address, int port) {
@@ -53,7 +57,7 @@ public class Node {
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
     		
-    		System.out.println("[NODE] Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
+    		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
     }
 	

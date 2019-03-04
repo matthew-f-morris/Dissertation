@@ -17,10 +17,12 @@ public class MessageController {
 	private boolean isRunning = true;
 	private Thread threadMessageController;
 	private SenderChecker senderChecker;
+	private String uuid = null;
 
-	public MessageController(Hashtable<String, PeerData> peers) {
+	public MessageController(Hashtable<String, PeerData> peers, String uuid) {
 
 		this.peers = peers;
+		this.uuid = uuid;
 		sender = new MessageSender(this);
 		reciever = new MessageReciever(this);
 		messagesRecieved = new LinkedList<Message>();
@@ -40,8 +42,7 @@ public class MessageController {
 		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message.getText());
 	}
 
-	public void addToRecieved(Message message) {
-
+	public void addToRecieved(Message message) {		
 		messagesRecieved.add(message);
 		
 	}
@@ -68,35 +69,6 @@ public class MessageController {
 			return new Message(null);
 		} else {
 			return messagesRecieved.removeFirst();
-		}
-	}
-
-	class SenderChecker extends Thread {
-
-		public void run() {
-
-			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
-
-			while (isRunning) {
-
-				try {
-
-					Thread.sleep(sendInterval);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-				if (messagesToSend.size() >= 1) {
-
-					Message toSend = messagesToSend.removeLast();
-
-					for (PeerData peer : peers.values()) {
-						sender.sendMessage(peer.getAddress(), toSend);
-					}
-				}
-			}
-
-			System.out.println("[MESSAGE CONTROLLER] SenderChecker Thread terminated...");
 		}
 	}
 	
@@ -127,6 +99,38 @@ public class MessageController {
 			}
 
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesRecieved.size());
+		}
+	}
+
+	class SenderChecker extends Thread {
+
+		public void run() {
+
+			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
+
+			while (isRunning) {
+
+				try {
+
+					Thread.sleep(sendInterval);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				if (messagesToSend.size() >= 1) {
+
+					Message toSend = messagesToSend.removeLast();
+
+					for (PeerData peer : peers.values()) {
+						
+						if(!(peer.getUuid().equals(uuid))){
+							sender.sendMessage(peer.getAddress(), toSend);
+						}						
+					}
+				}
+			}
+
+			System.out.println("[MESSAGE CONTROLLER] SenderChecker Thread terminated...");
 		}
 	}
 }
