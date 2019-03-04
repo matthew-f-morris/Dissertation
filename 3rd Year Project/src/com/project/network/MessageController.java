@@ -107,11 +107,9 @@ public class MessageController {
 		public void run() {
 
 			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
-
 			while (isRunning) {
 
 				try {
-
 					Thread.sleep(sendInterval);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -121,8 +119,7 @@ public class MessageController {
 
 					Message toSend = messagesToSend.removeLast();
 
-					for (PeerData peer : peers.values()) {
-						
+					for (PeerData peer : peers.values()) {						
 						if(!(peer.getUuid().equals(uuid))){
 							sender.sendMessage(peer.getAddress(), toSend);
 						}						
