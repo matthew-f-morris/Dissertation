@@ -24,8 +24,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		scanner = new Scanner(System.in);
-		initNode();
+		node = new Node();
+		node.initialise();	
+		node.queueToSend(new Message("TO ALL!"));
         ViewController viewControl = new ViewController(node);
+        node.addViewController(viewControl);
 		
         checkResource();
         
@@ -59,9 +62,7 @@ public class Main extends Application {
 	}
 	
 	private void initNode() {
-		node = new Node();
-		node.initialise();	
-		node.queueToSend(new Message("TO ALL!"));		
+			
 	}
 }
 
