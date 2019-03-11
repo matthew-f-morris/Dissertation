@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import com.project.controller.MessageController;
 import com.project.utils.Message;
 
 public class MessageSender {

@@ -1,8 +1,11 @@
-package com.project.network;
+package com.project.controller;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
 
+import com.project.network.MessageReciever;
+import com.project.network.MessageSender;
+import com.project.network.PeerData;
 import com.project.utils.Message;
 
 public class MessageController {

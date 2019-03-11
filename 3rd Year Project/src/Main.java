@@ -9,41 +9,32 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
 	static Scanner scanner;
-	
-	public static void main (String[] args) {
-		
-		launch(args);
-		scanner = new Scanner(System.in);
-		
-		Node node = new Node();
-		node.initialise();	
-		node.queueToSend(new Message("TO ALL!"));
-		
-		while(true) {
-			
-			String text = scanner.nextLine();
-			node.queueToSend(new Message(text));
-			
-		}
+	Node node;
+
+	public static void main (String[] args) {		
+		launch(args);		
 	}
 
 	public void start(Stage primaryStage) throws Exception {
 		
-		URL url = getClass().getResource("com.project.view/Login.fxml");
-        if (url == null) {
-            System.out.println("Can't load FXML file");
-            System.exit(0);
-        }
+		scanner = new Scanner(System.in);
 		
-		FXMLLoader loader = FXMLLoader.load(getClass().getResource("/3rd Year Project/src/com.project.view/Login.fxml"));
-		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 400);
-		scene.getStylesheets().add(getClass().getResource("/com.project.view/application.css").toExternalForm());
+		
+        initNode();
+        ViewController viewControl = new ViewController(node);
+		
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/project/view/Login.fxml")); 
+        loader.setController(viewControl);
+                
+        Pane root = loader.load();		
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("com/project/view/application.css").toExternalForm());
 		
 		primaryStage.setTitle("Login");
 		primaryStage.setScene(scene);
@@ -52,6 +43,26 @@ public class Main extends Application {
 		primaryStage.setOnCloseRequest( event -> {
 			System.exit(0);
 		});
+		
+//		while(true) {			
+//			String text = scanner.nextLine();
+//			node.queueToSend(new Message(text));			
+//		}
+	}
+	
+	private void checkResource() {
+		
+		URL url = getClass().getResource("com/project/view/Login.fxml");
+        if (url == null) {
+            System.out.println("Can't load FXML file");
+            System.exit(0);
+        }
+	}
+	
+	private void initNode() {
+		node = new Node();
+		node.initialise();	
+		node.queueToSend(new Message("TO ALL!"));		
 	}
 }
 

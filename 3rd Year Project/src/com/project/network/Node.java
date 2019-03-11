@@ -7,9 +7,13 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.UUID;
 
+import com.project.controller.MessageController;
 import com.project.utils.Message;
 
 public class Node {
+	
+	private String username = "";
+	private static String password = "dissertation";
 	
     public PeerData nodeInfo;
     private Hashtable<String, PeerData> peers;
@@ -87,5 +91,20 @@ public class Node {
 		}
 		
 		System.out.println("[NODE] Number of peers: " + peers.size());	
+	}
+	
+	private void setUsername(String username) {
+		
+		if(!username.isEmpty()) {
+			this.username = username;
+			System.out.println("Username: " + this.username);
+		}
+	}
+	
+	public void confirmLogin(String username, String password) {
+		
+		if(password.equals(Node.password)) {
+			this.setUsername(username);
+		}
 	}
 }
