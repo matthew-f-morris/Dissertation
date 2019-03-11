@@ -1,5 +1,5 @@
 package testingNetworking;
 
-public class testinet {
+public class Server {
 
 }
