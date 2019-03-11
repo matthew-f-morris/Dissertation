@@ -24,11 +24,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		scanner = new Scanner(System.in);
-		node = new Node();
-		node.initialise();	
-		node.queueToSend(new Message("TO ALL!"));
-        ViewController viewControl = new ViewController(node);
-        node.addViewController(viewControl);
+
+		ViewController viewControl = new ViewController();
 		
         checkResource();
         
@@ -44,6 +41,12 @@ public class Main extends Application {
 		primaryStage.setOnCloseRequest( event -> {
 			System.exit(0);
 		});
+		
+		node = new Node();
+        node.addViewController(viewControl);
+		node.initialise();	
+		node.queueToSend(new Message("TO ALL!"));
+		viewControl.setNode(node);
 		
 		primaryStage.show();
 //		while(true) {			

@@ -63,7 +63,7 @@ public class Node {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
-    		viewControl.addNode(hostname + " : " + address);
+    		viewControl.addNode(address.toString());
     		
     		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
