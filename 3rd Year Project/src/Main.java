@@ -24,11 +24,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		scanner = new Scanner(System.in);
-		
-		
-        initNode();
+		initNode();
         ViewController viewControl = new ViewController(node);
 		
+        checkResource();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/project/view/Login.fxml")); 
         loader.setController(viewControl);
                 
@@ -38,12 +38,11 @@ public class Main extends Application {
 		
 		primaryStage.setTitle("Login");
 		primaryStage.setScene(scene);
-		primaryStage.show();
-		
 		primaryStage.setOnCloseRequest( event -> {
 			System.exit(0);
 		});
 		
+		primaryStage.show();
 //		while(true) {			
 //			String text = scanner.nextLine();
 //			node.queueToSend(new Message(text));			

@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.UUID;
 
 import com.project.controller.MessageController;
+import com.project.controller.ViewController;
 import com.project.utils.Message;
 
 public class Node {
@@ -23,6 +24,7 @@ public class Node {
 
     private PeerDiscovery peerDiscoverer;
     private MessageController msgController;
+    private ViewController viewControl;
     
     public String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     
@@ -40,7 +42,8 @@ public class Node {
 			e.printStackTrace();
 		}
     	
-    	nodeInfo = new PeerData(UUID.randomUUID().toString(), hostname, localhost, Node.commPort);    	
+    	nodeInfo = new PeerData(UUID.randomUUID().toString(), hostname, localhost, Node.commPort);
+    	
     }
     
     public void initialise() {  
@@ -60,6 +63,7 @@ public class Node {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
+    		viewControl.addNode(hostname + " : " + address);
     		
     		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
@@ -106,5 +110,9 @@ public class Node {
 		if(password.equals(Node.password)) {
 			this.setUsername(username);
 		}
+	}
+
+	public void addViewController(ViewController viewControl) {
+		this.viewControl = viewControl;		
 	}
 }
