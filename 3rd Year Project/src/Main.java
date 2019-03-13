@@ -13,17 +13,17 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	
+
 	static Scanner scanner;
 	Node node;
 
 	public static void main (String[] args) {		
+		
+		scanner = new Scanner(System.in);
 		launch(args);		
 	}
 
 	public void start(Stage primaryStage) throws Exception {
-		
-		scanner = new Scanner(System.in);
 
 		ViewController viewControl = new ViewController();
 		
@@ -49,10 +49,10 @@ public class Main extends Application {
 		viewControl.setNode(node);
 		
 		primaryStage.show();
-//		while(true) {			
-//			String text = scanner.nextLine();
-//			node.queueToSend(new Message(text));			
-//		}
+
+		InputScanner input = new InputScanner();
+		Thread t = new Thread(input);
+		t.start();
 	}
 	
 	private void checkResource() {
@@ -64,8 +64,17 @@ public class Main extends Application {
         }
 	}
 	
-	private void initNode() {
+	class InputScanner extends Thread {
+		
+		public void run() {
 			
+			System.out.println("Scanner started");
+			
+			while(true) {				
+				String text = scanner.nextLine();
+				node.queueToSend(new Message(text));
+			}
+		}
 	}
 }
 

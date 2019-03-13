@@ -80,7 +80,7 @@ public class PeerDiscovery {
 
 				while (isRunning) {
 
-					System.out.println("[PEER DISCOVERY] Broadcasting packet...");
+					//System.out.println("[PEER DISCOVERY] Broadcasting packet...");
 					socket.send(new DatagramPacket(messageByte, messageByte.length, address, PeerDiscovery.broadcastPort));
 
 					try {
