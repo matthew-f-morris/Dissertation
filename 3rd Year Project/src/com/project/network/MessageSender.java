@@ -3,6 +3,7 @@ package com.project.network;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 
@@ -24,15 +25,15 @@ public class MessageSender {
 		
 		try {
 			
-			Socket socket = new Socket(address, commPort);
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			Socket socket = new Socket();
+			socket.connect(new InetSocketAddress(address,  commPort), 1000);
 			
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());			
 			oos.writeObject(message);
 			socket.close();
 			
 		} catch (IOException e) {
 			System.out.println(e);
-			e.printStackTrace();
 			return false;
 		}
 		

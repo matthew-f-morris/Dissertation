@@ -38,7 +38,8 @@ public class ViewController {
 	}
 	
 	public void addNode(String nodeIp) {
-		nodesInChat.getItems().add(nodeIp);
+		Platform.runLater(() ->
+			nodesInChat.getItems().add(nodeIp));
 	}
 	
 	public void removeNode(String nodeIp) {
