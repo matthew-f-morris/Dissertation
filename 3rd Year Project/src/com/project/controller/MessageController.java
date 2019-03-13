@@ -125,8 +125,18 @@ public class MessageController {
 	}
 	
 	public void shutdown() {
-		if(isRunning && reciever.shutdown())
+		
+		reciever.shutdown();
+		
+		if(isRunning)
 			isRunning = false;
+		
+		try {
+			threadSender.join();
+			threadResender.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void leaveNetwork() {
@@ -134,7 +144,9 @@ public class MessageController {
 		Message leaveMessage = new Message(true);
 		
 		for(PeerData peer : peers.values()) {
-			sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
+			if(!(peer.getUuid().equals(node.nodeInfo.getUuid()))){		
+				sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
+			}
 		}
 		
 		isRunning = false;
@@ -166,7 +178,7 @@ public class MessageController {
 				if (messagesToSend.size() >= 1) {
 					Message toSend = messagesToSend.removeLast();
 					for (PeerData peer : peers.values()) {						
-						if(!(peer.getUuid().equals(uuid))){							
+						if(!(peer.getUuid().equals(node.nodeInfo.getUuid()))){							
 							boolean sent = sender.sendMessage(peer.getAddress(), toSend);
 							
 							if(!sent) {
@@ -177,7 +189,7 @@ public class MessageController {
 				}
 			}
 
-			System.out.println("[MESSAGE CONTROLLER] SenderChecker Thread terminated...");
+			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread terminated...");
 		}
 	}
 	

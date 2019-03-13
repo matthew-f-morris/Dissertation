@@ -12,7 +12,7 @@ import java.net.InetAddress;
 
 public class PeerDiscovery {
 
-	public static Node parentNode;
+	public static Node node;
 	public static final String broadcastAddress = "255.255.255.255";
 	public static final int broadcastPort = 50008;
 	private static int broadcastInterval = 5000;
@@ -21,17 +21,18 @@ public class PeerDiscovery {
 	private Thread threadBroadcaster;
 	private BroadcastListener listener;
 	private Broadcaster broadcaster;
-	private static boolean isRunning = true;
+	private boolean isRunning = true;
+	private boolean isRunning2 = true;
 
-	private static InetAddress inetAddress;
+	private InetAddress inetAddress;
 
 	public PeerDiscovery(Node node) {
 
-		PeerDiscovery.parentNode = node;
+		PeerDiscovery.node = node;
 
 		try {
 
-			PeerDiscovery.inetAddress = InetAddress.getLocalHost();
+			inetAddress = InetAddress.getLocalHost();
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -58,20 +59,37 @@ public class PeerDiscovery {
 	}
 	
 	public void shutdown() {
-		if(isRunning)
-			isRunning = false;
+		
+		endThreads();
 	}
 	
 	public void leaveNetwork() {
-		if(isRunning) {
-			isRunning = false;
+		
+		endThreads();
+	}
+	
+	public void endThreads() {
+		
+		System.out.println("[PEER DISCOVERY] ENDING THREADS");
+		isRunning = false;
+		
+		try {
+			threadBroadcaster.join();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		isRunning2 = false;
+		System.out.println("HERE");
+		
+		try {
+			threadListener.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void checkMessage() {
-		
-	}
-
 	class Broadcaster implements Runnable {
 
 		public void run() {
@@ -87,7 +105,7 @@ public class PeerDiscovery {
 				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
 
 				oos.flush();
-				oos.writeObject(PeerDiscovery.parentNode.nodeInfo);
+				oos.writeObject(PeerDiscovery.node.nodeInfo);
 				oos.flush();
 				oos.close();
 
@@ -116,8 +134,7 @@ public class PeerDiscovery {
 				e.printStackTrace();
 			}
 
-			System.out.println("[PEER DISCOVERY] Thread Ended");
-			PeerDiscovery.parentNode.viewPeers();
+			System.out.println("[PEER DISCOVERY] Broadcaster Thread Ended");
 		}
 	}
 
@@ -133,7 +150,7 @@ public class PeerDiscovery {
 				DatagramPacket p = new DatagramPacket(message, message.length);
 				DatagramSocket socket = new DatagramSocket(PeerDiscovery.broadcastPort);
 
-				while (isRunning) {
+				while (isRunning2) {
 
 					socket.receive(p);
 
@@ -141,12 +158,12 @@ public class PeerDiscovery {
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(bis));
 
 					PeerData data = (PeerData) ois.readObject();
-					PeerDiscovery.parentNode.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort());
+					PeerDiscovery.node.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort());
 					ois.close();
 				}
 
 				socket.close();
-				System.out.println("[PEER DISCOVERY] Stopping Thread");
+				System.out.println("[PEER DISCOVERY] Listener Thread Ended");
 			}
 
 			catch (Exception e) {

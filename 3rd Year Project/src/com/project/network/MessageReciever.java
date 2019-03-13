@@ -33,10 +33,16 @@ public class MessageReciever {
 		}
 	}
 	
-	public boolean shutdown() {
+	public void shutdown() {
+		
 		if(isRunning)
 			isRunning = false;
-		return true;
+		
+		try {
+			threadServerSocket.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	class ClientServerSocket extends Thread {
@@ -63,9 +69,11 @@ public class MessageReciever {
 				try {
 					
 					Socket socket = servSocket.accept();
-					new ClientHandler(socket).start();
+					ClientHandler ch = new ClientHandler(socket);
+					ch.start();
+					ch.join();
 					
-				} catch (IOException e) {
+				} catch (IOException | InterruptedException e) {
 					System.out.println(e);
 					e.printStackTrace();
 				}
@@ -84,7 +92,7 @@ public class MessageReciever {
 		public void run() {
 			
 			String tempAddress = clientSocket.getRemoteSocketAddress().toString();
-			System.out.println("Socket connection from: " + tempAddress);
+			System.out.println("[MESSAGE RECIEVER] Socket connection from: " + tempAddress);
 			
 			try {
 
@@ -95,7 +103,8 @@ public class MessageReciever {
 					
 					controller.addToRecieved(message);
 					System.out.println("[MESSAGE RECIEVER] Message Recieved: " + message.getText());
-				} else if(message.leaveNetwork()){
+				
+				} else {
 					
 					String uuid = message.getPeerData().getUuid();
 					controller.removePeer(uuid);					

@@ -41,7 +41,15 @@ public class MessageSender {
 	}
 	
 	public void sendLeaveNetworkMessage(InetAddress address, Message message) {		
-		new RecipientHandler(address, message).start();		
+		
+		RecipientHandler rh = new RecipientHandler(address, message);
+		rh.start();
+		
+		try {
+			rh.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	class RecipientHandler extends Thread {

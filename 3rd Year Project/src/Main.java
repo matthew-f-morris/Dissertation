@@ -39,7 +39,6 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setOnCloseRequest( event -> {
 			node.shutdown();
-			System.out.println("\n --- NODE SHUTDOWN ---\n");
 			System.exit(0);
 		});
 		

@@ -123,22 +123,22 @@ public class Node {
 		
 	public void shutdown() {
 		
-		leaveNetwork();
-		
 		peerDiscoverer.shutdown();
 		msgController.shutdown();
-
+		System.out.println("\n --- NODE SHUTDOWN ---\n");
 	}
 	
 	public void leaveNetwork() {
 		
 		peerDiscoverer.leaveNetwork();
 		msgController.leaveNetwork();
+		System.out.println("\n --- NODE LEFT NETWORK ---\n");
 	}
 	
 	public void joinNetwork() {
 		
 		peerDiscoverer.startDiscovery();
 		msgController.startup();
+		System.out.println("\n --- NODE JOINED NETWORK ---\n");
 	}
 }
