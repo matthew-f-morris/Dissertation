@@ -117,6 +117,12 @@ public class MessageController {
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesRecieved.size());
 		}
 	}
+	
+	public void shutdown() {
+
+		if(isRunning && reciever.shutdown())
+			isRunning = false;
+	}
 
 	class SenderChecker extends Thread {
 
@@ -174,9 +180,7 @@ public class MessageController {
 						toResend.add(resend);
 					}
 				}
-			}
-
-			System.out.println("[MESSAGE CONTROLLER] Resender Thread terminated...");			
+			}		
 		}
 	}
 }

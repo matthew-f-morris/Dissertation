@@ -115,4 +115,10 @@ public class Node {
 	public void addViewController(ViewController viewControl) {
 		this.viewControl = viewControl;		
 	}
+		
+	public void shutdown() {
+		this.peerDiscoverer.shutdown();
+		this.msgController.shutdown();
+		System.out.println("\n --- NODE SHUTDOWN ---\n");
+	}
 }

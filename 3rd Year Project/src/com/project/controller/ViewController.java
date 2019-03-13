@@ -53,7 +53,6 @@ public class ViewController {
 		//ps = new PrintStream(new Console(console));
 		//System.setOut(ps);
 		//System.setErr(ps);
-		System.out.print("Hello..\n");
 	}
 	
 	public class Console extends OutputStream {

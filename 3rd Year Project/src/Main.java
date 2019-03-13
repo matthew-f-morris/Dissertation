@@ -25,10 +25,9 @@ public class Main extends Application {
 
 	public void start(Stage primaryStage) throws Exception {
 
-		ViewController viewControl = new ViewController();
-		
         checkResource();
-        
+		
+		ViewController viewControl = new ViewController();        
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/project/view/Login.fxml")); 
         loader.setController(viewControl);
                 
@@ -39,6 +38,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Login");
 		primaryStage.setScene(scene);
 		primaryStage.setOnCloseRequest( event -> {
+			node.shutdown();
 			System.exit(0);
 		});
 		
@@ -51,8 +51,8 @@ public class Main extends Application {
 		primaryStage.show();
 
 		InputScanner input = new InputScanner();
-		Thread t = new Thread(input);
-		t.start();
+		Thread inputThread = new Thread(input);
+		inputThread.start();
 	}
 	
 	private void checkResource() {
@@ -67,8 +67,6 @@ public class Main extends Application {
 	class InputScanner extends Thread {
 		
 		public void run() {
-			
-			System.out.println("Scanner started");
 			
 			while(true) {				
 				String text = scanner.nextLine();

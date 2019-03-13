@@ -56,6 +56,11 @@ public class PeerDiscovery {
 			threadListener.start();
 		}
 	}
+	
+	public void shutdown() {
+		if(isRunning)
+			isRunning = false;
+	}
 
 	class Broadcaster implements Runnable {
 

@@ -33,6 +33,12 @@ public class MessageReciever {
 		}
 	}
 	
+	public boolean shutdown() {
+		if(isRunning)
+			isRunning = false;
+		return true;
+	}
+	
 	class ClientServerSocket extends Thread {
 		
 		public ClientServerSocket() {
