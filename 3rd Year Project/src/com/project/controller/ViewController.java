@@ -49,9 +49,9 @@ public class ViewController {
 	}
 	
 	public void initialize() {
-		ps = new PrintStream(new Console(console));
-		System.setOut(ps);
-		System.setErr(ps);
+		//ps = new PrintStream(new Console(console));
+		//System.setOut(ps);
+		//System.setErr(ps);
 		System.out.print("Hello..\n");
 	}
 	
