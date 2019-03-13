@@ -64,7 +64,8 @@ public class ViewController {
 		}
 		
 		public void appendText(String valueOf) {
-			Platform.runLater(() -> console.appendText(valueOf));
+			Platform.runLater(() -> 
+				console.appendText(valueOf));
 		}
 		
 		public void write(int b) throws IOException {
