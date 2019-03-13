@@ -39,6 +39,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setOnCloseRequest( event -> {
 			node.shutdown();
+			System.out.println("\n --- NODE SHUTDOWN ---\n");
 			System.exit(0);
 		});
 		
@@ -68,9 +69,17 @@ public class Main extends Application {
 		
 		public void run() {
 			
-			while(true) {				
+			while(true) {	
+				
 				String text = scanner.nextLine();
-				node.queueToSend(new Message(node.nodeInfo, text));
+				
+				if(text.equals("LEAVE")) {
+					node.leaveNetwork();
+				} else if(text.equals("JOIN")){
+					node.joinNetwork();
+				} else {
+					node.queueToSend(new Message(node.nodeInfo, text));
+				}
 			}
 		}
 	}

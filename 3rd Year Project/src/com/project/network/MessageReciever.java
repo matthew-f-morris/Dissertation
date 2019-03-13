@@ -98,8 +98,7 @@ public class MessageReciever {
 				} else if(message.leaveNetwork()){
 					
 					String uuid = message.getPeerData().getUuid();
-					controller.removePeer(uuid);
-					
+					controller.removePeer(uuid);					
 				}
 					
 			} catch (IOException | ClassNotFoundException e) {

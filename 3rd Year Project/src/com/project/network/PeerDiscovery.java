@@ -62,6 +62,12 @@ public class PeerDiscovery {
 			isRunning = false;
 	}
 	
+	public void leaveNetwork() {
+		if(isRunning) {
+			isRunning = false;
+		}
+	}
+	
 	private void checkMessage() {
 		
 	}

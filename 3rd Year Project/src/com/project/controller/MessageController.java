@@ -135,7 +135,14 @@ public class MessageController {
 		
 		for(PeerData peer : peers.values()) {
 			sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
-		}		
+		}
+		
+		isRunning = false;
+	}
+	
+	public void startup() {
+		isRunning = true;
+		initializeThreads();
 	}
 	
 	public void removePeer(String uuid) {
