@@ -61,6 +61,10 @@ public class PeerDiscovery {
 		if(isRunning)
 			isRunning = false;
 	}
+	
+	private void checkMessage() {
+		
+	}
 
 	class Broadcaster implements Runnable {
 
@@ -89,7 +93,6 @@ public class PeerDiscovery {
 					socket.send(new DatagramPacket(messageByte, messageByte.length, address, PeerDiscovery.broadcastPort));
 
 					try {
-
 						Thread.sleep(PeerDiscovery.broadcastInterval);
 					}
 

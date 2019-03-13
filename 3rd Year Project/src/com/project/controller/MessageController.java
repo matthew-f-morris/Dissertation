@@ -1,18 +1,21 @@
 package com.project.controller;
 
-import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.project.network.MessageReciever;
 import com.project.network.MessageSender;
+import com.project.network.Node;
 import com.project.network.PeerData;
 import com.project.utils.AddressMessage;
 import com.project.utils.Message;
 
 public class MessageController {
 
-	private Hashtable<String, PeerData> peers;
+	private Node node;
+	
+	private ConcurrentHashMap<String, PeerData> peers;
 	private MessageSender sender;
 	private MessageReciever reciever;
 	private LinkedList<Message> messagesRecieved;
@@ -30,8 +33,9 @@ public class MessageController {
 	
 	private String uuid = null;
 	
-	public MessageController(Hashtable<String, PeerData> peers, String uuid) {
+	public MessageController(Node node, ConcurrentHashMap<String, PeerData> peers, String uuid) {
 
+		this.node = node;
 		this.peers = peers;
 		this.uuid = uuid;
 		sender = new MessageSender(this);
@@ -44,6 +48,7 @@ public class MessageController {
 	}
 
 	private void initializeThreads() {
+		
 		senderChecker = new SenderChecker();
 		threadSender = new Thread(senderChecker);
 		threadSender.start();
@@ -54,13 +59,14 @@ public class MessageController {
 	}
 
 	public void queueToSend(Message message) {
+		
 		messagesToSend.add(message);
 		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message.getText());
 	}
 
-	public void addToRecieved(Message message) {		
-		messagesRecieved.add(message);
+	public void addToRecieved(Message message) {
 		
+		messagesRecieved.add(message);		
 	}
 
 	private boolean checkEmptySend() {
@@ -79,14 +85,14 @@ public class MessageController {
 			return false;
 	}
 
-	public Message getNewMessage() {
-
-		if (checkEmptyRecieved()) {
-			return new Message(null);
-		} else {
-			return messagesRecieved.removeFirst();
-		}
-	}
+//	public Message getNewMessage() {
+//
+//		if (checkEmptyRecieved()) {
+//			return new Message(null);
+//		} else {
+//			return messagesRecieved.removeFirst();
+//		}
+//	}
 	
 	public void peekSend() {
 
@@ -119,9 +125,21 @@ public class MessageController {
 	}
 	
 	public void shutdown() {
-
 		if(isRunning && reciever.shutdown())
 			isRunning = false;
+	}
+	
+	public void leaveNetwork() {
+	
+		Message leaveMessage = new Message(true);
+		
+		for(PeerData peer : peers.values()) {
+			sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
+		}		
+	}
+	
+	public void removePeer(String uuid) {
+		node.removePeer(uuid);
 	}
 
 	class SenderChecker extends Thread {

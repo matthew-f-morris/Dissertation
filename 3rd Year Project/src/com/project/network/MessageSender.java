@@ -40,33 +40,37 @@ public class MessageSender {
 		return true;
 	}
 	
-//	class RecipientHandler extends Thread {
-//		
-//		//start one of these to send a message to a client!
-//		
-//		Message message;
-//		InetAddress address;
-//		
-//		public RecipientHandler(InetAddress address, Message message) {
-//			
-//			this.message = message;
-//			this.address = address;
-//		}		
-//		
-//		public void run() {
-//			
-//			try {
-//				
-//				Socket socket = new Socket(address, commPort);
-//				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-//				
-//				oos.writeObject(message);
-//				socket.close();
-//				
-//			} catch (IOException e) {
-//				System.out.println(e);
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	public void sendLeaveNetworkMessage(InetAddress address, Message message) {		
+		new RecipientHandler(address, message).start();		
+	}
+	
+	class RecipientHandler extends Thread {
+		
+		//start one of these to send a message to a client!
+		
+		Message message;
+		InetAddress address;
+		
+		public RecipientHandler(InetAddress address, Message message) {
+			
+			this.message = message;
+			this.address = address;
+		}		
+		
+		public void run() {
+			
+			try {
+				
+				Socket socket = new Socket(address, commPort);
+				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+				
+				oos.writeObject(message);
+				socket.close();
+				
+			} catch (IOException e) {
+				System.out.println(e);
+				e.printStackTrace();
+			}
+		}
+	}
 }

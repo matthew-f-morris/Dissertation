@@ -83,14 +83,25 @@ public class MessageReciever {
 		
 		public void run() {
 			
+			String tempAddress = clientSocket.getRemoteSocketAddress().toString();
+			System.out.println("Socket connection from: " + tempAddress);
+			
 			try {
 
 				ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
 				Message message = (Message) ois.readObject();
 				
-				controller.addToRecieved(message);
-				System.out.println("[MESSAGE RECIEVER] Message Recieved: " + message.getText());
-				
+				if(!message.leaveNetwork()) {
+					
+					controller.addToRecieved(message);
+					System.out.println("[MESSAGE RECIEVER] Message Recieved: " + message.getText());
+				} else if(message.leaveNetwork()){
+					
+					String uuid = message.getPeerData().getUuid();
+					controller.removePeer(uuid);
+					
+				}
+					
 			} catch (IOException | ClassNotFoundException e) {
 				System.out.println(e);
 				e.printStackTrace();

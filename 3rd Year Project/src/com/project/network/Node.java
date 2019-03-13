@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.project.controller.MessageController;
 import com.project.controller.ViewController;
@@ -17,7 +18,7 @@ public class Node {
 	private static String password = "dissertation";
 	
     public PeerData nodeInfo;
-    private Hashtable<String, PeerData> peers;
+    private ConcurrentHashMap<String, PeerData> peers;
 	
 	private static InetAddress localhost;
 	private static int commPort = 50010;
@@ -50,11 +51,11 @@ public class Node {
     	
     	System.out.println("[NODE] Initialising Node...");
     	
-    	peers = new Hashtable<String, PeerData>();
+    	peers = new ConcurrentHashMap<String, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
 
     	peerDiscoverer = new PeerDiscovery(this);    	
-    	msgController = new MessageController(peers, nodeInfo.getUuid());    	
+    	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
     }
     
 	public void addPeer(String uuid, String hostname, InetAddress address, int port) {
@@ -68,6 +69,10 @@ public class Node {
     		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
     }
+	
+	public void removePeer(String uuid) {
+		peers.remove(uuid);
+	}
 	
 	public void queueToSend(Message message) {		
 		msgController.queueToSend(message);
@@ -117,6 +122,9 @@ public class Node {
 	}
 		
 	public void shutdown() {
+		
+		msgController.leaveNetwork();
+		
 		this.peerDiscoverer.shutdown();
 		this.msgController.shutdown();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");

@@ -45,7 +45,7 @@ public class Main extends Application {
 		node = new Node();
         node.addViewController(viewControl);
 		node.initialise();	
-		node.queueToSend(new Message("TO ALL!"));
+		node.queueToSend(new Message(node.nodeInfo, "TO ALL!"));
 		viewControl.setNode(node);
 		
 		primaryStage.show();
@@ -70,7 +70,7 @@ public class Main extends Application {
 			
 			while(true) {				
 				String text = scanner.nextLine();
-				node.queueToSend(new Message(text));
+				node.queueToSend(new Message(node.nodeInfo, text));
 			}
 		}
 	}
