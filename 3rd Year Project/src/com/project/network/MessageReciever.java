@@ -32,24 +32,31 @@ public class MessageReciever {
 		}
 		
 		this.controller = controller;
-		startRecieving();
+		initialize();
 	}
 	
-	public void startRecieving() {
+	public void initialize() {
+		
+		isRunning = true;
+		
+		if(servSocket.isClosed()) {
+			try {
+				servSocket = new ServerSocket(commPort);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		serversocket = new ClientServerSocket(servSocket);
 		
-		if(threadServerSocket == null) {
-			threadServerSocket = new Thread(serversocket);
-			threadServerSocket.setName("[MESSAGE RECIEVER] SERVER SOCKET");
-			threadServerSocket.start();
-		}
+		threadServerSocket = new Thread(serversocket);
+		threadServerSocket.setName("[MESSAGE RECIEVER] SERVER SOCKET");
+		threadServerSocket.start();
 	}
 	
 	public void shutdown() {
 		
 		isRunning = false;
-		System.out.println("GOT TO HERE");
 		
 		try {
 			servSocket.close();
@@ -62,8 +69,6 @@ public class MessageReciever {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("WE WAITED");
 	}
 	
 	class ClientServerSocket extends Thread {

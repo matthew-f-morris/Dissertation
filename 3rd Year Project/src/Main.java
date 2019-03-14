@@ -6,6 +6,7 @@ import com.project.network.Node;
 import com.project.utils.Message;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -61,15 +62,18 @@ public class Main extends Application {
 		URL url = getClass().getResource("com/project/view/Login.fxml");
         if (url == null) {
             System.out.println("Can't load FXML file");
+            Platform.exit();
             System.exit(0);
         }
 	}
 	
 	class InputScanner extends Thread {
 		
+		boolean isRunning = true;
+		
 		public void run() {
 			
-			while(true) {	
+			while(isRunning) {	
 				
 				String text = scanner.nextLine();
 				
@@ -77,6 +81,9 @@ public class Main extends Application {
 					node.leaveNetwork();
 				} else if(text.equals("JOIN")){
 					node.joinNetwork();
+				} else if(text.equals("SHUTDOWN")) {
+					node.shutdown();
+					isRunning = false;
 				} else {
 					node.queueToSend(new Message(node.nodeInfo, text));
 				}

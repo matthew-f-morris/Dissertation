@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 public class PeerDiscovery {
@@ -46,34 +47,39 @@ public class PeerDiscovery {
 
 	public void startDiscovery() {
 
+		isRunning = true;
+		
+		if(socket.isClosed()) {
+			
+			try {
+				socket = new DatagramSocket(PeerDiscovery.broadcastPort);
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		listener = new BroadcastListener(socket);
 		broadcaster = new Broadcaster();
 
-		if (threadBroadcaster == null) {
-			threadBroadcaster = new Thread(broadcaster);
-			threadBroadcaster.setName("[PEER DISCOVERY] BROADCASTER");
-			threadBroadcaster.start();
-		}
+		threadBroadcaster = new Thread(broadcaster);
+		threadBroadcaster.setName("[PEER DISCOVERY] BROADCASTER");
+		threadBroadcaster.start();
 
-		if (threadListener == null) {
-			threadListener = new Thread(listener);
-			threadListener.setName("[PEER DISCOVERY] BROADCAST LISTENER");
-			threadListener.start();
-		}
+
+
+		threadListener = new Thread(listener);
+		threadListener.setName("[PEER DISCOVERY] BROADCAST LISTENER");
+		threadListener.start();
+
 	}
 	
 	public void shutdown() {
 		
-		endThreads();
+		leaveNetwork();
 	}
 	
 	public void leaveNetwork() {
 		
-		endThreads();
-	}
-	
-	public void endThreads() {
-
 		isRunning = false;
 		socket.close();
 		
@@ -83,7 +89,10 @@ public class PeerDiscovery {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("[PEER DISCOVERY] ALL DISCOVERY SYSTEMS SHUT DOWN");
 	}
+
 	
 	class Broadcaster implements Runnable {
 

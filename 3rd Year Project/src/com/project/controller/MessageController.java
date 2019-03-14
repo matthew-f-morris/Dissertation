@@ -22,7 +22,7 @@ public class MessageController {
 	private LinkedList<Message> messagesToSend;
 	private ConcurrentLinkedQueue<AddressMessage> toResend;
 	private final int sendInterval = 1000;
-	private final int resendInterval = 5000;
+	private final int resendInterval = 3000;
 
 	private boolean isRunning = true;
 	private Thread threadSender;
@@ -49,15 +49,19 @@ public class MessageController {
 
 	private void initializeThreads() {
 		
+		isRunning = true;
+		
 		senderChecker = new SenderChecker();
+		resender = new Resender();
+		
 		threadSender = new Thread(senderChecker);
 		threadSender.setName("[MESSAGE CONTROLLER] SEND CHECKER");
 		threadSender.start();
-		
-		resender = new Resender();
+
 		threadResender = new Thread(resender);
 		threadResender.setName("[MESSAGE CONTROLLER] RESENDER");
 		threadResender.start();
+
 	}
 
 	public void queueToSend(Message message) {
@@ -127,19 +131,8 @@ public class MessageController {
 	}
 	
 	public void shutdown() {
-
-		isRunning = false;
 		
-		try {
-			threadSender.join();
-			threadResender.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("dadsda");
-		reciever.shutdown();
-		
+		leaveNetwork();		
 	}
 	
 	public void leaveNetwork() {
@@ -153,11 +146,25 @@ public class MessageController {
 		}
 		
 		isRunning = false;
+		
+		try {
+			
+			threadSender.join();
+			threadResender.join();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		reciever.shutdown();
+		System.out.println("[MESSAGE CONTROLLER] ALL MESSAGING SYSTEMS SHUT DOWN");
 	}
 	
 	public void startup() {
+		
 		isRunning = true;
 		initializeThreads();
+		reciever.initialize();
 	}
 	
 	public void removePeer(String uuid) {
@@ -192,7 +199,7 @@ public class MessageController {
 				}
 			}
 
-			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread terminated...");
+			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread Ended");
 		}
 	}
 	
@@ -222,7 +229,7 @@ public class MessageController {
 				}
 			}
 			
-			System.out.println("[MESSAGE CONTROLLER] Resender Thread terminated...");
+			System.out.println("[MESSAGE CONTROLLER] Resender Thread Ended");
 		}
 	}
 }

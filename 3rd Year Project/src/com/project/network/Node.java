@@ -12,6 +12,8 @@ import com.project.controller.MessageController;
 import com.project.controller.ViewController;
 import com.project.utils.Message;
 
+import javafx.application.Platform;
+
 public class Node {
 	
 	private String username = "";
@@ -22,6 +24,7 @@ public class Node {
 	
 	private static InetAddress localhost;
 	private static int commPort = 50010;
+	private boolean joined = false;
 
     private PeerDiscovery peerDiscoverer;
     private MessageController msgController;
@@ -56,6 +59,8 @@ public class Node {
 
     	peerDiscoverer = new PeerDiscovery(this);    	
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
+    	
+    	joined = true;
     }
     
 	public void addPeer(String uuid, String hostname, InetAddress address, int port) {
@@ -126,19 +131,33 @@ public class Node {
 		peerDiscoverer.shutdown();
 		msgController.shutdown();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");
+		Platform.exit();
+		System.exit(0);
 	}
 	
 	public void leaveNetwork() {
 		
-		peerDiscoverer.leaveNetwork();
-		msgController.leaveNetwork();
-		System.out.println("\n --- NODE LEFT NETWORK ---\n");
+		if(!joined) {			
+			System.err.println("Node Not Joined To Network");
+		} else {
+			
+			peerDiscoverer.leaveNetwork();
+			msgController.leaveNetwork();
+			joined = false;
+			System.out.println("\n --- NODE LEFT NETWORK ---\n");
+		}
 	}
 	
 	public void joinNetwork() {
 		
-		peerDiscoverer.startDiscovery();
-		msgController.startup();
-		System.out.println("\n --- NODE JOINED NETWORK ---\n");
+		if(joined) {			
+			System.err.println("Node Already Joined To Network");
+		} else {
+		
+			System.out.println("\n --- NODE JOINING NETWORK ---\n");
+			peerDiscoverer.startDiscovery();
+			msgController.startup();
+			joined = true;
+		}
 	}
 }
