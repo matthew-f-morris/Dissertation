@@ -1,1 +1,60 @@
 https://github.com/usecanvas/logoot-js
+https://hal.inria.fr/inria-00432368/document
+
+
+
+IDENTIFIER = <pos, site> : pos = int, site = site Identifier
+
+POSITION = List<IDENTIFIER>  |  List<pos, site>
+
+ATOM IDENTIFIER = <pos, clock>  |  <List<pos, site>, clock>
+
+SEQUENCE ATOM = <atomIdentifier, Message>  |  <<pos, clock>, Message>  => <<List<pos, site>, clock>, Message>
+
+SEQUENCE = List<<<List<pos, site>, clock>, Message>>
+
+[
+	[[List[[pos, site], [pos, site], [pos, site]], clock], Message],
+]
+
+EXAMPLE:
+
+[
+	[[[[0, 0]]], null],
+	[[[[1, 1], [3, 2]], 5], "This an example message"],
+	[[[[1, 1], [5, 4]], 1], "This is some more random messages"],
+	[[[[32767, 0]]], null]
+]
+
+
+To add "I'm adding this text in between the two current messages" from site number 3 (with clock = 1), we need to find somewhere to add it.
+Logoot iterates over the list[[pos, site]] looking to see if it can place it between the two. It first checks the first pairs ([1, 1] and [1, 1] in this case).
+Because these identifiers are the same, the logoot algorithm moves onto the next pair, [3, 2] and [5, 4]. Because site 3's identifier is greater than site 2, it
+can insert identifier [3, 3] here and preserve the ordering , since [3, 2] < [3, 3] < [5, 4].
+
+This results in the following (assuming site 3's vector clock = 1),
+
+[
+	[[[[0, 0]]], null],
+	[[[[1, 1], [3, 2]], 5], "This an example message"],
+	[[[[1, 1], [3, 3]] ,1], "I'm adding this text in between the two current messages"],
+	[[[[1, 1], [5, 4]], 1], "This is some more random messages"],
+	[[[[32767, 0]]], null]
+]
+
+Its important to note that the vector clock values are not compared. Vector clock values are used to ensure unique atom identifiers, not for ordering.
+
+If this was site 1, things would be different because [3, 2] is not less than [3, 1]. Instead logoot generates a random integer between 3 and 5 (which is 4) in
+this case.
+
+This would result in the following;
+
+[
+	[[[[0, 0]]], null],
+	[[[[1, 1], [3, 2]], 5], "This an example message"],
+	[[[[1, 1], [4, 1]] ,1], "I'm adding this text in between the two current messages"],
+	[[[[1, 1], [5, 4]], 1], "This is some more random messages"],
+	[[[[32767, 0]]], null]
+]
+
+modifying a logoot document is a combination of operations.
