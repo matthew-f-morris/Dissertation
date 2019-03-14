@@ -52,6 +52,7 @@ public class Main extends Application {
 
 		InputScanner input = new InputScanner();
 		Thread inputThread = new Thread(input);
+		inputThread.setName("INPUT SCANNER");
 		inputThread.start();
 	}
 	

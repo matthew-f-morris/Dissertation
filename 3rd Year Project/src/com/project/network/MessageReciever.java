@@ -12,54 +12,69 @@ public class MessageReciever {
 	
 	private boolean isRunning = true;
 	private static final int commPort = 50010;
-	private ServerSocket servSocket = null;
 	private MessageController controller = null;
 	
 	private Thread threadServerSocket;
 	private ClientServerSocket serversocket;
+	private ServerSocket servSocket;
+	
 	
 	public MessageReciever(MessageController controller) {
+		
+		try {
+			
+			servSocket = new ServerSocket(commPort);
+			
+		} catch (IOException e) {
+			
+			System.out.println(e);
+			e.printStackTrace();
+		}
+		
 		this.controller = controller;
 		startRecieving();
 	}
 	
 	public void startRecieving() {
 		
-		serversocket = new ClientServerSocket();
+		serversocket = new ClientServerSocket(servSocket);
 		
 		if(threadServerSocket == null) {
 			threadServerSocket = new Thread(serversocket);
+			threadServerSocket.setName("[MESSAGE RECIEVER] SERVER SOCKET");
 			threadServerSocket.start();
 		}
 	}
 	
 	public void shutdown() {
 		
-		if(isRunning)
-			isRunning = false;
+		isRunning = false;
+		System.out.println("GOT TO HERE");
+		
+		try {
+			servSocket.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			threadServerSocket.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("WE WAITED");
 	}
 	
 	class ClientServerSocket extends Thread {
 		
-		public ClientServerSocket() {
+		ServerSocket servSocket;
+		
+		public ClientServerSocket(ServerSocket servSocket) {
 			
 			System.out.println("[MESSAGE RECIEVER] Message Listener Running...");
+			this.servSocket = servSocket;			
 			
-			try {
-				
-				servSocket = new ServerSocket(commPort);
-				
-			} catch (IOException e) {
-				
-				System.out.println(e);
-				e.printStackTrace();
-			}
 		}
 		
 		public void run() {
@@ -69,13 +84,10 @@ public class MessageReciever {
 				try {
 					
 					Socket socket = servSocket.accept();
-					ClientHandler ch = new ClientHandler(socket);
-					ch.start();
-					ch.join();
+					new ClientHandler(socket).start();
 					
-				} catch (IOException | InterruptedException e) {
-					System.out.println(e);
-					e.printStackTrace();
+				} catch (IOException e) {
+					System.out.println("[MESSAGE RECIEVER] Message Reciever Thread Ended");
 				}
 			}
 		}

@@ -51,10 +51,12 @@ public class MessageController {
 		
 		senderChecker = new SenderChecker();
 		threadSender = new Thread(senderChecker);
+		threadSender.setName("[MESSAGE CONTROLLER] SEND CHECKER");
 		threadSender.start();
 		
 		resender = new Resender();
 		threadResender = new Thread(resender);
+		threadResender.setName("[MESSAGE CONTROLLER] RESENDER");
 		threadResender.start();
 	}
 
@@ -125,11 +127,8 @@ public class MessageController {
 	}
 	
 	public void shutdown() {
-		
-		reciever.shutdown();
-		
-		if(isRunning)
-			isRunning = false;
+
+		isRunning = false;
 		
 		try {
 			threadSender.join();
@@ -137,6 +136,10 @@ public class MessageController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("dadsda");
+		reciever.shutdown();
+		
 	}
 	
 	public void leaveNetwork() {
@@ -217,7 +220,9 @@ public class MessageController {
 						toResend.add(resend);
 					}
 				}
-			}		
+			}
+			
+			System.out.println("[MESSAGE CONTROLLER] Resender Thread terminated...");
 		}
 	}
 }

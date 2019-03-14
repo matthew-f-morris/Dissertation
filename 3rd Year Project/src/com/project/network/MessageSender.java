@@ -42,11 +42,11 @@ public class MessageSender {
 	
 	public void sendLeaveNetworkMessage(InetAddress address, Message message) {		
 		
-		RecipientHandler rh = new RecipientHandler(address, message);
-		rh.start();
+		RecipientHandler handler = new RecipientHandler(address, message);
+		handler.start();
 		
 		try {
-			rh.join();
+			handler.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +69,8 @@ public class MessageSender {
 			
 			try {
 				
-				Socket socket = new Socket(address, commPort);
+				Socket socket = new Socket();
+				socket.connect(new InetSocketAddress(address, commPort), 1000);
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 				
 				oos.writeObject(message);
