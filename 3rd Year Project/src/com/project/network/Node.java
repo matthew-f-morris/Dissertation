@@ -8,8 +8,12 @@ import java.util.Hashtable;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.project.Thread.BroadcastManager;
+import com.project.Thread.Manager;
+import com.project.Thread.ThreadManager;
 import com.project.controller.MessageController;
 import com.project.controller.ViewController;
+import com.project.utils.CommunicationInfo;
 import com.project.utils.Message;
 
 import javafx.application.Platform;
@@ -23,17 +27,17 @@ public class Node {
     private ConcurrentHashMap<String, PeerData> peers;
 	
 	private static InetAddress localhost;
-	private static int commPort = 50010;
 	private boolean joined = false;
 
-    private PeerDiscovery peerDiscoverer;
+    private ThreadManager manager;
     private MessageController msgController;
     private ViewController viewControl;
     
     public String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     
-    public Node() {
+    public Node(ViewController viewControl) {
     	    
+    	this.viewControl = viewControl;		
     	String hostname = null;
     	
     	try {    	
@@ -46,19 +50,15 @@ public class Node {
 			e.printStackTrace();
 		}
     	
-    	nodeInfo = new PeerData(UUID.randomUUID().toString(), hostname, localhost, Node.commPort);
-    	
-    }
-    
-    public void initialise() {  
-    	
     	System.out.println("[NODE] Initialising Node...");
     	
+    	nodeInfo = new PeerData(UUID.randomUUID().toString(), hostname, localhost, CommunicationInfo.commPort);
+  	    	
     	peers = new ConcurrentHashMap<String, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
-
-    	peerDiscoverer = new PeerDiscovery(this);    	
+   
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
+     	manager = new ThreadManager();
     	
     	joined = true;
     }
@@ -120,10 +120,6 @@ public class Node {
 		if(password.equals(Node.password)) {
 			this.setUsername(username);
 		}
-	}
-
-	public void addViewController(ViewController viewControl) {
-		this.viewControl = viewControl;		
 	}
 		
 	public void shutdown() {

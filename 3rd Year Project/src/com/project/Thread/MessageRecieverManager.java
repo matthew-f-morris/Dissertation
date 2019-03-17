@@ -1,85 +1,58 @@
-package com.project.network;
+package com.project.Thread;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.project.Thread.ThreadStop;
 import com.project.controller.MessageController;
+import com.project.utils.CommunicationInfo;
 import com.project.utils.Message;
 
-public class MessageReciever {
-	
-	private boolean isRunning = true;
-	private static final int commPort = 50010;
-	private MessageController controller = null;
+public class MessageRecieverManager implements Manager {
+
+	private MessageController controller;
 	
 	private Thread threadServerSocket;
 	private ClientServerSocket serversocket;
-	private ServerSocket servSocket;
 	
+	public MessageRecieverManager() {
 	
-	public MessageReciever(MessageController controller) {
-		
-		try {
-			
-			servSocket = new ServerSocket(commPort);
-			
-		} catch (IOException e) {
-			
-			System.out.println(e);
-			e.printStackTrace();
-		}
-		
-		this.controller = controller;
-		initialize();
 	}
-	
-	public void initialize() {
+
+	public void start() {
 		
-		isRunning = true;
-		
-		if(servSocket.isClosed()) {
-			try {
-				servSocket = new ServerSocket(commPort);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		serversocket = new ClientServerSocket(servSocket);
-		
+		serversocket = new ClientServerSocket();		
 		threadServerSocket = new Thread(serversocket);
 		threadServerSocket.setName("[MESSAGE RECIEVER] SERVER SOCKET");
-		threadServerSocket.start();
+		threadServerSocket.start();		
 	}
-	
-	public void shutdown() {
+
+	public void stop() {
 		
-		isRunning = false;
-		
-		try {
-			servSocket.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		serversocket.stopThread();
 		
 		try {
 			threadServerSocket.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 	
 	class ClientServerSocket extends Thread implements ThreadStop {
 		
-		ServerSocket servSocket;
+		private ServerSocket servSocket;
+		private boolean isRunning = ThreadStop.isRunning;
 		
-		public ClientServerSocket(ServerSocket servSocket) {
+		public ClientServerSocket() {
 			
 			System.out.println("[MESSAGE RECIEVER] Message Listener Running...");
-			this.servSocket = servSocket;			
+			
+			try {
+				this.servSocket = new ServerSocket(CommunicationInfo.commPort);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
 			
 		}
 		
@@ -98,10 +71,15 @@ public class MessageReciever {
 			}
 		}
 
-		@Override
 		public void stopThread() {
-			// TODO Auto-generated method stub
 			
+			isRunning = false;
+			
+			try {
+				servSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

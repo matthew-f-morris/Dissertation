@@ -13,20 +13,16 @@ import com.project.utils.Message;
 
 public class MessageController {
 
-	private Node node;
+	public Node node;
 	
-	private ConcurrentHashMap<String, PeerData> peers;
-	private MessageSender sender;
+	public ConcurrentHashMap<String, PeerData> peers;
+	public MessageSender sender;
 	private MessageReciever reciever;
-	private LinkedList<Message> messagesRecieved;
-	private LinkedList<Message> messagesToSend;
-	private ConcurrentLinkedQueue<AddressMessage> toResend;
-	private final int sendInterval = 1000;
-	private final int resendInterval = 3000;
+	public LinkedList<Message> messagesRecieved;
+	public LinkedList<Message> messagesToSend;
+	public ConcurrentLinkedQueue<AddressMessage> toResend;
 
 	private boolean isRunning = true;
-	private Thread threadSender;
-	private SenderChecker senderChecker;
 	
 	private Thread threadResender;
 	private Resender resender;
@@ -41,7 +37,7 @@ public class MessageController {
 		sender = new MessageSender(this);
 		reciever = new MessageReciever(this);
 		messagesRecieved = new LinkedList<Message>();
-		messagesToSend = new LinkedList<Message>();
+		setMessagesToSend(new LinkedList<Message>());
 		toResend = new ConcurrentLinkedQueue<AddressMessage>();
 
 		initializeThreads();
@@ -66,7 +62,7 @@ public class MessageController {
 
 	public void queueToSend(Message message) {
 		
-		messagesToSend.add(message);
+		getMessagesToSend().add(message);
 		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message.getText());
 	}
 
@@ -77,7 +73,7 @@ public class MessageController {
 
 	private boolean checkEmptySend() {
 
-		if (messagesToSend.size() <= 0) {
+		if (getMessagesToSend().size() <= 0) {
 			return true;
 		} else
 			return false;
@@ -107,11 +103,11 @@ public class MessageController {
 
 		} else {
 
-			for (Message msg : messagesToSend) {
+			for (Message msg : getMessagesToSend()) {
 				System.out.println("[MESSAGE CONTROLLER] Messaages To Send: " + msg.getText());
 			}
 
-			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesToSend.size());
+			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + getMessagesToSend().size());
 		}
 	}
 
@@ -171,6 +167,14 @@ public class MessageController {
 		node.removePeer(uuid);
 	}
 
+	public LinkedList<Message> getMessagesToSend() {
+		return messagesToSend;
+	}
+
+	public void setMessagesToSend(LinkedList<Message> messagesToSend) {
+		this.messagesToSend = messagesToSend;
+	}
+
 	class SenderChecker extends Thread {
 
 		public void run() {
@@ -185,8 +189,8 @@ public class MessageController {
 					e.printStackTrace();
 				}
 
-				if (messagesToSend.size() >= 1) {
-					Message toSend = messagesToSend.removeLast();
+				if (getMessagesToSend().size() >= 1) {
+					Message toSend = getMessagesToSend().removeLast();
 					for (PeerData peer : peers.values()) {						
 						if(!(peer.getUuid().equals(node.nodeInfo.getUuid()))){							
 							boolean sent = sender.sendMessage(peer.getAddress(), toSend);

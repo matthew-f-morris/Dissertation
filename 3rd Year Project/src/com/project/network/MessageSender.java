@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 
+import com.project.Thread.ThreadStop;
 import com.project.controller.MessageController;
 import com.project.utils.Message;
 
@@ -52,7 +53,7 @@ public class MessageSender {
 		}
 	}
 	
-	class RecipientHandler extends Thread {
+	class RecipientHandler extends Thread implements ThreadStop {
 		
 		//start one of these to send a message to a client!
 		
@@ -80,6 +81,12 @@ public class MessageSender {
 				System.out.println(e);
 				e.printStackTrace();
 			}
+		}
+
+		@Override
+		public void stopThread() {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }
