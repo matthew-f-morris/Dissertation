@@ -58,7 +58,9 @@ public class Node {
     	peers.put(nodeInfo.getUuid(), nodeInfo);
    
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
-     	manager = new ThreadManager();
+     	
+    	manager = new ThreadManager(this, msgController);
+    	manager.joinNetwork();
     	
     	joined = true;
     }
@@ -124,8 +126,7 @@ public class Node {
 		
 	public void shutdown() {
 		
-		peerDiscoverer.shutdown();
-		msgController.shutdown();
+		manager.leaveNetwork();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");
 		Platform.exit();
 		System.exit(0);
@@ -137,8 +138,7 @@ public class Node {
 			System.err.println("Node Not Joined To Network");
 		} else {
 			
-			peerDiscoverer.leaveNetwork();
-			msgController.leaveNetwork();
+			manager.leaveNetwork();
 			joined = false;
 			System.out.println("\n --- NODE LEFT NETWORK ---\n");
 		}
@@ -149,10 +149,9 @@ public class Node {
 		if(joined) {			
 			System.err.println("Node Already Joined To Network");
 		} else {
-		
+			
+			manager.joinNetwork();
 			System.out.println("\n --- NODE JOINING NETWORK ---\n");
-			peerDiscoverer.startDiscovery();
-			msgController.startup();
 			joined = true;
 		}
 	}

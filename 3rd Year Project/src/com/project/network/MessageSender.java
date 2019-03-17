@@ -53,9 +53,7 @@ public class MessageSender {
 		}
 	}
 	
-	class RecipientHandler extends Thread implements ThreadStop {
-		
-		//start one of these to send a message to a client!
+	class RecipientHandler extends Thread {
 		
 		Message message;
 		InetAddress address;
@@ -81,12 +79,6 @@ public class MessageSender {
 				System.out.println(e);
 				e.printStackTrace();
 			}
-		}
-
-		@Override
-		public void stopThread() {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class MessageRecieverManager implements Manager {
 		}		
 	}
 	
-	class ClientServerSocket extends Thread implements ThreadStop {
+	class ClientServerSocket implements Runnable, ThreadStop {
 		
 		private ServerSocket servSocket;
 		private boolean isRunning = ThreadStop.isRunning;

@@ -13,8 +13,8 @@ public class SenderCheckerManager implements Manager{
 	private Thread threadSender;
 	private SenderChecker senderChecker;
 
-	public SenderCheckerManager() {
-		
+	public SenderCheckerManager(MessageController controller) {
+		this.controller = controller;
 	}
 	
 	public void start() {

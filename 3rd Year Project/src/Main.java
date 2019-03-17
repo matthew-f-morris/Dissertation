@@ -43,9 +43,7 @@ public class Main extends Application {
 			System.exit(0);
 		});
 		
-		node = new Node();
-        node.addViewController(viewControl);
-		node.initialise();	
+		node = new Node(viewControl);
 		node.queueToSend(new Message(node.nodeInfo, "TO ALL!"));
 		viewControl.setNode(node);
 		

@@ -9,7 +9,6 @@ import java.net.SocketException;
 
 import com.project.network.Node;
 import com.project.network.PeerData;
-import com.project.network.PeerDiscovery;
 import com.project.utils.CommunicationInfo;
 
 public class BroadcastListenerManager implements Manager {
@@ -18,8 +17,7 @@ public class BroadcastListenerManager implements Manager {
 	private BroadcastListener listener;
 	private Node node;
 	
-	public BroadcastListenerManager(Node node) {
-		
+	public BroadcastListenerManager(Node node) {		
 		this.node = node;
 	}
 	
@@ -78,8 +76,7 @@ public class BroadcastListenerManager implements Manager {
 
 				}
 
-				socket.close();
-				
+				socket.close();				
 			}
 
 			catch (Exception e) {

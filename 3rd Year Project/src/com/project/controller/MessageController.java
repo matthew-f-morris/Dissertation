@@ -21,11 +21,6 @@ public class MessageController {
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
 	public ConcurrentLinkedQueue<AddressMessage> toResend;
-
-	private boolean isRunning = true;
-	
-	private Thread threadResender;
-	private Resender resender;
 	
 	private String uuid = null;
 	
@@ -34,30 +29,10 @@ public class MessageController {
 		this.node = node;
 		this.peers = peers;
 		this.uuid = uuid;
-		sender = new MessageSender(this);
-		reciever = new MessageReciever(this);
+
 		messagesRecieved = new LinkedList<Message>();
 		setMessagesToSend(new LinkedList<Message>());
 		toResend = new ConcurrentLinkedQueue<AddressMessage>();
-
-		initializeThreads();
-	}
-
-	private void initializeThreads() {
-		
-		isRunning = true;
-		
-		senderChecker = new SenderChecker();
-		resender = new Resender();
-		
-		threadSender = new Thread(senderChecker);
-		threadSender.setName("[MESSAGE CONTROLLER] SEND CHECKER");
-		threadSender.start();
-
-		threadResender = new Thread(resender);
-		threadResender.setName("[MESSAGE CONTROLLER] RESENDER");
-		threadResender.start();
-
 	}
 
 	public void queueToSend(Message message) {
@@ -126,12 +101,7 @@ public class MessageController {
 		}
 	}
 	
-	public void shutdown() {
-		
-		leaveNetwork();		
-	}
-	
-	public void leaveNetwork() {
+	public void sendLeaveMessage() {
 	
 		Message leaveMessage = new Message(true);
 		
@@ -140,27 +110,6 @@ public class MessageController {
 				sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
 			}
 		}
-		
-		isRunning = false;
-		
-		try {
-			
-			threadSender.join();
-			threadResender.join();
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		reciever.shutdown();
-		System.out.println("[MESSAGE CONTROLLER] ALL MESSAGING SYSTEMS SHUT DOWN");
-	}
-	
-	public void startup() {
-		
-		isRunning = true;
-		initializeThreads();
-		reciever.initialize();
 	}
 	
 	public void removePeer(String uuid) {
@@ -173,67 +122,5 @@ public class MessageController {
 
 	public void setMessagesToSend(LinkedList<Message> messagesToSend) {
 		this.messagesToSend = messagesToSend;
-	}
-
-	class SenderChecker extends Thread {
-
-		public void run() {
-
-			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread started...");
-			
-			while (isRunning) {
-
-				try {
-					Thread.sleep(sendInterval);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-				if (getMessagesToSend().size() >= 1) {
-					Message toSend = getMessagesToSend().removeLast();
-					for (PeerData peer : peers.values()) {						
-						if(!(peer.getUuid().equals(node.nodeInfo.getUuid()))){							
-							boolean sent = sender.sendMessage(peer.getAddress(), toSend);
-							
-							if(!sent) {
-								toResend.add(new AddressMessage(peer.getAddress(), toSend));
-							}
-						}						
-					}
-				}
-			}
-
-			System.out.println("[MESSAGE CONTROLLER] Sender Checker Thread Ended");
-		}
-	}
-	
-	class Resender extends Thread {
-		
-		public void run() {
-			
-			System.out.println("[MESSAGE CONTROLLER] Resender Thread started...");
-			
-			while (isRunning) {
-
-				try {
-					Thread.sleep(resendInterval);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-				if (toResend.size() >= 1) {
-					
-					System.out.println("Number of messages to resend: " + toResend.size());
-					AddressMessage resend = toResend.poll();
-					
-					boolean resent = sender.sendMessage(resend.getAddress(), resend.getMessage());					
-					if(!resent) {
-						toResend.add(resend);
-					}
-				}
-			}
-			
-			System.out.println("[MESSAGE CONTROLLER] Resender Thread Ended");
-		}
 	}
 }

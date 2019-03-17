@@ -11,8 +11,8 @@ public class ResenderManager implements Manager {
 	private Thread threadResender;
 	private Resender resender;
 	
-	public ResenderManager() {
-		
+	public ResenderManager(MessageController controller) {
+		this.controller = controller;
 	}
 	
 	public void start() {
