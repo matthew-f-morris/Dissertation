@@ -4,27 +4,35 @@ import java.util.UUID;
 
 public class Identifier {
 	
-	private int position;
-	private String identifier;
+	public short position;
+	public String siteId;
 	
-	public Identifier(int position, String identifier) {
+	public Identifier(short position, String siteId) {
 		this.position = position;
-		this.identifier = identifier;
+		this.siteId = siteId;
 	}
 	
-	public Identifier(SequenceAtom atom, String identifier) throws Exception {
+	public Identifier(DocumentNode atom, String siteId) throws Exception {
 		
-		this.identifier = identifier;
+		this.siteId = siteId;
 		
-		if(atom == SequenceAtom.MIN) {
+		if(atom == DocumentNode.MIN) {
 			
 			this.position = Short.MIN_VALUE;			
-		} else if(atom == SequenceAtom.MAX) {
+		} else if(atom == DocumentNode.MAX) {
 			
 			this.position = Short.MAX_VALUE;
 		} else {
 			
 			throw new Exception("Invalid Identifier Construction");
 		}
+	}
+	
+	public short getPosition() {
+		return position;
+	}
+	
+	public String getIdentifier() {
+		return siteId;
 	}
 }

@@ -7,7 +7,7 @@ IDENTIFIER = <pos, site> : pos = int, site = site Identifier
 
 POSITION = List<IDENTIFIER>  |  List<pos, site>
 
-ATOM IDENTIFIER = <pos, clock>  |  <List<pos, site>, clock>
+ATOM IDENTIFIER = <POSITION, clock>  |  <List<IDENTIFIER>, clock>  ==>  <List<pos, site>, clock>
 
 SEQUENCE ATOM = <atomIdentifier, Message>  |  <<pos, clock>, Message>  => <<List<pos, site>, clock>, Message>
 
