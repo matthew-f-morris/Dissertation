@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.project.network.MessageReciever;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.network.PeerData;
@@ -17,7 +16,7 @@ public class MessageController {
 	
 	public ConcurrentHashMap<String, PeerData> peers;
 	public MessageSender sender;
-	private MessageReciever reciever;
+//	private MessageReciever reciever;
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
 	public ConcurrentLinkedQueue<AddressMessage> toResend;
@@ -110,6 +109,8 @@ public class MessageController {
 				sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
 			}
 		}
+		
+		System.out.println("[MESSAGE CONTROLLER] Leave Message Sent");
 	}
 	
 	public void removePeer(String uuid) {

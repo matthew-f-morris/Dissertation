@@ -8,7 +8,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import com.project.network.Node;
-import com.project.network.PeerDiscovery;
 import com.project.utils.CommunicationInfo;
 
 public class BroadcastManager implements Manager {
@@ -74,7 +73,6 @@ public class BroadcastManager implements Manager {
 					try {
 						Thread.sleep(broadcastInterval);
 					}
-
 					catch (InterruptedException e) {
 						System.out.println(e);
 						e.printStackTrace();

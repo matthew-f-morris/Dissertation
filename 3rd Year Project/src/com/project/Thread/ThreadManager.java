@@ -18,7 +18,7 @@ public class ThreadManager {
 		
 		broadcastListener = new BroadcastListenerManager(node);
 		broadcast = new BroadcastManager(node);
-		reciever = new MessageRecieverManager();
+		reciever = new MessageRecieverManager(controller);
 		sender = new SenderCheckerManager(controller);
 		resender = new ResenderManager(controller);
 	}

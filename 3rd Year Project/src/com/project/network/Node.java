@@ -78,7 +78,12 @@ public class Node {
     }
 	
 	public void removePeer(String uuid) {
-		peers.remove(uuid);
+		
+		if(peers.contains(uuid)) {
+			peers.remove(uuid);
+		} else {
+			System.err.println("Peer does not exist!");
+		}		
 	}
 	
 	public void queueToSend(Message message) {		

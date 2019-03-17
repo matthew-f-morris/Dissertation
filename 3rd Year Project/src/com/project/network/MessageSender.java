@@ -5,16 +5,14 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.concurrent.Callable;
 
-import com.project.Thread.ThreadStop;
 import com.project.controller.MessageController;
 import com.project.utils.Message;
 
 public class MessageSender {
 
 	private static final int commPort = 50010;
-	private MessageController controller = null;
+	private MessageController controller;
 	
 	public MessageSender(MessageController controller) {
 		this.controller = controller;

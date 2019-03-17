@@ -16,8 +16,8 @@ public class MessageRecieverManager implements Manager {
 	private Thread threadServerSocket;
 	private ClientServerSocket serversocket;
 	
-	public MessageRecieverManager() {
-	
+	public MessageRecieverManager(MessageController controller) {
+		this.controller = controller;
 	}
 
 	public void start() {

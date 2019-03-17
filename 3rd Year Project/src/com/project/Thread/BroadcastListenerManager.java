@@ -57,7 +57,7 @@ public class BroadcastListenerManager implements Manager {
 		public void run() {
 
 			System.out.println("[BROADCAST LISTENER] Listening for broadcasting peers...");
-			byte[] message = new byte[5000];
+			byte[] message = new byte[1500];
 
 			try {
 
