@@ -1,23 +1,27 @@
 package com.project.crdt;
 
-import com.project.clock.Clock;
-
 public class AtomIdentifier {
 
 	public Position position;
-	public Clock clock;
-	//private int clock;
-	
-	public AtomIdentifier() {		
+	public int clock;
+
+	public AtomIdentifier(int clock) {		
 		position = new Position();
-		clock = new Clock();
+		this.clock = clock;
 	}
 	
-	public Clock getClock() {
-		return clock;
-	}
-	
-	public Position getPosition() {
-		return position;
+	public AtomIdentifier(Position position, int clock) {
+		this.position = position;
+		this.clock = clock;
 	}
 }
+
+
+//
+//public Clock getClock() {
+//	return clock;
+//}
+//
+//public Position getPosition() {
+//	return position;
+//}

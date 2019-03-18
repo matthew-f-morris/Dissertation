@@ -8,7 +8,7 @@ public class SequenceAtom {
 	public SequenceAtom(AtomIdentifier atomId) {
 		
 		this.atomId = atomId;
-		message = "DEFAULT MESSAGE: \nSite Counter - " + atomId.clock.getCounter() + "\nSite ID - " + atomId.position.getLast().siteId;
+		message = "DEFAULT MESSAGE: \nSite Counter - " + atomId.clock;
 	}
 	
 	public SequenceAtom(AtomIdentifier atomId, String message) {

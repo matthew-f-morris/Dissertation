@@ -16,11 +16,14 @@ public class Sequence {
 		sequence = new ArrayList<SequenceAtom>();
 		sequence.add(seqAtom);
 	}
-	
-	public void add(SequenceAtom seqAtom) {
-		
-		sequence.add(seqAtom);
-	}
 }
+
+	
+//	
+//	public void add(SequenceAtom seqAtom) {
+//		
+//		sequence.add(seqAtom);
+//	}
+//}
 
 //these are just the datatypes, will need to edit

@@ -8,4 +8,9 @@ public class LogootDocument {
 		
 		document = new Sequence();
 	}
+	
+	private void initialize() {
+		
+		
+	}	
 }
