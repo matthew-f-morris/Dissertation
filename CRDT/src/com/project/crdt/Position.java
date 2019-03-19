@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Position {
 	
-	public ArrayList<Identifier> position;
+	public ArrayList<Identifier> ids;
 	
 	public Position(Identifier identifier) {		
-		position = new ArrayList<Identifier>();
-		position.add(identifier);
+		ids = new ArrayList<Identifier>();
+		ids.add(identifier);
 	}
 	
 	public Position() {		
-		position = new ArrayList<Identifier>();
+		ids = new ArrayList<Identifier>();
 	}
 }
 
