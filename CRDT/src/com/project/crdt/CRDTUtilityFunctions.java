@@ -12,6 +12,7 @@ public final class CRDTUtilityFunctions {
 	 */
 	
 	public static int compareAtomIdentifiers(AtomIdentifier x, AtomIdentifier y) {
+		System.out.println("ur mum");
 		return comparePos(x.position, y.position);
 	}
 	
@@ -66,7 +67,12 @@ public final class CRDTUtilityFunctions {
 	}
 
 	public static int prefix(Position pos, int index) {
-		return 0;
+		
+		if(pos.ids.size() < i)
+			return 0;
+		else {
+			pos.ids.get(index)
+		}
 	}
 }
 
