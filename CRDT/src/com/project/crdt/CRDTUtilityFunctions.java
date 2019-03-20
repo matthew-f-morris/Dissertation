@@ -59,7 +59,7 @@ public final class CRDTUtilityFunctions {
 			}
 			
 			Identifier id = new Identifier(pos, siteId);
-			//position
+			position.ids.add(id);
 		}
 				
 		return new Position();
