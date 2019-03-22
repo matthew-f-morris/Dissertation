@@ -1,4 +1,4 @@
-package com.project.crdt;
+package com.project.datatypes;
 
 public class AtomIdentifier {
 

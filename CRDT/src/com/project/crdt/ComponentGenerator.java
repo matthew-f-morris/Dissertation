@@ -1,16 +1,18 @@
 package com.project.crdt;
 
-import com.project.clock.Clock;
+import com.project.datatypes.AtomIdentifier;
+import com.project.datatypes.Identifier;
+import com.project.datatypes.Position;
+import com.project.datatypes.Sequence;
+import com.project.datatypes.SequenceAtom;
 
 public class ComponentGenerator {
 	
 	public static final int MAX_POSITION = 32767;	
-	private Clock clock;
-	private String siteId;
+	private static String siteId;
 	
-	public ComponentGenerator(Clock clock, String siteId) {
-		this.clock = clock;
-		this.siteId = siteId;
+	public ComponentGenerator(String siteId) {
+		ComponentGenerator.siteId = siteId;
 	}
 	
 	private int checkValue(int x) throws Exception {

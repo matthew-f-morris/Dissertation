@@ -1,4 +1,4 @@
-package com.project.crdt;
+package com.project.datatypes;
 
 public class SequenceAtom {
 	
@@ -8,7 +8,7 @@ public class SequenceAtom {
 	public SequenceAtom(AtomIdentifier atomId) {
 		
 		this.atomId = atomId;
-		message = "DEFAULT MESSAGE: \nSite Counter - " + atomId.clock;
+		message = "///";
 	}
 	
 	public SequenceAtom(AtomIdentifier atomId, String message) {

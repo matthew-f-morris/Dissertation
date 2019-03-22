@@ -1,16 +1,30 @@
 package com.project.crdt;
 
-public class LogootDocument {
+import java.util.Arrays;
 
-	public Sequence document;
+import com.project.clock.Clock;
+import com.project.datatypes.Sequence;
+
+public class LogootDocument {
 	
-	public LogootDocument() {
+	private String siteId;
+	public Sequence document;
+	Clock clock = new Clock();
+	CRDTUtilityFunctions utility = new CRDTUtilityFunctions(clock, new ComponentGenerator(siteId));
+	
+	public LogootDocument(String siteId) {
 		
+		this.siteId = siteId;
 		document = new Sequence();
 	}
 	
-	private void initialize() {
+	public void initDocument() {
 		
-		
-	}	
+		document.sequenceArray.add(CRDTUtilityFunctions.genStartAtom());
+		document.sequenceArray.add(CRDTUtilityFunctions.genStopAtom());
+	}
+	
+	public void print() {
+		// make print function
+	}
 }

@@ -3,11 +3,22 @@ package com.project.crdt;
 import java.util.ArrayList;
 import java.util.Random;
 
-public final class CRDTUtilityFunctions {
+import com.project.clock.Clock;
+import com.project.datatypes.AtomIdentifier;
+import com.project.datatypes.Identifier;
+import com.project.datatypes.Position;
+import com.project.datatypes.SequenceAtom;
+
+public class CRDTUtilityFunctions {
 	
 	static Random rand = new Random();
+	private static Clock clock;
+	private static ComponentGenerator maker;
 	
-	private CRDTUtilityFunctions() {}
+	public CRDTUtilityFunctions(Clock clock, ComponentGenerator maker) {
+		CRDTUtilityFunctions.clock = clock;
+		CRDTUtilityFunctions.maker = maker;
+	}
 		
 	public static ArrayList<Position> generateLinePositions(Position posP, Position posQ, int numberLines, String siteId) {
 		
@@ -31,7 +42,7 @@ public final class CRDTUtilityFunctions {
 			int random = rand.nextInt(high - low) + low;
 			
 			positions.add(constructPosition(r + random, posP, posQ, siteId));
-			r = r + step;
+			r = r + step;			
 		}
 		
 		return positions;
@@ -47,8 +58,7 @@ public final class CRDTUtilityFunctions {
 			interval = prefix(posQ, index) - prefix(posP, index);
 		}
 		
-		int r = prefix(posP, index);
-		
+		int r = prefix(posP, index);		
 		return constructPosition(r, posP, posQ, siteId);
 	}
 	
@@ -73,6 +83,9 @@ public final class CRDTUtilityFunctions {
 			
 			Identifier id = new Identifier(pos, siteId);
 			position.ids.add(id);
+			
+			clock.increment();
+			System.out.println("Line added, Clock val: " + clock.getCounter());
 		}
 				
 		return new Position();
@@ -85,6 +98,22 @@ public final class CRDTUtilityFunctions {
 		else {
 			return pos.ids.get(index).position;
 		}
+	}
+	
+	public static SequenceAtom genStartAtom() {
+		
+		Identifier min = maker.genIdentifierMin();
+		Position pMin = maker.genPosition(min);
+		AtomIdentifier atom = maker.genAtomIdentifier(pMin, clock.getCounter());
+		return maker.genSequenceAtom(atom);
+	}
+	
+	public static SequenceAtom genStopAtom() {
+		
+		Identifier max = maker.genIdentifierMax();
+		Position pMax = maker.genPosition(max);
+		AtomIdentifier atom = maker.genAtomIdentifier(pMax, clock.getCounter());
+		return maker.genSequenceAtom(atom);
 	}
 }
 
