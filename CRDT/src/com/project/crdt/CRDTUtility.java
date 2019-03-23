@@ -20,7 +20,7 @@ public class CRDTUtility {
 		CRDTUtility.maker = maker;
 	}
 		
-	public static ArrayList<Position> generateLinePositions(Position posP, Position posQ, int numberLines, String siteId) {
+	public static ArrayList<Position> generateLinePositions(Position posP, Position posQ, int numberLines, long siteId) throws Exception {
 		
 		ArrayList<Position> positions = new ArrayList<Position>();
 		
@@ -36,11 +36,10 @@ public class CRDTUtility {
 		int r = prefix(posP, index);
 		
 		for(int i = 0; i < numberLines; i++) {			
-
-			int high = step;
-			int random = rand.nextInt(high - 1) + 1;
 			
-			positions.add(constructPosition(r + random, posP, posQ, siteId));
+			int random = rand.nextInt(step - 1) + 1;
+			
+			positions.add(constructPosition(r, random, posP, posQ, siteId));
 			r = r + step;			
 		}
 		
@@ -62,17 +61,22 @@ public class CRDTUtility {
 //		return constructPosition(r, posP, posQ, siteId);		
 //	}
 	
-	private static Position constructPosition(int r, Position posP, Position posQ, String oldId) throws Exception {
+	private static Position constructPosition(int r, int random, Position posP, Position posQ, long oldId) throws Exception {
 		
 		//integer r = random value
 		//posp and pos q are the two arrays of identifiers for the sequence atoms which we want to put a new sequence atom between		
+		
+				
+		
+		//if(random)
+		
 		System.out.println("R: " + r);
 		
 		Position position = new Position();
 		
 		for(int j = 0; j < posP.ids.size(); j++) {
 			
-			String siteId = oldId;
+			long siteId = oldId;
 			int pos = j;
 			
 			if(j == posP.ids.size()) {
@@ -105,7 +109,20 @@ public class CRDTUtility {
 		}
 	}
 	
-	public static SequenceAtom genStartAtom(String siteId) {
+	//returns 1 if A > B, -1 if A < B, 0 if equal
+	
+	private static int compareIdentifiers(Identifier a, Identifier b) {
+		
+		if(a.position > b.position)
+			return 1;
+		else if(b.position > a.position)
+			return -1;
+		//else if()
+		
+		return 0;
+	}
+	
+	public static SequenceAtom genStartAtom(long siteId) {
 		
 		Identifier min = maker.genIdentifierMin(siteId);
 		Position pMin = maker.genPosition(min);
@@ -114,7 +131,7 @@ public class CRDTUtility {
 		return maker.genSequenceAtom(atom);
 	}
 	
-	public static SequenceAtom genStopAtom(String siteId) {
+	public static SequenceAtom genStopAtom(long siteId) {
 		
 		Identifier max = maker.genIdentifierMax(siteId);
 		Position pMax = maker.genPosition(max);

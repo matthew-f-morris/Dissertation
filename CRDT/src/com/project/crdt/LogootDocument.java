@@ -2,6 +2,7 @@ package com.project.crdt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Identifier;
@@ -11,12 +12,12 @@ import com.project.datatypes.SequenceAtom;
 
 public class LogootDocument {
 	
-	private String siteId;
+	private long siteId;
 	public Sequence document;
 	Clock clock = new Clock();
 	CRDTUtility utility = new CRDTUtility(clock, new ComponentGenerator());
 	
-	public LogootDocument(String siteId) {
+	public LogootDocument(long siteId) {
 		
 		this.siteId = siteId;
 		document = new Sequence();
@@ -45,7 +46,7 @@ public class LogootDocument {
 		}
 	}
 	
-	public void addMessage(String message, String site) {
+	public void addMessage(String message, long site) throws Exception {
 		
 		Position posP = document.sequenceArray.get(document.sequenceArray.size() - 2).atomId.position;
 		Position posQ = document.sequenceArray.get(document.sequenceArray.size() - 1).atomId.position;

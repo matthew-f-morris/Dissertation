@@ -3,9 +3,9 @@ package com.project.datatypes;
 public class Identifier {
 	
 	public int position;
-	public String siteId;
+	public long siteId;
 	
-	public Identifier(int position, String siteId) {
+	public Identifier(int position, long siteId) {
 		this.position = position;
 		this.siteId = siteId;
 	}

@@ -19,7 +19,7 @@ public class ComponentGenerator {
 			return x;
 	}
 	
-	public Identifier genIdentifier(int p, String siteId) throws Exception {
+	public Identifier genIdentifier(int p, long siteId) throws Exception {
 		
 		if(checkValue(p) == -1) {
 			throw new Exception("Identifier Generation Failed!");
@@ -27,11 +27,11 @@ public class ComponentGenerator {
 			return new Identifier(p, siteId);
 	}
 	
-	public Identifier genIdentifierMax(String siteId) {
+	public Identifier genIdentifierMax(long siteId) {
 		return new Identifier(MAX_POSITION, siteId);
 	}
 	
-	public Identifier genIdentifierMin(String siteId) {
+	public Identifier genIdentifierMin(long siteId) {
 		return new Identifier(0, siteId);
 	}
 	
