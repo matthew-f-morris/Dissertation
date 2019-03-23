@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Sequence {
 	
-	public ArrayList<SequenceAtom> sequenceArray;
+	public ArrayList<SequenceAtom> arr;
 	
 	public Sequence() {
 		
-		sequenceArray = new ArrayList<>();
+		arr = new ArrayList<>();
 	}
 	
 	public Sequence(SequenceAtom seqAtom) {		
-		sequenceArray = new ArrayList<SequenceAtom>();
-		sequenceArray.add(seqAtom);
+		arr = new ArrayList<SequenceAtom>();
+		arr.add(seqAtom);
 	}
 }
 

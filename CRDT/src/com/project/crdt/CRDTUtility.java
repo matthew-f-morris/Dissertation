@@ -8,46 +8,93 @@ import com.project.clock.Clock;
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
+import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
 
 public class CRDTUtility {
 	
 	static Random rand = new Random();
+	private long siteIdCopy;
 	private static Clock clock;
 	private static ComponentGenerator maker;
+	private static Position min; 
+	private static Position max; 
 	
-	public CRDTUtility(Clock clock, ComponentGenerator maker) {
+	public CRDTUtility(Clock clock, ComponentGenerator maker, long siteIdCopy) {
+		
 		CRDTUtility.clock = clock;
 		CRDTUtility.maker = maker;
-	}
-		
-	public static Position generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
-				
-		int index = -1;
-		int interval = 0;
-		
-		while(interval < 1) {			
-			index++;
-			interval = prefix(posQ, index) - prefix(posP, index);
-		}
-		
-		int r = prefix(posP, index);
-		return constructPosition(r, posP, posQ, siteId);
+
+		min = maker.genPosition(maker.genIdentifierMax(siteIdCopy));
+		min = maker.genPosition(maker.genIdentifierMin(siteIdCopy));		
 	}
 	
-	private static Position constructPosition(int index, Position posP, Position posQ, long oldId) throws Exception {
-
-		Position position = null;
+	public static SequenceAtom generate(String message, Position p, Position q, long siteId) throws Exception {
 		
-		if(index > posP.ids.size() || index > posQ.ids.size()) {			
-			int result = prefix(posP, index) - prefix(posQ, index);
-			
+		return maker.genSequenceAtom((maker.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
+	}
+		
+	private static Position generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
+						
+		if(posP.ids.size() == 0) {
+			posP = min;
 		}
 		
-		return position;
+		if(posQ.ids.size() == 0) {
+			posQ = max;
+		}
 		
-		//if(posP.ids.size())
+		switch(compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
+			
+			case -1:
+				int interval = prefix(posQ) - prefix(posP);
+				
+				if(interval > 1)
+					return maker.genPosition(maker.genIdentifier(randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+				
+				else if(interval == 1 && siteId > posP.ids.get(0).siteId)
+					return maker.genPosition(maker.genIdentifier(posP.ids.get(0).position, siteId));
+				
+				else {
+					
+					ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
+					ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+					
+					posP.ids.addAll(idP);
+					posQ.ids.addAll(idQ);
+					
+					return generateLinePosition(posP, posQ, siteId);
+				}
+			
+			case 0:
+				ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
+				ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+				
+				posP.ids.addAll(idP);
+				posQ.ids.addAll(idQ);
+				
+				return generateLinePosition(posP, posQ, siteId);
+			
+			case 1:				
+				throw new Exception("Position Q was less than Position P!");
+		}
 		
+		return null;
+	}
+	
+//	private static Position constructPosition(int index, Position posP, Position posQ, long oldId) throws Exception {
+//
+//		Position position = null;
+//		
+//		if(index > posP.ids.size() || index > posQ.ids.size()) {			
+//			int result = prefix(posP, index) - prefix(posQ, index);
+//			
+//		}
+//		
+//		return position;
+//		
+//		//if(posP.ids.size())
+//		
 //		r += random;		
 //		Position position = new Position();
 //		
@@ -75,18 +122,20 @@ public class CRDTUtility {
 //		}		
 //		
 //		return position;
-	}
-
-	private static int prefix(Position pos, int index) {
-		
-		if(pos.ids.size() < index)
-			return 0;
-		else {
-			return pos.ids.get(index).position;
-		}
-	}
+//	}
+//
+//	private static int prefix(Position pos, int index) {
+//		
+//		if(pos.ids.size() < index)
+//			return 0;
+//		else {
+//			return pos.ids.get(index).position;
+//		}
+//	}
 	
-
+	private static int prefix(Position pos) {
+		return pos.ids.get(0).position;
+	}
 	
 	private static int comparePosition(Position p, Position q) {
 		
@@ -111,7 +160,7 @@ public class CRDTUtility {
 		ArrayList<Identifier> idP = new ArrayList<Identifier>(p.ids.subList(1, p.ids.size())); 
 		ArrayList<Identifier> idQ = new ArrayList<Identifier>(q.ids.subList(1, q.ids.size())); 
 				
-			return comparePosition(maker.genPosition(idP), maker.genPosition(idQ));		
+			return comparePosition(maker.genPosition(idP), maker.genPosition(idQ));	
 	}
 	
 	private static int compareIdentifier(Identifier p, Identifier q) {
@@ -120,9 +169,9 @@ public class CRDTUtility {
 		int siteComparison = compareIdentifierSites(p.position, q.position);;
 		
 		if(posComparison == 1 && siteComparison == 1)
-			return 1;
+			return -1;
 		else if(posComparison == -1 && siteComparison == -1)
-			return -1;		
+			return 1;		
 		return 0;
 	}
 		
@@ -149,18 +198,16 @@ public class CRDTUtility {
 	}
 	
 	public static SequenceAtom genStartAtom(long siteId) {
-		
-		Identifier min = maker.genIdentifierMin(siteId);
-		Position pMin = maker.genPosition(min);
+
+		Position pMin = maker.genPosition(maker.genIdentifierMin(siteId));
 		AtomIdentifier atom = maker.genAtomIdentifier(pMin, clock.counter);
 		clock.increment();
 		return maker.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genStopAtom(long siteId) {
-		
-		Identifier max = maker.genIdentifierMax(siteId);
-		Position pMax = maker.genPosition(max);
+
+		Position pMax = maker.genPosition(maker.genIdentifierMax(siteId));
 		AtomIdentifier atom = maker.genAtomIdentifier(pMax, clock.counter);
 		clock.increment();
 		return maker.genSequenceAtom(atom);
@@ -171,6 +218,25 @@ public class CRDTUtility {
 		AtomIdentifier atom = maker.genAtomIdentifier(p, clock.counter);
 		clock.increment();
 		return maker.genSequenceAtom(atom, message);
+	}
+	
+	public static void addToSequence(Sequence doc, SequenceAtom atom) {
+		
+		int length = doc.arr.size();
+		
+		for(int i = 0; i < length; i++) {
+			
+			int comparePrev = comparePosition(atom.atomId.position, doc.arr.get(i).atomId.position);
+			int compareNext = comparePosition(atom.atomId.position, doc.arr.get(i+1).atomId.position);
+			
+			if(comparePrev == 1 && compareNext == -1) {
+				doc.arr.add(i + 1, atom);
+			} else if(comparePrev == 1 && compareNext == 1) {
+				continue;
+			} else if((comparePrev == -1 && compareNext == 1) || (comparePrev == -1 && compareNext == -1)) {
+				throw new Error("Document is not ordered properly!");
+			} 
+		}
 	}
 }
 

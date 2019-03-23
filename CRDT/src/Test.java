@@ -18,7 +18,7 @@ public class Test {
 		LogootDocument doc = new LogootDocument(site1);
 		
 		doc.initDocument();
-		doc.addMessage("YAA", site1);
+		doc.addMessage("YAA", site2);
 		doc.addMessage("Hi", site2);
 		doc.addMessage("Hello", site3);
 		doc.addMessage("How are you?", site4);
@@ -33,15 +33,18 @@ public class Test {
 		doc.addMessage("How are you?", site4);
 		doc.addMessage("How are you?", site5);
 		doc.addMessage("How are you?", site6);
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
-//		doc.addMessage("How are you?", "site 4");
+		doc.addMessage("How are you?", site4);
+		doc.addMessage("How are you?", site5);
+		doc.addMessage("How are you?", site6);
+		doc.addMessage("How are you?", site4);
+		doc.addMessage("How are you?", site5);
+		doc.addMessage("How are you?", site6);
+		doc.addMessage("How are you?", site4);
+		doc.addMessage("How are you?", site5);
+		doc.addMessage("How are you?", site6);
+		doc.addMessage("How are you?", site4);
+		doc.addMessage("How are you?", site5);
+		doc.addMessage("How are you?", site6);
 		doc.print();
 	}	
 }

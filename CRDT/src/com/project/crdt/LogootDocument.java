@@ -15,7 +15,7 @@ public class LogootDocument {
 	private long siteId;
 	public Sequence document;
 	Clock clock = new Clock();
-	CRDTUtility utility = new CRDTUtility(clock, new ComponentGenerator());
+	CRDTUtility utility = new CRDTUtility(clock, new ComponentGenerator(), siteId);
 	
 	public LogootDocument(long siteId) {
 		
@@ -25,13 +25,13 @@ public class LogootDocument {
 	
 	public void initDocument() {
 		
-		document.sequenceArray.add(CRDTUtility.genStartAtom(siteId));
-		document.sequenceArray.add(CRDTUtility.genStopAtom(siteId));
+		document.arr.add(CRDTUtility.genStartAtom(siteId));
+		document.arr.add(CRDTUtility.genStopAtom(siteId));
 	}
 	
 	public void print() {
 				
-		for(SequenceAtom atom : document.sequenceArray) {
+		for(SequenceAtom atom : document.arr) {
 
 			System.out.print("Position Identifier: [");			
 			for(int i = 0; i < atom.atomId.position.ids.size(); i++) {
@@ -48,18 +48,21 @@ public class LogootDocument {
 	
 	public void addMessage(String message, long site) throws Exception {
 		
-		Position posP = document.sequenceArray.get(document.sequenceArray.size() - 2).atomId.position;
-		Position posQ = document.sequenceArray.get(document.sequenceArray.size() - 1).atomId.position;
+		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
+		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
-		ArrayList<Position> newPos = CRDTUtility.generateLinePositions(posP, posQ, 1, site);
+		SequenceAtom atom = CRDTUtility.generate(message,posP, posQ, site);
+		print(atom);
 		
-		for(Position pos : newPos) {
-			document.sequenceArray.add(document.sequenceArray.size() - 1, CRDTUtility.genSequenceAtom(message, pos));
-		}
+		CRDTUtility.addToSequence(document, atom);
 	}
 	
-	private void orderDocument() {
+	public void print(SequenceAtom atom) {
 		
-		//iterate over position list and compare first integer and then site identifier to see if integer is equal
+		System.out.print("[");
+		for(Identifier i : atom.atomId.position.ids) {
+			System.out.print(i.position + ", ");
+		}
+		System.out.println("]");
 	}
 }
