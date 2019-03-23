@@ -9,11 +9,6 @@ import com.project.datatypes.SequenceAtom;
 public class ComponentGenerator {
 	
 	public static final int MAX_POSITION = 32767;	
-	private static String siteId;
-	
-	public ComponentGenerator(String siteId) {
-		ComponentGenerator.siteId = siteId;
-	}
 	
 	private int checkValue(int x) throws Exception {
 		
@@ -24,7 +19,7 @@ public class ComponentGenerator {
 			return x;
 	}
 	
-	public Identifier genIdentifier(int p) throws Exception {
+	public Identifier genIdentifier(int p, String siteId) throws Exception {
 		
 		if(checkValue(p) == -1) {
 			throw new Exception("Identifier Generation Failed!");
@@ -32,11 +27,11 @@ public class ComponentGenerator {
 			return new Identifier(p, siteId);
 	}
 	
-	public Identifier genIdentifierMax() {
+	public Identifier genIdentifierMax(String siteId) {
 		return new Identifier(MAX_POSITION, siteId);
 	}
 	
-	public Identifier genIdentifierMin() {
+	public Identifier genIdentifierMin(String siteId) {
 		return new Identifier(0, siteId);
 	}
 	

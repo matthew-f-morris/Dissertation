@@ -8,7 +8,7 @@ public class SequenceAtom {
 	public SequenceAtom(AtomIdentifier atomId) {
 		
 		this.atomId = atomId;
-		message = "///";
+		message = null;
 	}
 	
 	public SequenceAtom(AtomIdentifier atomId, String message) {

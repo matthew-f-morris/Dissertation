@@ -2,7 +2,7 @@ package com.project.clock;
 
 public class Clock {
 	
-	private int counter = 0;
+	public int counter = 0;
 	
 	public Clock() {	
 		counter = 0;
@@ -27,9 +27,5 @@ public class Clock {
 		if(0 <= check && check <= Integer.MAX_VALUE)	
 			return check;	
 		return -1;
-	}
-	
-	public int getCounter() {
-		return counter;
 	}
 }
