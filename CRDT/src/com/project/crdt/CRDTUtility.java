@@ -1,6 +1,7 @@
 package com.project.crdt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import com.project.clock.Clock;
@@ -20,84 +21,60 @@ public class CRDTUtility {
 		CRDTUtility.maker = maker;
 	}
 		
-	public static ArrayList<Position> generateLinePositions(Position posP, Position posQ, int numberLines, long siteId) throws Exception {
-		
-		ArrayList<Position> positions = new ArrayList<Position>();
-		
+	public static Position generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
+				
 		int index = -1;
 		int interval = 0;
 		
-		while(interval < numberLines) {			
+		while(interval < 1) {			
 			index++;
 			interval = prefix(posQ, index) - prefix(posP, index);
 		}
 		
-		int step = interval / numberLines;
 		int r = prefix(posP, index);
-		
-		for(int i = 0; i < numberLines; i++) {			
-			
-			int random = rand.nextInt(step - 1) + 1;
-			
-			positions.add(constructPosition(r, random, posP, posQ, siteId));
-			r = r + step;			
-		}
-		
-		return positions;
+		return constructPosition(r, posP, posQ, siteId);
 	}
 	
-//	public static Position generateLinePosition(Position posP, Position posQ, String siteId) {
-//		
-//		int interval = 0;
-//		int index = -1;
-//		
-//		while(interval < 1) {
-//			index++;
-//			interval = prefix(posQ, index) - prefix(posP, index);
-//			System.out.println("Interval: " + interval + "\n");			
-//		}
-//		
-//		int r = prefix(posP, index);
-//		return constructPosition(r, posP, posQ, siteId);		
-//	}
-	
-	private static Position constructPosition(int r, int random, Position posP, Position posQ, long oldId) throws Exception {
+	private static Position constructPosition(int index, Position posP, Position posQ, long oldId) throws Exception {
+
+		Position position = null;
 		
-		//integer r = random value
-		//posp and pos q are the two arrays of identifiers for the sequence atoms which we want to put a new sequence atom between		
-		
-				
-		
-		//if(random)
-		
-		System.out.println("R: " + r);
-		
-		Position position = new Position();
-		
-		for(int j = 0; j < posP.ids.size(); j++) {
+		if(index > posP.ids.size() || index > posQ.ids.size()) {			
+			int result = prefix(posP, index) - prefix(posQ, index);
 			
-			long siteId = oldId;
-			int pos = j;
-			
-			if(j == posP.ids.size()) {
-				siteId = oldId;
-			} else if(r == posP.ids.get(j).position) {
-				siteId = posP.ids.get(j).siteId;
-			} else if(r == posQ.ids.get(j).position) {
-				siteId = posQ.ids.get(j).siteId;
-			} else {
-				siteId = oldId;
-			}
-			
+		}
+		
+		return position;
+		
+		//if(posP.ids.size())
+		
+//		r += random;		
+//		Position position = new Position();
+//		
+//		for(int j = 0; j < posP.ids.size(); j++) {
+//			
+//			long siteId = oldId;
+//			int pos = j;
+//			
+//			if(j == posP.ids.size()) {
+//				siteId = oldId;
+//			} else if(r == posP.ids.get(j).position) {
+//				siteId = posP.ids.get(j).siteId;
+//			} else if(r == posQ.ids.get(j).position) {
+//				siteId = posQ.ids.get(j).siteId;
+//			} else {
+//				siteId = oldId;
+//			}
+//			
 //			if(j < posP.ids.size()) {
 //				pos = r;
 //			}
-			
-			Identifier id = maker.genIdentifier(r, siteId);
-			position.ids.add(id);
-		}		
-		
-		return position;
+//			
+//			Identifier id = maker.genIdentifier(r, siteId);
+//			position.ids.add(id);
+//		}		
+//		
+//		return position;
 	}
 
 	private static int prefix(Position pos, int index) {
@@ -109,17 +86,66 @@ public class CRDTUtility {
 		}
 	}
 	
-	//returns 1 if A > B, -1 if A < B, 0 if equal
+
 	
-	private static int compareIdentifiers(Identifier a, Identifier b) {
+	private static int comparePosition(Position p, Position q) {
 		
-		if(a.position > b.position)
+		int lenP = p.ids.size();
+		int lenQ = q.ids.size();
+		
+		if(lenP == 0 && lenQ == 0)
+			return 0;		
+		if(lenP == 0)		
+			return -1;		
+		if(lenQ == 0)
 			return 1;
-		else if(b.position > a.position)
-			return -1;
-		//else if()
 		
+		int result = compareIdentifier(p.ids.get(0), q.ids.get(0));
+		
+		if(result == 1)
+			return 1;
+		if(result == -1)
+			return -1;
+		if(result == 0);
+		
+		ArrayList<Identifier> idP = new ArrayList<Identifier>(p.ids.subList(1, p.ids.size())); 
+		ArrayList<Identifier> idQ = new ArrayList<Identifier>(q.ids.subList(1, q.ids.size())); 
+				
+			return comparePosition(maker.genPosition(idP), maker.genPosition(idQ));		
+	}
+	
+	private static int compareIdentifier(Identifier p, Identifier q) {
+		
+		int posComparison = compareIdentifierPositions(p.position, q.position);
+		int siteComparison = compareIdentifierSites(p.position, q.position);;
+		
+		if(posComparison == 1 && siteComparison == 1)
+			return 1;
+		else if(posComparison == -1 && siteComparison == -1)
+			return -1;		
 		return 0;
+	}
+		
+	private static int compareIdentifierPositions(int a, int b) {
+				
+		if(a > b)
+			return -1;
+		else if(b > a)
+			return 1;		
+		return 0;
+	}
+	
+	private static int compareIdentifierSites(long a, long b) {
+		
+		if(a > b)
+			return -1;
+		else if(b > a)
+			return 1;
+		return 0;
+	}
+	
+	private static int randomInt(int min, int max) {
+		return rand.nextInt(max - min -1) + min + 1;
 	}
 	
 	public static SequenceAtom genStartAtom(long siteId) {
@@ -147,29 +173,5 @@ public class CRDTUtility {
 		return maker.genSequenceAtom(atom, message);
 	}
 }
-
-
-
-
-
-
-
-/*
-// *	Compare atom identifiers, returns 1 if x > y, returns -1 if y > x,
-// * 	returns 0 if x == y 
-// */
-//
-//public static int compareAtomIdentifiers(AtomIdentifier x, AtomIdentifier y) {
-//	System.out.println("ur mum");
-//	return comparePos(x.position, y.position);
-//}
-//
-//public static int comparePosition(Position posx, Position posy) {
-//	// implement 
-//}
-//
-///*
-// *	Implementation of generateLinePositions(p, q, N, s) from paper
-// */
 
 

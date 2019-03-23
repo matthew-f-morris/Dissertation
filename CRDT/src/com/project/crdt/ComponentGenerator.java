@@ -1,5 +1,7 @@
 package com.project.crdt;
 
+import java.util.ArrayList;
+
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
@@ -40,6 +42,10 @@ public class ComponentGenerator {
 	}
 	
 	public Position genPosition(Identifier identifier) {
+		return new Position(identifier);
+	}
+	
+	public Position genPosition(ArrayList<Identifier> identifier) {
 		return new Position(identifier);
 	}
 	

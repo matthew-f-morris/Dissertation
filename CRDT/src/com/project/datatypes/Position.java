@@ -14,6 +14,10 @@ public class Position {
 	public Position() {		
 		ids = new ArrayList<Identifier>();
 	}
+
+	public Position(ArrayList<Identifier> identifiers) {
+		this.ids = identifiers;
+	}
 }
 
 //	
