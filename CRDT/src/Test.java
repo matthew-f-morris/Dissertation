@@ -28,8 +28,8 @@ public class Test {
 		doc.addMessage("Hello, world from site 1!", site1);
 		doc.addMessage("I came from site 2!", site2);
 		doc.addMessage("Hello from site 3!", site3);
-//		doc.addMessage("How are you?", site4);
-//		doc.addMessage("How are you?", site5);
+		doc.addMessage("How are you from 2?", site2);
+		doc.addMessage("Fuck off from 1?", site1);
 //		doc.addMessage("How are you?", site6);
 //		doc.addMessage("How are you?", site4);
 //		doc.addMessage("How are you?", site5);

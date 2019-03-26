@@ -51,11 +51,12 @@ public class LogootDocument {
 		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
 		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
-		SequenceAtom atom = CRDTUtility.generate(message,posP, posQ, site);
+		Position build = new Position();
+		
+		SequenceAtom atom = CRDTUtility.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, build);
 		clock.increment();
 		
-		CRDTUtility.printSequenceAtom(atom);
-		
+		CRDTUtility.printSequenceAtom(atom);		
 		CRDTUtility.addToSequence(document, atom);
 	}
 	

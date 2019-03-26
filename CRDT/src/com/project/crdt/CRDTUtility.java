@@ -20,35 +20,30 @@ public class CRDTUtility {
 	private static Position min; 
 	private static Position max;
 	
-	private static Identifier imin;
-	private static Identifier imax;
-	
 	public CRDTUtility(Clock clock, ComponentGenerator maker, long siteIdCopy) {
 		
 		CRDTUtility.clock = clock;
 		CRDTUtility.maker = maker;
-		
-		imin = maker.genIdentifierMin();
-		imax = maker.genIdentifierMax();
 
 		min = maker.genPosition(maker.genIdentifierMax());
 		min = maker.genPosition(maker.genIdentifierMin());		
 	}
 	
-	public static SequenceAtom generate(String message, Position p, Position q, long siteId) throws Exception {	
+	public static SequenceAtom generate(String message, Position p, Position q, long siteId, Position build) throws Exception {	
 		
 		//return maker.genSequenceAtom((maker.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
-		return maker.genSequenceAtom((maker.genAtomIdentifier(genLinePosition(p, q, siteId), clock.counter)), message);
+		Position pos = new Position(generateLinePosition(p, q, siteId));		
+		return maker.genSequenceAtom((maker.genAtomIdentifier(pos, clock.counter)), message);
 	}
 		
-	private static Position generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
+	private static ArrayList<Identifier> generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
 					
 		//takes in a position p and position q
 		//checks to see if the number of id's are zero
 		//if they are set them to the relative min and max positions
 		//means if that one position is longer than the other, the algorithm
 		//can compare the positions properly
-		
+				
 		if(posP.ids.size() == 0) {
 			posP = min;
 		}
@@ -60,115 +55,130 @@ public class CRDTUtility {
 		//compares the identifiers in the 1st position
 		//if -1 (ie q is greater than p for both site and position)
 		
+		ArrayList<Identifier> build = new ArrayList<Identifier>(); 
+		
 		switch(compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
 			
-			case 1:
+			case -1:
 								
 				int interval = prefix(posQ) - prefix(posP);
 				
-				if(interval > 1)
-					return maker.genPosition(maker.genIdentifier(randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+				if(interval > 1) {
+
+					build.add(maker.genIdentifier(randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+					return build;
+				}
 				
-				else if(interval == 1 && siteId > posP.ids.get(0).siteId)
-					return maker.genPosition(maker.genIdentifier(posP.ids.get(0).position, siteId));
-				
-				else {
+				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 					
-					ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
-					ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+					build.add(maker.genIdentifier(posP.ids.get(0).position, siteId));
+					return build;
 					
-					posP.ids.addAll(idP);
-					posQ.ids.addAll(idQ);
+				} else {
 					
-					return generateLinePosition(posP, posQ, siteId);
+					build.add(posP.ids.get(0));
+					
+					posP.ids.subList(1, posP.ids.size());
+					posQ.ids.subList(1, posQ.ids.size());
+					
+					build.addAll(generateLinePosition(posP, posQ, siteId));
+					return build;
 				}
 			
 			case 0:
 				
-				ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
-				ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+				build.add(posP.ids.get(0));
 				
-				posP.ids.addAll(idP);
-				posQ.ids.addAll(idQ);
+				posP.ids.subList(1, posP.ids.size());
+				posQ.ids.subList(1, posQ.ids.size());
 				
-				return generateLinePosition(posP, posQ, siteId);
+				build.addAll(generateLinePosition(posP, posQ, siteId));
+				return build;
+				
+//				ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
+//				ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+//				
+//				posP.ids.addAll(idP);
+//				posQ.ids.addAll(idQ);
+//				
+//				return generateLinePosition(posP, posQ, siteId, build);
 			
-			case -1:				
+			case 1:				
 				
 				throw new Exception("Position Q was less than Position P!");
 		}
 		
-		return null;
+		return build;
 	}
 	
-	private static Position genLinePosition(Position tempP, Position tempQ, long siteId) throws Exception {
-		
-		
-		Position posP = new Position(tempP.copy());
-		Position posQ = new Position(tempQ.copy());
-				
-//		if(sizeP != sizeQ)
-//			if(sizeP > sizeQ)
-//				posP.ids.add(imin);
-//			else
-//				posP.ids.add(imax);
-		Position newPos = posP.ids.get(0).position == 0 ? new Position() : new Position(tempP.ids);
-				
-		posP.ids.add(imin);
-		posQ.ids.add(imax);
-		
-		int sizeP = posP.ids.size();
-		int sizeQ = posQ.ids.size();
-		
-//		printPosition(posP);
-//		System.out.println();
-//		printPosition(posQ);
-//		System.out.println();
-			
-		loop: for(int i = 0; i < Math.min(sizeP, sizeQ); i++) {
-			
-			//System.out.println("MAX: " + Math.max(sizeP, sizeQ));
-			
-			switch(compareIdentifier(posP.ids.get(i), posQ.ids.get(i))) {
-			
-			case -1:			
-				int interval = prefix(posQ) - prefix(posP);
-				
-				if(interval > 1) {
-					newPos.ids.add(maker.genIdentifier(randomInt(posP.ids.get(i).position, posQ.ids.get(i).position), siteId));
-					break loop;
-				}
-					
-				if(interval == 1 && siteId > posP.ids.get(i).siteId) {
-					newPos.ids.add(maker.genIdentifier(posP.ids.get(i).position, siteId));
-					break loop;
-				}
-				
-				newPos.ids.add(posP.ids.get(i));
-				continue;
-				
-//				else
-					
-//					ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
-//					ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+//	private static Position genLinePosition(Position tempP, Position tempQ, long siteId) throws Exception {
+//		
+//		
+//		Position posP = new Position(tempP.copy());
+//		Position posQ = new Position(tempQ.copy());
+//				
+////		if(sizeP != sizeQ)
+////			if(sizeP > sizeQ)
+////				posP.ids.add(imin);
+////			else
+////				posP.ids.add(imax);
+//		Position newPos = posP.ids.get(0).position == 0 ? new Position() : new Position(tempP.ids);
+//				
+//		posP.ids.add(imin);
+//		posQ.ids.add(imax);
+//		
+//		int sizeP = posP.ids.size();
+//		int sizeQ = posQ.ids.size();
+//		
+////		printPosition(posP);
+////		System.out.println();
+////		printPosition(posQ);
+////		System.out.println();
+//			
+//		loop: for(int i = 0; i < Math.min(sizeP, sizeQ); i++) {
+//			
+//			//System.out.println("MAX: " + Math.max(sizeP, sizeQ));
+//			
+//			switch(compareIdentifier(posP.ids.get(i), posQ.ids.get(i))) {
+//			
+//			case -1:			
+//				int interval = prefix(posQ) - prefix(posP);
+//				
+//				if(interval > 1) {
+//					newPos.ids.add(maker.genIdentifier(randomInt(posP.ids.get(i).position, posQ.ids.get(i).position), siteId));
+//					break loop;
+//				}
 //					
-//					posP.ids.addAll(idP);
-//					posQ.ids.addAll(idQ);
+//				if(interval == 1 && siteId > posP.ids.get(i).siteId) {
+//					newPos.ids.add(maker.genIdentifier(posP.ids.get(i).position, siteId));
+//					break loop;
+//				}
+//				
+//				newPos.ids.add(posP.ids.get(i));
+//				continue;
+//				
+////				else
 //					
-//					return generateLinePosition(posP, posQ, siteId);
-						
-			case 1:
-				
-				newPos.ids.add(posP.ids.get(i));
-				continue;
-			
-			case 0:				
-				
-				throw new Exception("Position Q was less than Position P!");
-			}
-		}
-		
-		return newPos;
+////					ArrayList<Identifier> idP = new ArrayList<Identifier>(posP.ids.subList(1, posP.ids.size()));
+////					ArrayList<Identifier> idQ = new ArrayList<Identifier>(posQ.ids.subList(1, posQ.ids.size()));
+////					
+////					posP.ids.addAll(idP);
+////					posQ.ids.addAll(idQ);
+////					
+////					return generateLinePosition(posP, posQ, siteId);
+//						
+//			case 1:
+//				
+//				newPos.ids.add(posP.ids.get(i));
+//				continue;
+//			
+//			case 0:				
+//				
+//				throw new Exception("Position Q was less than Position P!");
+//			}
+//		}
+//		
+//		return newPos;
 		
 		
 		
@@ -226,7 +236,7 @@ public class CRDTUtility {
 //		}
 //		
 //		return new Position();
-	}
+//	}
 	
 	private static int prefix(Position pos) {
 		return pos.ids.get(0).position;
@@ -264,59 +274,57 @@ public class CRDTUtility {
 	
 	private static int compareIdentifier(Identifier p, Identifier q) {
 		
-		int posComparison = compareIdentifierPositions(p.position, q.position);
-		int siteComparison = compareIdentifierSites(p.position, q.position);;
-		
-		if(posComparison == 1 && siteComparison == 1)
+		if(p.position > q.position)
+			return 1;
+		if(p.position < q.position)
 			return -1;
-		
-			// 	this is incorrect, P > Q for both site and position THIS IS INCORRECT!!!!!!!!!
-		
-			//	[
-			//		p [[[[32908, 8746016110688904592]], 2], YAA],
-			//		q [[[[29836, 7988293892253055526]], 3], Hi],
-			//	]
-			
-		else if(posComparison == -1 && siteComparison == -1)
+		if(p.siteId > q.siteId)
 			return 1;
-			
-			//	this is correct, Q > P for both position and site
-		
-			//	[
-			//		p [[[[27908, 6746016110688904592]], 2], YAA],
-			//		q [[[[29836, 7988293892253055526]], 3], Hi],
-			//	]
-		
-		else if(posComparison == -1 && siteComparison == 1)
-			
-			//P has a greater identifier but a lower site Id
-			
-			//	[
-			//		p [[[[27908, 6746016110688904592]], 2], YAA],
-			//		q [[[[19836, 7988293892253055526]], 3], Hi],
-			//	]
-			return 1;
-		
-		else if(posComparison == 1 && siteComparison == -1)
-			
-			//P has a lower identifier (correct) but a higher siteId
-			
-			//	[
-			//		p [[[[27908, 8746016110688904592]], 2], YAA],
-			//		q [[[[29836, 7988293892253055526]], 3], Hi],
-			//	]
-			
-			return 3;
-		
-		// something has gone horribly wrong
+		if(p.siteId < q.siteId)
+			return -1;
 		return 0;
-			
-			//	Either site or identifier are not equal
 		
-			//	[
-			//		p [[[[27908, 6746016110688904592]], 2], YAA],
-			//		q [[[[29836, 7988293892253055526]], 3], Hi],
-			//	]		
+//		int posComparison = compareIdentifierPositions(p.position, q.position);
+//		int siteComparison = compareIdentifierSites(p.position, q.position);;
+//		
+//		if(posComparison == 1 && siteComparison == 1)
+//			return 1;
+//		
+//			// 	this is incorrect, Q > P for both site and position THIS IS CORRECT!!!!!!!!!
+//			
+//		else if(posComparison == -1 && siteComparison == -1)
+//			return -1;
+//		
+//		else if(posComparison == -1 && siteComparison == 1)
+//			
+//			//P has a greater identifier but a lower site Id
+//			
+//			//	[
+//			//		p [[[[27908, 6746016110688904592]], 2], YAA],
+//			//		q [[[[19836, 7988293892253055526]], 3], Hi],
+//			//	]
+//			return -1;
+//		
+//		else if(posComparison == 1 && siteComparison == -1)
+//			
+//			//P has a lower identifier (correct) but a higher siteId
+//			
+//			//	[
+//			//		p [[[[27908, 8746016110688904592]], 2], YAA],
+//			//		q [[[[29836, 7988293892253055526]], 3], Hi],
+//			//	]
+//			
+//			return 1;
+//		
+//		// something has gone horribly wrong
+//		return 0;
+//			
+//			//	Either site or identifier are not equal
+//		
+//			//	[
+//			//		p [[[[27908, 6746016110688904592]], 2], YAA],
+//			//		q [[[[29836, 7988293892253055526]], 3], Hi],
+//			//	]		
 	}
 		
 	private static int compareIdentifierPositions(int a, int b) {
@@ -338,7 +346,7 @@ public class CRDTUtility {
 	}
 	
 	private static int randomInt(int min, int max) {
-		return rand.nextInt(max - min -1) + min + 1;
+		return rand.nextInt(max - min - 1) + min + 1;
 	}
 	
 	public static SequenceAtom genStartAtom(long siteId) {
