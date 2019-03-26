@@ -9,4 +9,14 @@ public class Identifier {
 		this.position = position;
 		this.siteId = siteId;
 	}
+	
+	@Override 
+	public Identifier clone() {
+		return new Identifier(this.position, this.siteId);
+	}
+	
+	@Override
+	public String toString() {		
+		return "[" + this.position + ", " + this.siteId + "]";
+	}
 }

@@ -10,7 +10,7 @@ import com.project.datatypes.SequenceAtom;
 
 public class ComponentGenerator {
 	
-	public static final int MAX_POSITION = 32767;	
+	public static final int MAX_POSITION = 3;	
 	
 	private int checkValue(int x) throws Exception {
 		
@@ -29,12 +29,13 @@ public class ComponentGenerator {
 			return new Identifier(p, siteId);
 	}
 	
-	public Identifier genIdentifierMax(long siteId) {
-		return new Identifier(MAX_POSITION, siteId);
+	public Identifier genIdentifierMax() {
+		return new Identifier(MAX_POSITION, 0);
 	}
 	
-	public Identifier genIdentifierMin(long siteId) {
-		return new Identifier(0, siteId);
+	public Identifier genIdentifierMin() {
+		return new Identifier(0, 0);
+		//return new Identifier(MAX_POSITION - 2, siteId);
 	}
 	
 	public Position genPosition() {

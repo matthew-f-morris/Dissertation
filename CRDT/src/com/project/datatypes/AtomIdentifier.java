@@ -14,6 +14,11 @@ public class AtomIdentifier {
 		this.position = position;
 		this.clock = clock;
 	}
+	
+	@Override
+	public String toString() {		
+		return "[" + position.toString() + ", " + clock + "]";
+	}
 }
 
 

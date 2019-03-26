@@ -16,4 +16,9 @@ public class SequenceAtom {
 		this.atomId = atomId;
 		this.message = message;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + atomId.toString() + ", " + message + "],";
+	}
 }

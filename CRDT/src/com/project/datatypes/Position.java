@@ -18,6 +18,27 @@ public class Position {
 	public Position(ArrayList<Identifier> identifiers) {
 		this.ids = identifiers;
 	}
+	
+	public ArrayList<Identifier> copy(){
+		ArrayList<Identifier> arr = new ArrayList<Identifier>();
+		for(Identifier i : ids) {
+			arr.add(i.clone());
+		}
+		
+		return arr;
+	}
+	
+	@Override
+	public String toString() {
+		
+		String s = "";
+		
+		for(Identifier i : ids) {			
+			s+= i.toString() + ", ";
+		}
+		
+		return s.substring(0, s.length()-2);
+	}
 }
 
 //	
