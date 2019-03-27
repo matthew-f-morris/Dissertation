@@ -1,10 +1,11 @@
 package com.project.datatypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Position {
 	
-	public ArrayList<Identifier> ids;
+	public List<Identifier> ids;
 	
 	public Position(Identifier identifier) {		
 		ids = new ArrayList<Identifier>();
@@ -15,12 +16,12 @@ public class Position {
 		ids = new ArrayList<Identifier>();
 	}
 
-	public Position(ArrayList<Identifier> identifiers) {
+	public Position(List<Identifier> identifiers) {
 		this.ids = identifiers;
 	}
 	
-	public ArrayList<Identifier> copy(){
-		ArrayList<Identifier> arr = new ArrayList<Identifier>();
+	public List<Identifier> copy(){
+		List<Identifier> arr = new ArrayList<Identifier>();
 		for(Identifier i : ids) {
 			arr.add(i.clone());
 		}

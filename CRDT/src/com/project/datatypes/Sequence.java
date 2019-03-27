@@ -15,6 +15,18 @@ public class Sequence {
 		arr = new ArrayList<SequenceAtom>();
 		arr.add(seqAtom);
 	}
+	
+	@Override
+	public String toString() {
+		
+		String s = "";
+		
+		for(SequenceAtom seqAtom : arr) {			
+			s+= seqAtom.toString() + ", ";
+		}
+		
+		return s.substring(0, s.length()-2);
+	}
 }
 
 	

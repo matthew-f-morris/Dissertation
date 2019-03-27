@@ -1,7 +1,7 @@
 package com.project.crdt;
 
+import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import com.project.clock.Clock;
@@ -17,26 +17,21 @@ public class CRDTUtility {
 
 	private static Clock clock;
 	private static ComponentGenerator maker;
-	private static Position min; 
-	private static Position max;
 	
 	public CRDTUtility(Clock clock, ComponentGenerator maker, long siteIdCopy) {
 		
 		CRDTUtility.clock = clock;
-		CRDTUtility.maker = maker;
-
-		min = maker.genPosition(maker.genIdentifierMax());
-		min = maker.genPosition(maker.genIdentifierMin());		
+		CRDTUtility.maker = maker;	
 	}
 	
-	public static SequenceAtom generate(String message, Position p, Position q, long siteId, Position build) throws Exception {	
+	public static SequenceAtom generate(String message, Position p, Position q, long siteId) throws Exception {	
 		
 		//return maker.genSequenceAtom((maker.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
 		Position pos = new Position(generateLinePosition(p, q, siteId));		
 		return maker.genSequenceAtom((maker.genAtomIdentifier(pos, clock.counter)), message);
 	}
 		
-	private static ArrayList<Identifier> generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
+	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
 					
 		//takes in a position p and position q
 		//checks to see if the number of id's are zero
@@ -45,17 +40,17 @@ public class CRDTUtility {
 		//can compare the positions properly
 				
 		if(posP.ids.size() == 0) {
-			posP = min;
+			posP = maker.genPosition(maker.genIdentifierMin());
 		}
 		
 		if(posQ.ids.size() == 0) {
-			posQ = max;
+			posQ = maker.genPosition(maker.genIdentifierMax());
 		}
 		
 		//compares the identifiers in the 1st position
 		//if -1 (ie q is greater than p for both site and position)
 		
-		ArrayList<Identifier> build = new ArrayList<Identifier>(); 
+		List<Identifier> build = new ArrayList<Identifier>(); 
 		
 		switch(compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
 			
@@ -78,8 +73,8 @@ public class CRDTUtility {
 					
 					build.add(posP.ids.get(0));
 					
-					posP.ids.subList(1, posP.ids.size());
-					posQ.ids.subList(1, posQ.ids.size());
+					posP.ids = posP.ids.subList(1, posP.ids.size());
+					posQ.ids = posQ.ids.subList(1, posQ.ids.size());
 					
 					build.addAll(generateLinePosition(posP, posQ, siteId));
 					return build;
@@ -283,6 +278,7 @@ public class CRDTUtility {
 		if(p.siteId < q.siteId)
 			return -1;
 		return 0;
+	}
 		
 //		int posComparison = compareIdentifierPositions(p.position, q.position);
 //		int siteComparison = compareIdentifierSites(p.position, q.position);;
@@ -325,26 +321,7 @@ public class CRDTUtility {
 //			//		p [[[[27908, 6746016110688904592]], 2], YAA],
 //			//		q [[[[29836, 7988293892253055526]], 3], Hi],
 //			//	]		
-	}
 		
-	private static int compareIdentifierPositions(int a, int b) {
-				
-		if(a > b)
-			return -1;
-		else if(b > a)
-			return 1;		
-		return 0;
-	}
-	
-	private static int compareIdentifierSites(long a, long b) {
-		
-		if(a > b)
-			return -1;
-		else if(b > a)
-			return 1;
-		return 0;
-	}
-	
 	private static int randomInt(int min, int max) {
 		return rand.nextInt(max - min - 1) + min + 1;
 	}
