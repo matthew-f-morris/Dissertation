@@ -41,12 +41,23 @@ public class LogootDocument {
 	
 	public void addMessage(String message, long site) throws Exception {
 		
-		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
-		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
+		int i;
+		
+		if(document.arr.size() == 2) {
+			i = 0;
+		} else
+			i = CRDTUtility.randomInt(0, document.arr.size() - 1);		
+		
+		Position posP = document.arr.get(i).atomId.position;
+		Position posQ = document.arr.get(i + 1).atomId.position;
+
+//		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
+//		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
 		SequenceAtom atom = CRDTUtility.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site);
 		clock.increment();
 		
+		print(atom);
 		CRDTUtility.addToSequence(document, atom);
 	}
 	
