@@ -13,8 +13,7 @@ import com.project.datatypes.SequenceAtom;
 
 public class CRDTUtility {
 	
-	static Random rand = new Random();
-
+	private static Random rand = new Random();
 	private static Clock clock;
 	private static ComponentGenerator maker;
 	
@@ -121,6 +120,10 @@ public class CRDTUtility {
 		
 	protected static int randomInt(int min, int max) {
 		return rand.nextInt(max - min - 1) + min + 1;
+	}
+	
+	protected static Boolean randomBool() {
+		return rand.nextBoolean();
 	}
 	
 	protected static SequenceAtom genStartAtom(long siteId) {

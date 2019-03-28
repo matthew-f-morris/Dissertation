@@ -11,8 +11,6 @@ import com.project.datatypes.SequenceAtom;
 
 public class LogootCRDT {
 	
-	static Random rand = new Random();
-	
 	private static Clock clock;
 	private static ComponentGenerator maker;
 	//private static CRDTUtility util;

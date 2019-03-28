@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
+import com.project.datatypes.LSEQid;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
@@ -72,5 +73,13 @@ public class ComponentGenerator {
 	
 	public Sequence genSequence(SequenceAtom seqAtom) {
 		return new Sequence(seqAtom);
+	}
+	
+	public LSEQid genLSEQid() {
+		return new LSEQid();
+	}
+	
+	public LSEQid genLSEQid(ArrayList<Integer> i) {
+		return new LSEQid(i);
 	}
 }	
