@@ -26,10 +26,11 @@ public class LSEQCRDT {
 		
 		int depth = -1;
 		int interval = 0;
+		LSEQid id;
 		
 		while(interval < 1) {
 			depth++;
-			interval = prefix(q, depth) - prefix(p, depth) - 1;
+			interval = prefix(q, depth).get(depth) - prefix(p, depth).get(depth) - 1;		
 		}
 		
 		int step = Math.min(boundary, interval);
@@ -39,10 +40,23 @@ public class LSEQCRDT {
 			strategy.put(depth, rand);
 		}
 		
+		if(strategy.get(depth)){
+			//CHECK THIS THING
+			int addVal = CRDTUtility.randomInt(0, step) + 1;
+			id = maker.genLSEQid(prefix(p, depth));
+			id.listIds.add(addVal);
+			
+		} else {
+			//CHECK THIS THING ALSO
+			int subVal = CRDTUtility.randomInt(0, step) + 1;
+			id = maker.genLSEQid(prefix(q, depth));
+			id.listIds.add(subVal);		
+		}
+		
 		return new LSEQid();
 	} 
 	
-	private static int prefix(LSEQid id, int depth) {
+	private static ArrayList<Integer> prefix(LSEQid id, int depth) {
 		
 		ArrayList<Integer> idCopy = new ArrayList<Integer>();
 		
@@ -54,10 +68,10 @@ public class LSEQCRDT {
 			}
 		}
 		
-		return idCopy.get(depth);
+		return idCopy;
 	} 
 	
 	private static int base(int cpt) {
-		return 0;
+		return (int) Math.pow(2, (5 + cpt));
 	}
 }

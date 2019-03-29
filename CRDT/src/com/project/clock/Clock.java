@@ -2,7 +2,7 @@ package com.project.clock;
 
 public class Clock {
 	
-	public int counter = 0;
+	public static int counter = 0;
 	
 	public Clock() {	
 		counter = 0;
@@ -17,12 +17,12 @@ public class Clock {
 		}
 	}
 	
-	public int increment() {		
+	public static int increment() {		
 		counter++;
 		return counter;
 	}
 	
-	private int sanityCheck(int check) {	
+	private static int sanityCheck(int check) {	
 		
 		if(0 <= check && check <= Integer.MAX_VALUE)	
 			return check;	

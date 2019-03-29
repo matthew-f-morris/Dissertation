@@ -1,11 +1,6 @@
 package com.project.crdt;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
-
 import com.project.clock.Clock;
-import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
@@ -14,8 +9,8 @@ public class LogootDocument {
 	
 	private long siteId;
 	private Sequence document;
-	Clock clock = new Clock();
-	CRDTUtility utility = new CRDTUtility(clock, new ComponentGenerator(), siteId);
+	
+	LogootCRDT logoot = new LogootCRDT();
 	
 	public LogootDocument(long siteId) {
 		
@@ -31,8 +26,6 @@ public class LogootDocument {
 	}
 	
 	public void print() {
-				
-		System.out.println("\nDOCUMENT: \n");
 		
 		for(SequenceAtom at : document.arr) {
 			System.out.println(at.toString());
@@ -41,23 +34,11 @@ public class LogootDocument {
 	
 	public void addMessage(String message, long site) throws Exception {
 		
-		int i;
+		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
+		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
-		if(document.arr.size() == 2) {
-			i = 0;
-		} else
-			i = CRDTUtility.randomInt(0, document.arr.size() - 1);		
-		
-		Position posP = document.arr.get(i).atomId.position;
-		Position posQ = document.arr.get(i + 1).atomId.position;
-
-//		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
-//		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
-		
-		SequenceAtom atom = CRDTUtility.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site);
-		clock.increment();
-		
-		print(atom);
+		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site);
+		Clock.increment();
 		CRDTUtility.addToSequence(document, atom);
 	}
 	
@@ -66,3 +47,14 @@ public class LogootDocument {
 		System.out.println(atom.toString());
 	}
 }
+
+
+//int i;
+//
+//if(document.arr.size() == 2) {
+//	i = 0;
+//} else
+//	i = CRDTUtility.randomInt(0, document.arr.size() - 1);		
+//
+//Position posP = document.arr.get(i).atomId.position;
+//Position posQ = document.arr.get(i + 1).atomId.position;

@@ -2,7 +2,6 @@ package com.project.crdt;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Identifier;
@@ -10,23 +9,12 @@ import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
 
 public class LogootCRDT {
-	
-	private static Clock clock;
-	private static ComponentGenerator maker;
-	//private static CRDTUtility util;
-	
-	public LogootCRDT(Clock clock, ComponentGenerator maker, long siteIdCopy) {
 		
-		LogootCRDT.clock = clock;
-		LogootCRDT.maker = maker;
-		//LogootCRDT.util = util;
-	}
-	
 	public static SequenceAtom generate(String message, Position p, Position q, long siteId) throws Exception {	
 		
-		//return maker.genSequenceAtom((maker.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
+		//return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
 		Position pos = new Position(generateLinePosition(p, q, siteId));		
-		return maker.genSequenceAtom((maker.genAtomIdentifier(pos, clock.counter)), message);
+		return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(pos, Clock.counter)), message);
 	}
 		
 	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
@@ -38,11 +26,11 @@ public class LogootCRDT {
 		//can compare the positions properly
 				
 		if(posP.ids.size() == 0) {
-			posP = maker.genPosition(maker.genIdentifierMin());
+			posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
 		}
 		
 		if(posQ.ids.size() == 0) {
-			posQ = maker.genPosition(maker.genIdentifierMax());
+			posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
 		}
 		
 		//compares the identifiers in the 1st position
@@ -54,17 +42,17 @@ public class LogootCRDT {
 			
 			case -1:
 								
-				int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
+				int interval = prefix(posQ) - prefix(posP);
 				
 				if(interval > 1) {
 
-					build.add(maker.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+					build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
 					return build;
 				}
 				
 				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 					
-					build.add(maker.genIdentifier(posP.ids.get(0).position, siteId));
+					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
 					return build;
 					
 				} else {
@@ -94,5 +82,9 @@ public class LogootCRDT {
 		}
 		
 		return build;
+	}
+	
+	private static int prefix(Position pos) {
+		return pos.ids.get(0).position;
 	}
 }
