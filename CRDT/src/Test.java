@@ -9,10 +9,19 @@ public class Test {
 		
 		LogootDocument doc = new LogootDocument(site);
 		
-		for(int i = 0; i < 100; i++) {
+//		for(int i = 0; i < 20000; i++) {
+//			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
+//		}
+//		
+//		doc.printInfo();
+		
+		doc.modify(true);
+		doc.clear();
+		
+		for(int i = 0; i < 100000; i++) {
 			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
 		}
-		
-		doc.print();
+
+		doc.printInfo();
 	}	
 }

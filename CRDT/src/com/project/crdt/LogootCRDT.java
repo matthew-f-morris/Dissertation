@@ -10,14 +10,14 @@ import com.project.datatypes.SequenceAtom;
 
 public class LogootCRDT {
 		
-	public static SequenceAtom generate(String message, Position p, Position q, long siteId) throws Exception {	
+	public static SequenceAtom generate(String message, Position p, Position q, long siteId, Boolean modify) throws Exception {	
 		
 		//return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
-		Position pos = new Position(generateLinePosition(p, q, siteId));		
+		Position pos = new Position(generateLinePosition(p, q, siteId, modify));		
 		return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(pos, Clock.counter)), message);
 	}
 		
-	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId) throws Exception {
+	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId, Boolean modify) throws Exception {
 					
 		//takes in a position p and position q
 		//checks to see if the number of id's are zero
@@ -46,7 +46,10 @@ public class LogootCRDT {
 				
 				if(interval > 1) {
 
-					build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+					if(modify)
+						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
+					else 
+						build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
 					return build;
 				}
 				
@@ -62,7 +65,7 @@ public class LogootCRDT {
 					posP.ids = posP.ids.subList(1, posP.ids.size());
 					posQ.ids = posQ.ids.subList(1, posQ.ids.size());
 					
-					build.addAll(generateLinePosition(posP, posQ, siteId));
+					build.addAll(generateLinePosition(posP, posQ, siteId, modify));
 					return build;
 				}
 			
@@ -73,7 +76,7 @@ public class LogootCRDT {
 				posP.ids.subList(1, posP.ids.size());
 				posQ.ids.subList(1, posQ.ids.size());
 				
-				build.addAll(generateLinePosition(posP, posQ, siteId));
+				build.addAll(generateLinePosition(posP, posQ, siteId, modify));
 				return build;
 			
 			case 1:				
