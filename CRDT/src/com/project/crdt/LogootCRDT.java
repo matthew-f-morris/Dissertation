@@ -7,6 +7,7 @@ import com.project.clock.Clock;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
+import com.project.util.CRDTUtility;
 
 public class LogootCRDT {
 		

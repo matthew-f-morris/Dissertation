@@ -6,6 +6,7 @@ import com.project.clock.Clock;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
+import com.project.util.CRDTUtility;
 
 public class LogootDocument {
 	
@@ -85,7 +86,7 @@ public class LogootDocument {
 		
 		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify);
 		Clock.increment();
-		CRDTUtility.addToSequence(document, atom);
+		CRDTUtility.insertSequenceAtom(document.arr, atom);
 	}
 	
 //	private void print(SequenceAtom atom) {
