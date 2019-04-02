@@ -13,7 +13,7 @@ public class CRDTController {
 	public CRDTController(long siteId) {
 		this.siteId = siteId;
 		doc = new LogootDocument(siteId);
-		doc.modify(true);
+		//doc.modify(true);
 	}
 
 	public Message handleMessage(String message, PeerData nodeInfo) {

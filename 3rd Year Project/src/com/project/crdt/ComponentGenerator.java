@@ -12,7 +12,8 @@ import com.project.datatypes.SequenceAtom;
 
 public class ComponentGenerator {
 	
-	public static final int MAX_POSITION = Short.MAX_VALUE;	
+	//public static final int MAX_POSITION = Short.MAX_VALUE;	
+	public static final int MAX_POSITION = 2;	
 	
 	private static int checkValue(int x) throws Exception {
 		

@@ -21,12 +21,23 @@ public class Position {
 	}
 	
 	public List<Identifier> copy(){
+		
 		List<Identifier> arr = new ArrayList<Identifier>();
 		for(Identifier i : ids) {
 			arr.add(i.clone());
 		}
 		
 		return arr;
+	}
+	
+	public List<Identifier> copy(int x){
+		
+		List<Identifier> arr = new ArrayList<Identifier>();
+		for(Identifier i : ids) {
+			arr.add(i.clone());
+		}
+		
+		return arr.subList(x, arr.size());
 	}
 	
 	@Override

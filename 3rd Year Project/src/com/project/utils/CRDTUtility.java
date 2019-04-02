@@ -67,27 +67,26 @@ public class CRDTUtility {
 
 		int size = array.size();
 		
-		for(int i = 0; i < size; i++) {
+		for(int i = 0; i < size - 1; i++) {
 			
 			Position pos = add.atomId.position;
 			Position prev = array.get(i).atomId.position;
 			Position next = array.get(i + 1).atomId.position;
 			
-			int l = comparePosition(pos, prev, 0);
-			int u = comparePosition(pos, next, 0);
+			int l = comparePosition(prev, pos);
+			int u = comparePosition(pos, next);
 			
-			if(l == 1 && u == -1)
+			if(l == -1 && u == -1)
 				insert(array, add, i + 1);
-			else if(l == 1 && u == 1)
+			else if(l == -1 && u == 1)
 				continue;
-			else if(l == -1)
+			else if(l == 1)
 				throw new Exception("The document atoms are not in a valid order!");
 		}
 	}
 	
-	private static int comparePosition(Position p, Position q, int x) {
-		
-		int i = x;
+	private static int comparePosition(Position p, Position q) {
+
 		//return 0 if equal, retur 1 if q is greater than p, return -1 if p is greater than q
 		
 		int lenP = p.ids.size();
@@ -100,13 +99,13 @@ public class CRDTUtility {
 		if(lenQ == 0)
 			return 1;
 		
-		switch(compareIdentifier(p.ids.get(i), q.ids.get(i))){
+		switch(compareIdentifier(p.ids.get(0), q.ids.get(0))){
 			case 1:
 				return 1;
 			case -1:
 				return -1;
 			case 0:
-				return comparePosition(p, q, i++);
+				return comparePosition(new Position(p.copy(1)), new Position(q.copy(1)));
 		}
 		
 		return 0;
