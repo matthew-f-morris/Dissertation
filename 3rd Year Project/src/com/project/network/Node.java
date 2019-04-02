@@ -43,7 +43,7 @@ public class Node {
     	
     	System.out.println("[NODE] Initialising Node...");
     	
-    	nodeInfo = new PeerData(UUID.randomUUID().getLeastSignificantBits(), hostname, localhost, CommunicationInfo.commPort);
+    	nodeInfo = new PeerData(Math.abs(UUID.randomUUID().getLeastSignificantBits()), hostname, localhost, CommunicationInfo.commPort);
   	    	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);

@@ -13,7 +13,6 @@ public class CRDTController {
 	public CRDTController(long siteId) {
 		this.siteId = siteId;
 		doc = new LogootDocument(siteId);
-		doc.initDocument();
 		doc.modify(true);
 	}
 
@@ -35,5 +34,9 @@ public class CRDTController {
 	
 	public Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
 		return new Message(nodeInfo, atom);
+	}
+	
+	public void printDocument() {
+		doc.printInfo();
 	}
 }

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.project.crdt.LogootDocument;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.utils.AddressMessage;
@@ -42,7 +41,7 @@ public class MessageController {
 		Message crdtMessage = crdt.handleMessage(message, node.nodeInfo);
 		
 		getMessagesToSend().add(crdtMessage);
-		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message);
+		crdt.printDocument();
 	}
 
 	public void addToRecieved(Message message) {

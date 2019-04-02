@@ -14,7 +14,7 @@ public class Main {
 		scanner = new Scanner(System.in);
 		
 		node = new Node();
-		node.queueToSend(new Message(node.nodeInfo, "TO ALL!"));
+		node.queueToSend("TO ALL!");
 		
 		InputScanner input = new InputScanner();
 		Thread inputThread = new Thread(input);
@@ -40,7 +40,7 @@ public class Main {
 					node.shutdown();
 					isRunning = false;
 				} else {
-					node.queueToSend(new Message(node.nodeInfo, text));
+					node.queueToSend(text);
 				}
 			}
 		}

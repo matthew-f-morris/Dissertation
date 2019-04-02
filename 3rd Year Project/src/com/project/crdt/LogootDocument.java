@@ -28,56 +28,7 @@ public class LogootDocument {
 		
 		document.arr.add(CRDTUtility.genStartAtom(siteId));
 		document.arr.add(CRDTUtility.genStopAtom(siteId));
-	}
-	
-	public void print() {
-		
-		System.out.println("--- START OF DOCUMENT ---\n");
-		
-		for(SequenceAtom at : document.arr) {
-			System.out.println(at.toString());
-		}
-		
-		System.out.println("\n---- END OF DOCUMENT ----\n\n");
-	}
-	
-	public void print(int lines) {
-		
-		ArrayList<SequenceAtom> seq = document.arr;
-		
-		System.out.println("--- START OF DOCUMENT ---\n");
-		
-		if(lines > seq.size())
-			lines = seq.size();
-		for(int i = seq.size() - lines; i < seq.size(); i++) {
-			System.out.println(seq.get(i).toString());
-		}
-		
-		System.out.println("\n---- END OF DOCUMENT ----\n");
-	}
-	
-	public void printInfo() {
-		
-		int sizeMax = getSizeOfPos(getMaxPosition());
-		
-		if(sizeMax > 20)
-			System.out.println("Unable to print document due to oversized ID's!\n");
-		else 
-			print(printNo);
-		
-		System.out.println("---- DATA ----\n");
-		System.out.println("Doc Size (Excluding Start/Stop): " + docSize());
-		
-		if(sizeMax > 30)
-			System.out.println("Max Position ID: ID is too big to print!");
-		else		
-			System.out.println("Max Position ID: " + getMaxPosition().toString());
-		
-		System.out.println("Max Position ID Size: " + getSizeOfPos(getMaxPosition()));
-		System.out.println("Average Position ID size: " + getAverageIdLength());
-		System.out.println("Size of Document in Bytes: " + 0);
-		System.out.println("\n");
-	}
+	}	
 	
 	public SequenceAtom addMessage(String message, long site) throws Exception {
 		
@@ -93,12 +44,12 @@ public class LogootDocument {
 	
 	public boolean insertIntoDocument(SequenceAtom atom) {
 		
-		try {
-			CRDTUtility.insertSequenceAtom(document.arr, atom);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			CRDTUtility.insertSequenceAtom(document.arr, atom);
+//			return true;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		return false;
 	}
@@ -149,7 +100,57 @@ public class LogootDocument {
 		
 		return (float) sum/size;
 	}
+	
 	private int docSize() {
 		return document.arr.size() - 2;
+	}
+	
+	private void print() {
+		
+		System.out.println("--- START OF DOCUMENT ---\n");
+		
+		for(SequenceAtom at : document.arr) {
+			System.out.println(at.toString());
+		}
+		
+		System.out.println("\n---- END OF DOCUMENT ----\n\n");
+	}
+	
+	private void print(int lines) {
+		
+		ArrayList<SequenceAtom> seq = document.arr;
+		
+		System.out.println("--- START OF DOCUMENT ---\n");
+		
+		if(lines > seq.size())
+			lines = seq.size();
+		for(int i = seq.size() - lines; i < seq.size(); i++) {
+			System.out.println(seq.get(i).toString());
+		}
+		
+		System.out.println("\n---- END OF DOCUMENT ----\n");
+	}
+	
+	public void printInfo() {
+		
+		int sizeMax = getSizeOfPos(getMaxPosition());
+		
+		if(sizeMax > 20)
+			System.out.println("Unable to print document due to oversized ID's!\n");
+		else 
+			print(printNo);
+		
+		System.out.println("---- DATA ----\n");
+		System.out.println("Doc Size (Excluding Start/Stop): " + docSize());
+		
+		if(sizeMax > 30)
+			System.out.println("Max Position ID: ID is too big to print!");
+		else		
+			System.out.println("Max Position ID: " + getMaxPosition().toString());
+		
+		System.out.println("Max Position ID Size: " + getSizeOfPos(getMaxPosition()));
+		System.out.println("Average Position ID size: " + getAverageIdLength());
+		System.out.println("Size of Document in Bytes: " + 0);
+		System.out.println("\n");
 	}
 }
