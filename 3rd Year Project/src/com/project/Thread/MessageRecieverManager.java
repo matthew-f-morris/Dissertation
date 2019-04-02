@@ -108,7 +108,7 @@ public class MessageRecieverManager implements Manager {
 				
 				} else {
 					
-					String uuid = message.getPeerData().getUuid();
+					long uuid = message.getPeerData().getUuid();
 					controller.removePeer(uuid);					
 				}
 					

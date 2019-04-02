@@ -2,8 +2,6 @@ package com.project.utils;
 
 import java.io.Serializable;
 
-import com.project.network.PeerData;
-
 public class Message implements Serializable{
 
 	private static final long serialVersionUID = 1L;

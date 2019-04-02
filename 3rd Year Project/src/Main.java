@@ -1,71 +1,28 @@
-import java.net.URL;
+
 import java.util.Scanner;
 
-import com.project.controller.*;
 import com.project.network.Node;
 import com.project.utils.Message;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-
-public class Main extends Application {
+public class Main {
 
 	static Scanner scanner;
-	Node node;
+	static Node node;
 
-	public static void main (String[] args) {		
+	public static void main(String[] args) {		
 		
 		scanner = new Scanner(System.in);
-		launch(args);		
-	}
-
-	public void start(Stage primaryStage) throws Exception {
-
-        checkResource();
 		
-		ViewController viewControl = new ViewController();        
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/project/view/Login.fxml")); 
-        loader.setController(viewControl);
-                
-        Pane root = loader.load();		
-		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("com/project/view/application.css").toExternalForm());
-		
-		primaryStage.setTitle("Login");
-		primaryStage.setScene(scene);
-		primaryStage.setOnCloseRequest( event -> {
-			node.shutdown();
-			System.exit(0);
-		});
-		
-		node = new Node(viewControl);
+		node = new Node();
 		node.queueToSend(new Message(node.nodeInfo, "TO ALL!"));
-		viewControl.setNode(node);
 		
-		primaryStage.show();
-
 		InputScanner input = new InputScanner();
 		Thread inputThread = new Thread(input);
 		inputThread.setName("INPUT SCANNER");
 		inputThread.start();
 	}
 	
-	private void checkResource() {
-		
-		URL url = getClass().getResource("com/project/view/Login.fxml");
-        if (url == null) {
-            System.out.println("Can't load FXML file");
-            Platform.exit();
-            System.exit(0);
-        }
-	}
-	
-	class InputScanner extends Thread {
+	static class InputScanner extends Thread {
 		
 		boolean isRunning = true;
 		

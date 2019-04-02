@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.project.datatypes.LSEQid;
-import com.project.util.CRDTUtility;
+import com.project.utils.CRDTUtility;
 
 public class LSEQCRDT {
 	

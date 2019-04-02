@@ -1,5 +1,5 @@
 import com.project.crdt.LogootDocument;
-import com.project.util.MsgGen;
+import com.project.utils.MsgGen;
 
 public class Test {
 
@@ -18,7 +18,7 @@ public class Test {
 		doc.modify(true);
 		doc.clear();
 		
-		for(int i = 0; i < 100000; i++) {
+		for(int i = 0; i < 10000; i++) {
 			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
 		}
 

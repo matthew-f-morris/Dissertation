@@ -1,4 +1,4 @@
-package com.project.util;
+package com.project.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class MsgGen {
     static {	
     	
     	try {
-			lines = Files.readAllLines(Paths.get("C:\\Users\\matth\\Dissertation\\CRDT\\src\\com\\project\\util\\msgs.txt"), Charset.defaultCharset());
+			lines = Files.readAllLines(Paths.get("C:\\Users\\matth\\Dissertation\\3rd Year Project\\src\\com\\project\\utils\\msgs.txt"), Charset.defaultCharset());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -4,30 +4,33 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.project.crdt.LogootDocument;
 import com.project.network.MessageSender;
 import com.project.network.Node;
-import com.project.network.PeerData;
 import com.project.utils.AddressMessage;
 import com.project.utils.Message;
+import com.project.utils.PeerData;
 
 public class MessageController {
 
 	public Node node;
 	
-	public ConcurrentHashMap<String, PeerData> peers;
+	public ConcurrentHashMap<Long, PeerData> peers;
 	public MessageSender sender;
-//	private MessageReciever reciever;
+	//private MessageReciever reciever;
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
 	public ConcurrentLinkedQueue<AddressMessage> toResend;
+	private LogootDocument doc;
 	
-	private String uuid = null;
+	private long uuid = 0L;
 	
-	public MessageController(Node node, ConcurrentHashMap<String, PeerData> peers, String uuid) {
+	public MessageController(Node node, ConcurrentHashMap<Long, PeerData> peers, long uuid, LogootDocument doc) {
 
 		this.node = node;
 		this.peers = peers;
 		this.uuid = uuid;
+		this.doc = doc;
 
 		messagesRecieved = new LinkedList<Message>();
 		setMessagesToSend(new LinkedList<Message>());
@@ -105,7 +108,7 @@ public class MessageController {
 		Message leaveMessage = new Message(true);
 		
 		for(PeerData peer : peers.values()) {
-			if(!(peer.getUuid().equals(node.nodeInfo.getUuid()))){		
+			if(!(peer.getUuid() == node.nodeInfo.getUuid())){		
 				sender.sendLeaveNetworkMessage(peer.getAddress(), leaveMessage);
 			}
 		}
@@ -113,7 +116,7 @@ public class MessageController {
 		System.out.println("[MESSAGE CONTROLLER] Leave Message Sent");
 	}
 	
-	public void removePeer(String uuid) {
+	public void removePeer(long uuid) {
 		node.removePeer(uuid);
 	}
 

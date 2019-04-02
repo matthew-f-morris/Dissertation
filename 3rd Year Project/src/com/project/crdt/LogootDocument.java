@@ -6,7 +6,7 @@ import com.project.clock.Clock;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
-import com.project.util.CRDTUtility;
+import com.project.utils.CRDTUtility;
 
 public class LogootDocument {
 	

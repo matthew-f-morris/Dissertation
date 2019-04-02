@@ -1,4 +1,4 @@
-package com.project.network;
+package com.project.utils;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -8,12 +8,12 @@ public class PeerData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String uuid;
+	private long uuid;
     private String hostname;
     private InetAddress address;
     private int port;
 
-    public PeerData(String uuid, String hostname, InetAddress address, int port ){
+    public PeerData(long uuid, String hostname, InetAddress address, int port ){
 
     	this.uuid = uuid;
         this.hostname = hostname;
@@ -29,7 +29,7 @@ public class PeerData implements Serializable {
     	System.out.println("	Port: " + port + "\n");
     }
 
-    public String getUuid() {
+    public long getUuid() {
         return uuid;
     }
 

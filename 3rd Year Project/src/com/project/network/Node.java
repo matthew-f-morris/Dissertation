@@ -4,40 +4,35 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.project.Thread.BroadcastManager;
-import com.project.Thread.Manager;
 import com.project.Thread.ThreadManager;
 import com.project.controller.MessageController;
-import com.project.controller.ViewController;
+import com.project.crdt.LogootDocument;
 import com.project.utils.CommunicationInfo;
 import com.project.utils.Message;
+import com.project.utils.PeerData;
 
 import javafx.application.Platform;
 
 public class Node {
-	
-	private String username = "";
-	private static String password = "dissertation";
-	
+
     public PeerData nodeInfo;
-    private ConcurrentHashMap<String, PeerData> peers;
+    private ConcurrentHashMap<Long, PeerData> peers;
 	
 	private static InetAddress localhost;
 	private boolean joined = false;
+	
+	private LogootDocument doc;
 
     private ThreadManager manager;
     private MessageController msgController;
-    private ViewController viewControl;
     
     public String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     
-    public Node(ViewController viewControl) {
+    public Node() {
     	    
-    	this.viewControl = viewControl;		
     	String hostname = null;
     	
     	try {    	
@@ -52,32 +47,32 @@ public class Node {
     	
     	System.out.println("[NODE] Initialising Node...");
     	
-    	nodeInfo = new PeerData(UUID.randomUUID().toString(), hostname, localhost, CommunicationInfo.commPort);
+    	nodeInfo = new PeerData(UUID.randomUUID().getLeastSignificantBits(), hostname, localhost, CommunicationInfo.commPort);
+    	doc = new LogootDocument(nodeInfo.getUuid());
   	    	
-    	peers = new ConcurrentHashMap<String, PeerData>();
+    	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
    
-    	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
+    	msgController = new MessageController(this, peers, nodeInfo.getUuid(), doc);    	
      	
     	manager = new ThreadManager(this, msgController);
     	manager.joinNetwork();
     	
-    	joined = true;
+    	joined = true;    	
     }
     
-	public void addPeer(String uuid, String hostname, InetAddress address, int port) {
+	public void addPeer(long uuid, String hostname, InetAddress address, int port) {
 		
 		if(!peers.containsKey(uuid)) {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
-    		viewControl.addNode(address.toString());
     		
     		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}
     }
 	
-	public void removePeer(String uuid) {
+	public void removePeer(long uuid) {
 		
 		if(peers.contains(uuid)) {
 			peers.remove(uuid);
@@ -114,20 +109,20 @@ public class Node {
 		System.out.println("[NODE] Number of peers: " + peers.size());	
 	}
 	
-	private void setUsername(String username) {
-		
-		if(!username.isEmpty()) {
-			this.username = username;
-			System.out.println("Username: " + this.username);
-		}
-	}
-	
-	public void confirmLogin(String username, String password) {
-		
-		if(password.equals(Node.password)) {
-			this.setUsername(username);
-		}
-	}
+//	private void setUsername(String username) {
+//		
+//		if(!username.isEmpty()) {
+//			this.username = username;
+//			System.out.println("Username: " + this.username);
+//		}
+//	}
+//	
+//	public void confirmLogin(String username, String password) {
+//		
+//		if(password.equals(Node.password)) {
+//			this.setUsername(username);
+//		}
+//	}
 		
 	public void shutdown() {
 		

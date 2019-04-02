@@ -8,8 +8,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 
 import com.project.network.Node;
-import com.project.network.PeerData;
 import com.project.utils.CommunicationInfo;
+import com.project.utils.PeerData;
 
 public class BroadcastListenerManager implements Manager {
 

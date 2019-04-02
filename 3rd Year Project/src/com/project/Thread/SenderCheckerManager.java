@@ -1,10 +1,10 @@
 package com.project.Thread;
 
 import com.project.controller.MessageController;
-import com.project.network.PeerData;
 import com.project.utils.AddressMessage;
 import com.project.utils.Message;
 import com.project.utils.MessageControllerInfo;
+import com.project.utils.PeerData;
 
 public class SenderCheckerManager implements Manager{	
 	
@@ -55,7 +55,7 @@ public class SenderCheckerManager implements Manager{
 				if (controller.messagesToSend.size() >= 1) {
 					Message toSend = controller.messagesToSend.removeLast();
 					for (PeerData peer : controller.peers.values()) {						
-						if(!(peer.getUuid().equals(controller.node.nodeInfo.getUuid()))){							
+						if(!(peer.getUuid() == controller.node.nodeInfo.getUuid())){							
 							boolean sent = controller.sender.sendMessage(peer.getAddress(), toSend);
 							
 							if(!sent) {
