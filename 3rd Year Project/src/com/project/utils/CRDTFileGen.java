@@ -12,6 +12,12 @@ public class CRDTFileGen {
 		
 		thread = new Thread(new FileHandler(str));
 		thread.start();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	static class FileHandler implements Runnable {

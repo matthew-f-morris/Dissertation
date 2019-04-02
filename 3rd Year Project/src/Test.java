@@ -1,3 +1,4 @@
+import com.project.controller.CRDTController;
 import com.project.crdt.LogootDocument;
 import com.project.utils.MsgGen;
 
@@ -9,19 +10,13 @@ public class Test {
 		
 		LogootDocument doc = new LogootDocument(site);
 		
-		for(int i = 0; i < 2000; i++) {
+		doc.modify(true);
+		
+		for(int i = 0; i < 100000; i++) {
 			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
 		doc.printInfo();
-		
-//		doc.modify(true);
-//		doc.clear();
-//		
-//		for(int i = 0; i < 500; i++) {
-//			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
-//		}
-//		
-//		doc.printInfo();
+		CRDTController.printDoc(doc);
 	}	
 }

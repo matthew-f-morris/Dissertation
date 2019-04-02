@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import java.util.Arrays;
-
 import com.project.crdt.LogootDocument;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTFileGen;
@@ -62,6 +60,10 @@ public class CRDTController {
 	}
 	
 	public static void printDoc() {
+		CRDTFileGen.start(doc.getStringList());
+	}
+	
+	public static void printDoc(LogootDocument doc) {
 		CRDTFileGen.start(doc.getStringList());
 	}
 }

@@ -184,7 +184,7 @@ public class LogootDocument {
 		ArrayList<String> strings = new ArrayList<String>();
 		
 		for(SequenceAtom atom : document.arr) {
-			strings.add(atom.toString() + "\n");
+			strings.add(atom.toString() + "\r\n");
 		}
 		
 		return strings;
