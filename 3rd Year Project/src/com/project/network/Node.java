@@ -9,9 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.project.Thread.ThreadManager;
 import com.project.controller.MessageController;
-import com.project.crdt.LogootDocument;
 import com.project.utils.CommunicationInfo;
-import com.project.utils.Message;
 import com.project.utils.PeerData;
 
 import javafx.application.Platform;
@@ -24,8 +22,6 @@ public class Node {
 	private static InetAddress localhost;
 	private boolean joined = false;
 	
-	private LogootDocument doc;
-
     private ThreadManager manager;
     private MessageController msgController;
     
@@ -48,12 +44,11 @@ public class Node {
     	System.out.println("[NODE] Initialising Node...");
     	
     	nodeInfo = new PeerData(UUID.randomUUID().getLeastSignificantBits(), hostname, localhost, CommunicationInfo.commPort);
-    	doc = new LogootDocument(nodeInfo.getUuid());
   	    	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
    
-    	msgController = new MessageController(this, peers, nodeInfo.getUuid(), doc);    	
+    	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
      	
     	manager = new ThreadManager(this, msgController);
     	manager.joinNetwork();
@@ -81,7 +76,7 @@ public class Node {
 		}		
 	}
 	
-	public void queueToSend(Message message) {		
+	public void queueToSend(String message) {		
 		msgController.queueToSend(message);
 	}
 	

@@ -2,16 +2,18 @@ package com.project.utils;
 
 import java.io.Serializable;
 
+import com.project.datatypes.SequenceAtom;
+
 public class Message implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private PeerData peerData;
 	private boolean leaveNetwork = false;
-	private String text;
+	private SequenceAtom atom;
 	
-	public Message(PeerData peerData, String text) {
-		this.text = text;
+	public Message(PeerData peerData, SequenceAtom atom) {
 		this.peerData = peerData;
+		this.atom = atom;
 	}
 	
 	public Message(boolean leaveNetwork) {
@@ -21,7 +23,7 @@ public class Message implements Serializable{
 	}
 		
 	public String getText() {		
-		return text;
+		return atom.message;
 	}
 	
 	public boolean leaveNetwork() {
@@ -30,5 +32,9 @@ public class Message implements Serializable{
 	
 	public PeerData getPeerData() {
 		return peerData;
+	}
+	
+	public SequenceAtom getAtom() {
+		return atom;
 	}
 }

@@ -79,7 +79,7 @@ public class LogootDocument {
 		System.out.println("\n");
 	}
 	
-	public void addMessage(String message, long site) throws Exception {
+	public SequenceAtom addMessage(String message, long site) throws Exception {
 		
 		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
 		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
@@ -87,6 +87,20 @@ public class LogootDocument {
 		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify);
 		Clock.increment();
 		CRDTUtility.insertSequenceAtom(document.arr, atom);
+		
+		return atom;
+	}
+	
+	public boolean insertIntoDocument(SequenceAtom atom) {
+		
+		try {
+			CRDTUtility.insertSequenceAtom(document.arr, atom);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 //	private void print(SequenceAtom atom) {
@@ -139,14 +153,3 @@ public class LogootDocument {
 		return document.arr.size() - 2;
 	}
 }
-
-
-//int i;
-//
-//if(document.arr.size() == 2) {
-//	i = 0;
-//} else
-//	i = CRDTUtility.randomInt(0, document.arr.size() - 1);		
-//
-//Position posP = document.arr.get(i).atomId.position;
-//Position posQ = document.arr.get(i + 1).atomId.position;=

@@ -21,31 +21,34 @@ public class MessageController {
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
 	public ConcurrentLinkedQueue<AddressMessage> toResend;
-	private LogootDocument doc;
+	private CRDTController crdt;
 	
 	private long uuid = 0L;
 	
-	public MessageController(Node node, ConcurrentHashMap<Long, PeerData> peers, long uuid, LogootDocument doc) {
+	public MessageController(Node node, ConcurrentHashMap<Long, PeerData> peers, long uuid) {
 
 		this.node = node;
 		this.peers = peers;
 		this.uuid = uuid;
-		this.doc = doc;
 
-		messagesRecieved = new LinkedList<Message>();
 		setMessagesToSend(new LinkedList<Message>());
 		toResend = new ConcurrentLinkedQueue<AddressMessage>();
+		
+		crdt = new CRDTController(uuid);
 	}
 
-	public void queueToSend(Message message) {
+	public void queueToSend(String message) {
 		
-		getMessagesToSend().add(message);
-		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message.getText());
+		Message crdtMessage = crdt.handleMessage(message, node.nodeInfo);
+		
+		getMessagesToSend().add(crdtMessage);
+		System.out.println("[MESSAGE CONTROLLER] Message Queued To Send: " + message);
 	}
 
 	public void addToRecieved(Message message) {
 		
-		messagesRecieved.add(message);		
+		messagesRecieved.add(message);
+		crdt.addMessage(message);
 	}
 
 	private boolean checkEmptySend() {
