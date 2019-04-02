@@ -9,22 +9,23 @@ import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTUtility;
 
+//The main algorithm for the logoot crdt implementation
+
 public class LogootCRDT {
 		
+	//method called that generates the sequence atom to be added to the document
+	
 	public static SequenceAtom generate(String message, Position p, Position q, long siteId, Boolean modify) throws Exception {	
 		
-		//return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(generateLinePosition(p, q, siteId), clock.counter)), message);
 		Position pos = new Position(generateLinePosition(p, q, siteId, modify));		
 		return ComponentGenerator.genSequenceAtom((ComponentGenerator.genAtomIdentifier(pos, Clock.counter)), message);
 	}
+	
+	//generates the line position for the new atom, this method is recursive
 		
 	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId, Boolean modify) throws Exception {
 					
-		//takes in a position p and position q
-		//checks to see if the number of id's are zero
-		//if they are set them to the relative min and max positions
-		//means if that one position is longer than the other, the algorithm
-		//can compare the positions properly
+		//this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
 				
 		if(posP.ids.size() == 0) {
 			posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());

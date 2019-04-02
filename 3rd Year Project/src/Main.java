@@ -1,8 +1,10 @@
 
 import java.util.Scanner;
 
+import com.project.controller.CRDTController;
 import com.project.network.Node;
 import com.project.utils.Message;
+import com.project.utils.MsgGen;
 
 public class Main {
 
@@ -20,6 +22,14 @@ public class Main {
 		Thread inputThread = new Thread(input);
 		inputThread.setName("INPUT SCANNER");
 		inputThread.start();
+		
+		for(int i = 0; i < 30000; i++) {		
+			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+		}
+		
+		System.out.println("Size: " + CRDTController.getDocSize());
+		
+		node.shutdown();
 	}
 	
 	static class InputScanner extends Thread {
@@ -39,6 +49,8 @@ public class Main {
 				} else if(text.equals("SHUTDOWN")) {
 					node.shutdown();
 					isRunning = false;
+				} else if(text.equals("PRINT")){
+					node.print();
 				} else {
 					node.queueToSend(text);
 				}

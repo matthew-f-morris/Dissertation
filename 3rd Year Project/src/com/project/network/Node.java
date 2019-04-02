@@ -8,8 +8,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.project.Thread.ThreadManager;
+import com.project.controller.CRDTController;
 import com.project.controller.MessageController;
+import com.project.utils.CRDTFileGen;
 import com.project.utils.CommunicationInfo;
+import com.project.utils.MsgGen;
 import com.project.utils.PeerData;
 
 import javafx.application.Platform;
@@ -121,7 +124,9 @@ public class Node {
 		
 	public void shutdown() {
 		
+		System.out.println("\n --- NODE SHUTTING DOWN ---\n");
 		manager.leaveNetwork();
+		CRDTController.printDoc();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");
 		Platform.exit();
 		System.exit(0);
@@ -149,5 +154,13 @@ public class Node {
 			System.out.println("\n --- NODE JOINING NETWORK ---\n");
 			joined = true;
 		}
+	}
+	
+	public void print() {
+		msgController.print();
+	}
+	
+	public void bypass(String str, long site) {
+		msgController.bypassSend(str, site);
 	}
 }

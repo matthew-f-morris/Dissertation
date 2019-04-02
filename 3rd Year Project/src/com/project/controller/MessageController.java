@@ -7,8 +7,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.utils.AddressMessage;
+import com.project.utils.CRDTFileGen;
 import com.project.utils.Message;
 import com.project.utils.PeerData;
+
+/*
+ * Main controller class that enables a node to send messages to other nodes
+ * 		
+ * 		- Stores messages to be sent and recieved messages
+ * 		- Sends messages out using the message sender
+ * 		- Recieves messages from the reciever
+ * 		- Sends messages to the CRDTController to handle adding to the CRDT and document
+ */
 
 public class MessageController {
 
@@ -16,7 +26,6 @@ public class MessageController {
 	
 	public ConcurrentHashMap<Long, PeerData> peers;
 	public MessageSender sender;
-	//private MessageReciever reciever;
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
 	public ConcurrentLinkedQueue<AddressMessage> toResend;
@@ -31,25 +40,34 @@ public class MessageController {
 		this.uuid = uuid;
 
 		setMessagesToSend(new LinkedList<Message>());
-		toResend = new ConcurrentLinkedQueue<AddressMessage>();
-		
+		toResend = new ConcurrentLinkedQueue<AddressMessage>();		
 		crdt = new CRDTController(uuid);
 	}
 
+	//adds messages to the 'To-Send' queue so to speak
+	//inserts the message into the local crdt
+	
 	public void queueToSend(String message) {
 		
-		Message crdtMessage = crdt.handleMessage(message, node.nodeInfo);
-		
+		System.out.println("[MESSAGE CONTROLLER] Sending Message: " + message);
+		Message crdtMessage = crdt.handleMessage(message, node.nodeInfo);		
 		getMessagesToSend().add(crdtMessage);
-		crdt.printDocument();
 	}
+	
+	public void bypassSend(String str, long site) {		
+		crdt.handleBypassMessage(str, node.nodeInfo, site);
+	}
+	
+	//called when a message is recieved from the message reciever
+	//adds the message to the recieved queue
+	//adds the atom in the message to the local crdt document
 
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
 		crdt.addMessage(message);
 	}
-
+	
 	private boolean checkEmptySend() {
 
 		if (getMessagesToSend().size() <= 0) {
@@ -75,6 +93,8 @@ public class MessageController {
 //		}
 //	}
 	
+	//checks the number of messages in the 'To-Send' queue
+	
 	public void peekSend() {
 
 		if (checkEmptySend()) {
@@ -89,6 +109,8 @@ public class MessageController {
 			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + getMessagesToSend().size());
 		}
 	}
+	
+	//checks the number of messages in the 'Received' queue
 
 	public void peekRecieved() {
 
@@ -105,6 +127,8 @@ public class MessageController {
 		}
 	}
 	
+	//sends a message to the other replicas saying that a node has left the network
+	
 	public void sendLeaveMessage() {
 	
 		Message leaveMessage = new Message(true);
@@ -118,6 +142,8 @@ public class MessageController {
 		System.out.println("[MESSAGE CONTROLLER] Leave Message Sent");
 	}
 	
+	//method called that removes a peer from the list of known peers, this occurs when a 'leave-message' is received
+	
 	public void removePeer(long uuid) {
 		node.removePeer(uuid);
 	}
@@ -128,5 +154,9 @@ public class MessageController {
 
 	public void setMessagesToSend(LinkedList<Message> messagesToSend) {
 		this.messagesToSend = messagesToSend;
+	}
+	
+	public void print() {
+		crdt.printDocument();
 	}
 }

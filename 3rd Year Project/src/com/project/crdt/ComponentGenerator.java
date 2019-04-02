@@ -10,10 +10,12 @@ import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
 
+//static class that means generating new datatypes for the crdt becomes less messy
+
 public class ComponentGenerator {
 	
-	//public static final int MAX_POSITION = Short.MAX_VALUE;	
-	public static final int MAX_POSITION = 2;	
+	public static final int MAX_POSITION = Short.MAX_VALUE;	
+	//public static final int MAX_POSITION = 3;	
 	
 	private static int checkValue(int x) throws Exception {
 		

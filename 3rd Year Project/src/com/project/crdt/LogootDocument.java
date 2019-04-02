@@ -1,12 +1,18 @@
 package com.project.crdt;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTUtility;
+
+//a document class that represents the chat by using an array of sequence atoms
+//exposes methods that enable the crdt controller to add messages, print the state of the
+//crdt, calculates some metrics and initialised the document 
 
 public class LogootDocument {
 	
@@ -24,13 +30,20 @@ public class LogootDocument {
 		initDocument();
 	}
 	
-	public void initDocument() {
+	private void initDocument() {
+		
+		//creates the start and stop atoms that are necessary for the logoot document and algorithm to work
 		
 		document.arr.add(CRDTUtility.genStartAtom(siteId));
 		document.arr.add(CRDTUtility.genStopAtom(siteId));
 	}	
 	
 	public SequenceAtom addMessage(String message, long site) throws Exception {
+		
+		//adds a new message at the end of the document, this could be modified to add
+		//a message at any position. However, for this use case, messages are only added
+		//to the end of a document, because this is a chat... you cannae just add messages
+		//to random parts of the document
 		
 		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
 		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
@@ -44,19 +57,20 @@ public class LogootDocument {
 	
 	public boolean insertIntoDocument(SequenceAtom atom) {
 		
-//		try {
-//			CRDTUtility.insertSequenceAtom(document.arr, atom);
-//			return true;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			CRDTUtility.insertSequenceAtom(document.arr, atom);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return false;
 	}
 	
-//	private void print(SequenceAtom atom) {
-//		System.out.println(atom.toString());
-//	}
+	//The Logoot CRDT algorithm can be modified to minimise the number of positions in its identifiers
+	//This takes advantage of the fact that the messages are always added at the end of a document, therefor
+	//Each identifier doesnt need to leave space before it to add more identifiers, so it uses the least
+	//Amount of space possible.
 	
 	public void modify(Boolean mod) {
 		this.modify = mod;
@@ -66,6 +80,9 @@ public class LogootDocument {
 		document.arr.clear();
 		initDocument();
 	}
+	
+	//The following methods mearly calculate some metrics about the document and print the state of
+	//The document
 	
 	private Position getMaxPosition() {
 		
@@ -101,7 +118,7 @@ public class LogootDocument {
 		return (float) sum/size;
 	}
 	
-	private int docSize() {
+	public int docSize() {
 		return document.arr.size() - 2;
 	}
 	
@@ -114,6 +131,10 @@ public class LogootDocument {
 		}
 		
 		System.out.println("\n---- END OF DOCUMENT ----\n\n");
+	}
+	
+	public String getDocumentString() {
+		return toString();
 	}
 	
 	private void print(int lines) {
@@ -152,5 +173,20 @@ public class LogootDocument {
 		System.out.println("Average Position ID size: " + getAverageIdLength());
 		System.out.println("Size of Document in Bytes: " + 0);
 		System.out.println("\n");
+	}
+	
+	private void print(SequenceAtom atom) {
+		System.out.println(atom.toString());
+	}
+	
+	public ArrayList<String> getStringList() {
+
+		ArrayList<String> strings = new ArrayList<String>();
+		
+		for(SequenceAtom atom : document.arr) {
+			strings.add(atom.toString() + "\n");
+		}
+		
+		return strings;
 	}
 }
