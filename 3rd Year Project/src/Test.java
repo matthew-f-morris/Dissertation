@@ -12,7 +12,7 @@ public class Test {
 		
 		doc.modify(true);
 		
-		for(int i = 0; i < 100000; i++) {
+		for(int i = 0; i < 50000; i++) {
 			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
