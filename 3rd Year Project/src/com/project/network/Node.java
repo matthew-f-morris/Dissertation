@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.project.Thread.ThreadManager;
-import com.project.controller.CRDTController;
+import com.project.controller.DocumentController;
 import com.project.controller.MessageController;
 import com.project.utils.CRDTFileGen;
 import com.project.utils.CommunicationInfo;
@@ -126,7 +126,7 @@ public class Node {
 		
 		System.out.println("\n --- NODE SHUTTING DOWN ---\n");
 		manager.leaveNetwork();
-		CRDTController.printDoc();
+		DocumentController.printDoc();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");
 		Platform.exit();
 		System.exit(0);

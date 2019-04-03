@@ -3,6 +3,7 @@ package com.project.crdt;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Position;
@@ -19,6 +20,7 @@ public class LogootDocument {
 	private long siteId;
 	private Sequence document;
 	private Boolean modify = false;
+	private Boolean setLseq = false;
 	private int printNo = 15;
 	private long totalAddTime = 0L;
 	private long totalInsertTime = 0L;
@@ -51,9 +53,12 @@ public class LogootDocument {
 		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
 		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
-		long startTime = System.nanoTime();		
-		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify);
-		long endTime = System.nanoTime();
+		long startTime;
+		long endTime;		
+			
+		startTime = System.nanoTime();		
+		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify, setLseq);
+		endTime = System.nanoTime();
 		totalAddTime += endTime - startTime;
 		
 		Clock.increment();
@@ -85,6 +90,10 @@ public class LogootDocument {
 	
 	public void modify(Boolean mod) {
 		this.modify = mod;
+	}
+	
+	public void setLseq(Boolean set) {
+		this.setLseq = set;
 	}
 	
 	public void clear() {

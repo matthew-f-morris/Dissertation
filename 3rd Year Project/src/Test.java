@@ -1,5 +1,4 @@
-import com.project.controller.CRDTController;
-import com.project.crdt.LSEQDocument;
+import com.project.controller.DocumentController;
 import com.project.crdt.LogootDocument;
 import com.project.utils.MsgGen;
 
@@ -9,15 +8,16 @@ public class Test {
 	
 	public static void main(String[] args) throws Exception {
 		
-		LSEQDocument doc = new LSEQDocument(site);
+		LogootDocument doc = new LogootDocument(site);
 		
-		doc.modify(true);
+		doc.modify(false);
+		doc.setLseq(true);
 		
-		for(int i = 0; i < 10000; i++) {
+		for(int i = 0; i < 10; i++) {
 			doc.addMessage(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
 		doc.printInfo();
-		CRDTController.printDoc(doc);
+		DocumentController.printDoc(doc);
 	}	
 }

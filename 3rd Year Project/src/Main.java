@@ -1,7 +1,7 @@
 
 import java.util.Scanner;
 
-import com.project.controller.CRDTController;
+import com.project.controller.DocumentController;
 import com.project.network.Node;
 import com.project.utils.Message;
 import com.project.utils.MsgGen;
@@ -23,22 +23,22 @@ public class Main {
 //		inputThread.setName("INPUT SCANNER");
 //		inputThread.start();
 		
-		CRDTController.modifyDoc(true);
+		DocumentController.modifyDoc(true);
 		
 		for(int i = 0; i < 30000; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
-		CRDTController.printDocStats();
+		DocumentController.printDocStats();
 		
-		CRDTController.clear();
-		CRDTController.modifyDoc(false);
+		DocumentController.clear();
+		DocumentController.modifyDoc(false);
 		
 		for(int i = 0; i < 1000; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
-		CRDTController.printDocStats();		
+		DocumentController.printDocStats();		
 		node.shutdown();
 	}
 	

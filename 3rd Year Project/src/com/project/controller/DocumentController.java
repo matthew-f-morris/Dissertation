@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.crdt.LogootCRDT;
 import com.project.crdt.LogootDocument;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTFileGen;
@@ -8,15 +9,16 @@ import com.project.utils.PeerData;
 
 //Simple class that exposes the necessary methods to the message controller
 
-public class CRDTController {
+public class DocumentController {
 
 	private static long siteId;
 	private static LogootDocument doc;
 	
 	public static void init(long siteId) {
-		CRDTController.siteId = siteId;
+		DocumentController.siteId = siteId;
 		doc = new LogootDocument(siteId);
 		doc.modify(true);
+		doc.setLseq(false);
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities
@@ -74,5 +76,16 @@ public class CRDTController {
 	
 	public static void modifyDoc(Boolean mod) {
 		doc.modify(mod);
+	}
+	
+	public static void setLseq(Boolean set) {
+		doc.setLseq(set);
+	}
+	
+	public static void printStrategy() {
+		for(Integer depth : LogootCRDT.getStrategy().keySet()) {
+			
+			System.outprintln("Key: " + )
+		}
 	}
 }

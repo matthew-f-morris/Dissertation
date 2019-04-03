@@ -111,6 +111,14 @@ public class CRDTUtility {
 		return 0;
 	}
 	
+	public static int prefix(Position pos) {
+		return pos.ids.get(0).position;
+	}
+		
+	public static int base(int cpt) {
+		return (int) Math.pow(2, (5 + cpt));
+	}
+	
 	private static ArrayList<SequenceAtom> insert(ArrayList<SequenceAtom> array, SequenceAtom atom, int index) {
 		
 		array.add(index, atom);
