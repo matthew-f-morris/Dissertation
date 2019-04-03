@@ -20,6 +20,9 @@ public class LogootDocument {
 	private Sequence document;
 	private Boolean modify = false;
 	private int printNo = 15;
+	private long totalAddTime = 0L;
+	private long totalInsertTime = 0L;
+	private long lastInsertTime = 0L;
 	
 	LogootCRDT logoot = new LogootCRDT();
 	
@@ -48,22 +51,30 @@ public class LogootDocument {
 		Position posP = document.arr.get(document.arr.size() - 2).atomId.position;
 		Position posQ = document.arr.get(document.arr.size() - 1).atomId.position;
 		
+		long startTime = System.nanoTime();		
 		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify);
+		long endTime = System.nanoTime();
+		totalAddTime += endTime - startTime;
+		
 		Clock.increment();
+		
+		startTime = System.nanoTime();
 		CRDTUtility.insertSequenceAtom(document.arr, atom);
+		endTime = System.nanoTime();
+		lastInsertTime = endTime - startTime;
+		totalInsertTime += endTime - startTime;
 		
 		return atom;
 	}
 	
 	public boolean insertIntoDocument(SequenceAtom atom) {
 		
-		try {
+		try {									
 			CRDTUtility.insertSequenceAtom(document.arr, atom);
-			return true;
+			return true;			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
+		}		
 		return false;
 	}
 	
@@ -141,7 +152,7 @@ public class LogootDocument {
 		
 		ArrayList<SequenceAtom> seq = document.arr;
 		
-		System.out.println("--- START OF DOCUMENT ---\n");
+		System.out.println("\n--- START OF DOCUMENT ---\n");
 		
 		if(lines > seq.size())
 			lines = seq.size();
@@ -157,7 +168,7 @@ public class LogootDocument {
 		int sizeMax = getSizeOfPos(getMaxPosition());
 		
 		if(sizeMax > 20)
-			System.out.println("Unable to print document due to oversized ID's!\n");
+			System.out.println("\nUnable to print document due to oversized ID's!\n");
 		else 
 			print(printNo);
 		
@@ -172,7 +183,12 @@ public class LogootDocument {
 		System.out.println("Max Position ID Size: " + getSizeOfPos(getMaxPosition()));
 		System.out.println("Average Position ID size: " + getAverageIdLength());
 		System.out.println("Size of Document in Bytes: " + 0);
-		System.out.println("\n");
+		System.out.println("Total time taken to add messages (ms): " + (float) totalAddTime / 1000000);
+		System.out.println("Average time taken to add messages (ms): " + (float) totalAddTime / (docSize() * 1000000));
+		System.out.println("Total time taken to insert messages (ms): " + (float) totalInsertTime / 1000000);	
+		System.out.println("Average time taken to insert messages (ms): " + (float) totalInsertTime / (docSize() * 1000000));
+		System.out.println("Time taken for last addition (ms): " + (float) lastInsertTime / 1000000);
+		
 	}
 	
 	private void print(SequenceAtom atom) {

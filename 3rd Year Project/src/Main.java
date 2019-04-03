@@ -18,17 +18,27 @@ public class Main {
 		node = new Node();
 		node.queueToSend("TO ALL!");
 		
-		InputScanner input = new InputScanner();
-		Thread inputThread = new Thread(input);
-		inputThread.setName("INPUT SCANNER");
-		inputThread.start();
+//		InputScanner input = new InputScanner();
+//		Thread inputThread = new Thread(input);
+//		inputThread.setName("INPUT SCANNER");
+//		inputThread.start();
+		
+		CRDTController.modifyDoc(true);
 		
 		for(int i = 0; i < 30000; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
-		System.out.println("Size: " + CRDTController.getDocSize());
+		CRDTController.printDocStats();
 		
+		CRDTController.clear();
+		CRDTController.modifyDoc(false);
+		
+		for(int i = 0; i < 1000; i++) {		
+			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+		}
+		
+		CRDTController.printDocStats();		
 		node.shutdown();
 	}
 	

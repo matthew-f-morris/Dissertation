@@ -28,9 +28,7 @@ public class MessageController {
 	public MessageSender sender;
 	public LinkedList<Message> messagesRecieved;
 	public LinkedList<Message> messagesToSend;
-	public ConcurrentLinkedQueue<AddressMessage> toResend;
-	private CRDTController crdt;
-	
+	public ConcurrentLinkedQueue<AddressMessage> toResend;	
 	private long uuid = 0L;
 	
 	public MessageController(Node node, ConcurrentHashMap<Long, PeerData> peers, long uuid) {
@@ -41,7 +39,7 @@ public class MessageController {
 
 		setMessagesToSend(new LinkedList<Message>());
 		toResend = new ConcurrentLinkedQueue<AddressMessage>();		
-		crdt = new CRDTController(uuid);
+		CRDTController.init(uuid);
 	}
 
 	//adds messages to the 'To-Send' queue so to speak
@@ -50,12 +48,12 @@ public class MessageController {
 	public void queueToSend(String message) {
 		
 		System.out.println("[MESSAGE CONTROLLER] Sending Message: " + message);
-		Message crdtMessage = crdt.handleMessage(message, node.nodeInfo);		
+		Message crdtMessage = CRDTController.handleMessage(message, node.nodeInfo);		
 		getMessagesToSend().add(crdtMessage);
 	}
 	
 	public void bypassSend(String str, long site) {		
-		crdt.handleBypassMessage(str, node.nodeInfo, site);
+		CRDTController.handleBypassMessage(str, node.nodeInfo, site);
 	}
 	
 	//called when a message is recieved from the message reciever
@@ -65,7 +63,7 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
-		crdt.addMessage(message);
+		CRDTController.addMessage(message);
 	}
 	
 	private boolean checkEmptySend() {
@@ -157,6 +155,6 @@ public class MessageController {
 	}
 	
 	public void print() {
-		crdt.printDocument();
+		CRDTController.printDoc();
 	}
 }

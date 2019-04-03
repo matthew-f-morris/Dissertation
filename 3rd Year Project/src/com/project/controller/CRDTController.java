@@ -10,18 +10,18 @@ import com.project.utils.PeerData;
 
 public class CRDTController {
 
-	private long siteId;
+	private static long siteId;
 	private static LogootDocument doc;
 	
-	public CRDTController(long siteId) {
-		this.siteId = siteId;
+	public static void init(long siteId) {
+		CRDTController.siteId = siteId;
 		doc = new LogootDocument(siteId);
 		doc.modify(true);
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities
 
-	public Message handleMessage(String message, PeerData nodeInfo) {
+	public static Message handleMessage(String message, PeerData nodeInfo) {
 		
 		try {
 			SequenceAtom atom = doc.addMessage(message, siteId);
@@ -32,7 +32,8 @@ public class CRDTController {
 		
 		return null;
 	}
-	public void handleBypassMessage(String message, PeerData info, long site) {
+	
+	public static void handleBypassMessage(String message, PeerData info, long site) {
 		
 		try {
 			doc.addMessage(message, siteId);
@@ -41,18 +42,18 @@ public class CRDTController {
 		}
 	}
 	
+	public static void clear() {
+		doc.clear();
+	}
+	
 	//allows the message controller to add any sequence atoms recieved from other sites
 	
-	public void addMessage(Message message) {
+	public static void addMessage(Message message) {
 		doc.insertIntoDocument(message.getAtom());
 	}
 	
-	public Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
+	public static Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
 		return new Message(nodeInfo, atom);
-	}
-	
-	public void printDocument() {
-		doc.printInfo();
 	}
 	
 	public static int getDocSize() {
@@ -65,5 +66,13 @@ public class CRDTController {
 	
 	public static void printDoc(LogootDocument doc) {
 		CRDTFileGen.start(doc.getStringList());
+	}
+	
+	public static void printDocStats() {
+		doc.printInfo();
+	}
+	
+	public static void modifyDoc(Boolean mod) {
+		doc.modify(mod);
 	}
 }

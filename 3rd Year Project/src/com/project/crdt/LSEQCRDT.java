@@ -15,11 +15,6 @@ public class LSEQCRDT {
 	
 	private static int boundary = 10;
 	private static Map<Integer, Boolean> strategy = new HashMap<Integer, Boolean>();
-	private static ComponentGenerator maker;	
-	
-	public LSEQCRDT(ComponentGenerator maker) {
-		LSEQCRDT.maker = maker;		
-	}
 	
 	//insert algorithm 1 here (allocation function)
 	
@@ -44,13 +39,13 @@ public class LSEQCRDT {
 		if(strategy.get(depth)){
 			//CHECK THIS THING
 			int addVal = CRDTUtility.randomInt(0, step) + 1;
-			id = maker.genLSEQid(prefix(p, depth));
+			id = ComponentGenerator.genLSEQid(prefix(p, depth));
 			id.listIds.add(addVal);
 			
 		} else {
 			//CHECK THIS THING ALSO
 			int subVal = CRDTUtility.randomInt(0, step) + 1;
-			id = maker.genLSEQid(prefix(q, depth));
+			id = ComponentGenerator.genLSEQid(prefix(q, depth));
 			id.listIds.add(subVal);		
 		}
 		

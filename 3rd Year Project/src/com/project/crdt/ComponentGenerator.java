@@ -15,7 +15,8 @@ import com.project.datatypes.SequenceAtom;
 public class ComponentGenerator {
 	
 	public static final int MAX_POSITION = Short.MAX_VALUE;	
-	//public static final int MAX_POSITION = 3;	
+	//public static final int MAX_POSITION = 3;
+	public static final int ARITY = 99;
 	
 	private static int checkValue(int x) throws Exception {
 		
@@ -94,10 +95,10 @@ public class ComponentGenerator {
 		return new LSEQid(begin);
 	}
 	
-	public static LSEQid genLSEQidEnd(int arity) {
+	public static LSEQid genLSEQidEnd() {
 		List<Integer> end = new ArrayList<Integer>();
-		end.add(0);
-		end.add(arity);
+		end.add(ARITY);
+		end.add(-1);
 		return new LSEQid(end);
 	}
 }	
