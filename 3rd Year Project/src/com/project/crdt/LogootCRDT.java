@@ -29,75 +29,7 @@ public class LogootCRDT {
 	}
 
 	//generates the line position for the new atom, this method is recursive
-		
-	private static List<Identifier> generateLinePositionX(Position posP, Position posQ, long siteId, Boolean modify, Boolean setLseq) throws Exception {
-					
-		//this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
-				
-		if(posP.ids.size() == 0) {
-			posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
-		}
-		
-		if(posQ.ids.size() == 0) {
-			posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
-		}
-		
-		//compares the identifiers in the 1st position
-		//if -1 (ie q is greater than p for both site and position)
-		
-		List<Identifier> build = new ArrayList<Identifier>(); 
-		
-		switch(CRDTUtility.compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
-			
-			case -1:
-								
-				int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
-				
-				if(interval > 1) {
 
-					if(modify)
-						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
-					else 
-						build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
-					return build;
-				}
-				
-				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
-					
-					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
-					return build;
-					
-				} else {
-					
-					build.add(posP.ids.get(0));
-					
-					posP.ids = posP.ids.subList(1, posP.ids.size());
-					posQ.ids = posQ.ids.subList(1, posQ.ids.size());
-					
-					build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
-					return build;
-				}
-			
-			case 0:
-				
-				build.add(posP.ids.get(0));
-				
-				posP.ids.subList(1, posP.ids.size());
-				posQ.ids.subList(1, posQ.ids.size());
-				
-				build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
-				return build;
-			
-			case 1:				
-				
-				throw new Exception("Position Q was less than Position P!");
-		}
-		
-		return build;
-	}
-	
-	// new updated version
-	
 	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId, Boolean modify, Boolean setLseq) throws Exception {
 		
 		//this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
@@ -121,6 +53,7 @@ public class LogootCRDT {
 			case -1:
 								
 				int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
+				System.out.println("Interval: " + interval);
 				
 				if(interval > 1) {
 
@@ -128,7 +61,7 @@ public class LogootCRDT {
 						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
 					
 					else if(setLseq) {
-						build.add(ComponentGenerator.genIdentifier(alloc(Math.min(boundary, interval), posP.ids.get(0).position), siteId));
+						build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position), siteId));
 					}
 					
 					else	
@@ -175,6 +108,10 @@ public class LogootCRDT {
 		
 		int id = 0;
 		
+		System.out.println("Step: " + step);
+		System.out.println("Pos: " + pos);		
+		System.out.println("Depth: " + depth);
+		
 		if(!strategy.containsKey(depth)) {
 			Boolean rand = CRDTUtility.randomBool();
 			strategy.put(depth, rand);
@@ -189,7 +126,7 @@ public class LogootCRDT {
 			
 			int subVal = CRDTUtility.randomInt(0, step) + 1;
 			id = pos - subVal;
-				
+			
 		}
 		
 		return id;
@@ -198,4 +135,93 @@ public class LogootCRDT {
 	public static Map<Integer, Boolean> getStrategy(){
 		return strategy;
 	}
+	
+	//need to do the base thing properly
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	private static List<Identifier> generateLinePositionX(Position posP, Position posQ, long siteId, Boolean modify, Boolean setLseq) throws Exception {
+//		
+////this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
+//	
+//if(posP.ids.size() == 0) {
+//posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
+//}
+//
+//if(posQ.ids.size() == 0) {
+//posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
+//}
+//
+////compares the identifiers in the 1st position
+////if -1 (ie q is greater than p for both site and position)
+//
+//List<Identifier> build = new ArrayList<Identifier>(); 
+//
+//switch(CRDTUtility.compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
+//
+//case -1:
+//					
+//	int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
+//	
+//	if(interval > 1) {
+//
+//		if(modify)
+//			build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
+//		else 
+//			build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+//		return build;
+//	}
+//	
+//	else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
+//		
+//		build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+//		return build;
+//		
+//	} else {
+//		
+//		build.add(posP.ids.get(0));
+//		
+//		posP.ids = posP.ids.subList(1, posP.ids.size());
+//		posQ.ids = posQ.ids.subList(1, posQ.ids.size());
+//		
+//		build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
+//		return build;
+//	}
+//
+//case 0:
+//	
+//	build.add(posP.ids.get(0));
+//	
+//	posP.ids.subList(1, posP.ids.size());
+//	posQ.ids.subList(1, posQ.ids.size());
+//	
+//	build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
+//	return build;
+//
+//case 1:				
+//	
+//	throw new Exception("Position Q was less than Position P!");
+//}
+//
+//return build;
+//}
+//}

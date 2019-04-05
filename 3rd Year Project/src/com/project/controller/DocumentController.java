@@ -1,5 +1,7 @@
 package com.project.controller;
 
+import java.util.Arrays;
+
 import com.project.crdt.LogootCRDT;
 import com.project.crdt.LogootDocument;
 import com.project.datatypes.SequenceAtom;
@@ -17,7 +19,7 @@ public class DocumentController {
 	public static void init(long siteId) {
 		DocumentController.siteId = siteId;
 		doc = new LogootDocument(siteId);
-		doc.modify(true);
+		doc.modify(false);
 		doc.setLseq(false);
 	}
 	
@@ -62,12 +64,12 @@ public class DocumentController {
 		return doc.docSize();
 	}
 	
-	public static void printDoc() {
-		CRDTFileGen.start(doc.getStringList());
+	public static void printDoc(String str) {
+		CRDTFileGen.start(doc.getStringList(), str);
 	}
 	
 	public static void printDoc(LogootDocument doc) {
-		CRDTFileGen.start(doc.getStringList());
+		CRDTFileGen.start(doc.getStringList(), "");
 	}
 	
 	public static void printDocStats() {
@@ -75,17 +77,27 @@ public class DocumentController {
 	}
 	
 	public static void modifyDoc(Boolean mod) {
+		
+		if(doc.getSetLseq()) {
+			setLseq(false);
+		}
+		
+		doc.clear();
 		doc.modify(mod);
 	}
 	
 	public static void setLseq(Boolean set) {
+		
+		if(doc.getModify()) {
+			modifyDoc(false);
+		}
+		
+		doc.clearLSEQ();
 		doc.setLseq(set);
 	}
 	
 	public static void printStrategy() {
-		for(Integer depth : LogootCRDT.getStrategy().keySet()) {
-			
-			System.outprintln("Key: " + )
-		}
+		System.out.println("\n--- STRATEGY ---\n");
+		System.out.println(Arrays.asList(LogootCRDT.getStrategy()));
 	}
 }

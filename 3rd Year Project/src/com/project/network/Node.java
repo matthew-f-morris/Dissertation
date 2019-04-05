@@ -126,7 +126,7 @@ public class Node {
 		
 		System.out.println("\n --- NODE SHUTTING DOWN ---\n");
 		manager.leaveNetwork();
-		DocumentController.printDoc();
+		//DocumentController.printDoc();
 		System.out.println("\n --- NODE SHUTDOWN ---\n");
 		Platform.exit();
 		System.exit(0);
@@ -157,7 +157,7 @@ public class Node {
 	}
 	
 	public void print() {
-		msgController.print();
+		DocumentController.printDoc("");
 	}
 	
 	public void bypass(String str, long site) {

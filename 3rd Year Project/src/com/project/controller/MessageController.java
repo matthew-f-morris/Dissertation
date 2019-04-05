@@ -153,8 +153,4 @@ public class MessageController {
 	public void setMessagesToSend(LinkedList<Message> messagesToSend) {
 		this.messagesToSend = messagesToSend;
 	}
-	
-	public void print() {
-		DocumentController.printDoc();
-	}
 }

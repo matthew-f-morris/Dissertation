@@ -55,6 +55,22 @@ public class CRDTUtility {
 		return ComponentGenerator.genSequenceAtom(atom);
 	}
 	
+	public static SequenceAtom genStartAtomLseq() {
+		
+		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq());
+		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
+		Clock.increment();
+		return ComponentGenerator.genSequenceAtom(atom);
+	}
+	
+	public static SequenceAtom genStopAtomLseq() {
+		
+		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq());
+		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
+		Clock.increment();
+		return ComponentGenerator.genSequenceAtom(atom);
+	}
+	
 	public static SequenceAtom genSequenceAtom(String message, Position p) {
 		
 		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(p, Clock.counter);

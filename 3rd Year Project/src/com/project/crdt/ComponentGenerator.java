@@ -14,7 +14,6 @@ import com.project.datatypes.SequenceAtom;
 public class ComponentGenerator {
 	
 	public static final int MAX_POSITION = Short.MAX_VALUE;	
-	//public static final int MAX_POSITION = 3;
 	public static final int ARITY = 99;
 	
 	private static int checkValue(int x) throws Exception {
@@ -33,6 +32,16 @@ public class ComponentGenerator {
 		} else		
 			return new Identifier(p, siteId);
 	}
+
+	public static Identifier genIdentifierLseq(int p, long siteId) throws Exception {
+		
+		System.out.println("[COMPONENT GENERATOR] Int P: " + p);
+		
+		if(checkValue(p) == -1) {
+			throw new Exception("LSEQ Identifier Generation Failed!");
+		} else		
+			return new Identifier(p, siteId);
+	}
 	
 	public static Identifier genIdentifierMax() {
 		return new Identifier(MAX_POSITION, 0);
@@ -41,6 +50,14 @@ public class ComponentGenerator {
 	public static Identifier genIdentifierMin() {
 		return new Identifier(0, 0);
 		//return new Identifier(MAX_POSITION - 2, siteId);
+	}
+	
+	public static Identifier genIdentifierMinLseq() {
+		return new Identifier(0, 0);
+	}
+	
+	public static Identifier genIdentifierMaxLseq() {
+		return new Identifier(ARITY, 0);
 	}
 	
 	public static Position genPosition() {

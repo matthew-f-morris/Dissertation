@@ -23,22 +23,29 @@ public class Main {
 //		inputThread.setName("INPUT SCANNER");
 //		inputThread.start();
 		
-		DocumentController.modifyDoc(true);
+//		DocumentController.modifyDoc(false);		
+//		for(int i = 0; i < 100; i++) {		
+//			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+//		}		
+//		DocumentController.printDocStats();		
+//		DocumentController.printDoc("BASIC");
+
+//		
+//		DocumentController.modifyDoc(true);		
+//		for(int i = 0; i < 100; i++) {		
+//			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+//		}
+//		DocumentController.printDocStats();
+//		DocumentController.printDoc("MODIFIED");
 		
-		for(int i = 0; i < 30000; i++) {		
+		DocumentController.setLseq(true);
+		for(int i = 0; i < 100; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-		}
+		}		
+		DocumentController.printDocStats();	
+		DocumentController.printDoc("LSEQ");
+		DocumentController.printStrategy();
 		
-		DocumentController.printDocStats();
-		
-		DocumentController.clear();
-		DocumentController.modifyDoc(false);
-		
-		for(int i = 0; i < 1000; i++) {		
-			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-		}
-		
-		DocumentController.printDocStats();		
 		node.shutdown();
 	}
 	

@@ -38,10 +38,15 @@ public class LogootDocument {
 	private void initDocument() {
 		
 		//creates the start and stop atoms that are necessary for the logoot document and algorithm to work
-		
 		document.arr.add(CRDTUtility.genStartAtom(siteId));
 		document.arr.add(CRDTUtility.genStopAtom(siteId));
-	}	
+	}
+	
+	public void initDocumentLSEQ() {
+				
+		document.arr.add(CRDTUtility.genStartAtom(siteId));
+		document.arr.add(CRDTUtility.genStopAtom(siteId));
+	}
 	
 	public SequenceAtom addMessage(String message, long site) throws Exception {
 		
@@ -99,6 +104,11 @@ public class LogootDocument {
 	public void clear() {
 		document.arr.clear();
 		initDocument();
+	}
+	
+	public void clearLSEQ() {
+		document.arr.clear();
+		initDocumentLSEQ();
 	}
 	
 	//The following methods mearly calculate some metrics about the document and print the state of
@@ -213,5 +223,13 @@ public class LogootDocument {
 		}
 		
 		return strings;
+	}
+	
+	public Boolean getModify() {
+		return modify;
+	}
+	
+	public Boolean getSetLseq() {
+		return setLseq;
 	}
 }

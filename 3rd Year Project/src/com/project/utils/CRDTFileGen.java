@@ -8,9 +8,9 @@ public class CRDTFileGen {
 	
 	private static Thread thread;
 	
-	public static void start(ArrayList<String> str) {
+	public static void start(ArrayList<String> str, String name) {
 		
-		thread = new Thread(new FileHandler(str));
+		thread = new Thread(new FileHandler(str, name));
 		thread.start();
 		try {
 			thread.join();
@@ -23,9 +23,11 @@ public class CRDTFileGen {
 	static class FileHandler implements Runnable {
 		
 		ArrayList<String> array;
+		String name = "";
 		
-		public FileHandler(ArrayList<String> array) {
+		public FileHandler(ArrayList<String> array, String name) {
 			this.array = array;
+			this.name = name;
 		}
 
 		public void run() {
@@ -33,7 +35,7 @@ public class CRDTFileGen {
 			FileWriter writer = null;
 			
 			try {
-				writer = new FileWriter("output.txt");
+				writer = new FileWriter("output-" + name + ".txt");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
