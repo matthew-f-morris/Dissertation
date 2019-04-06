@@ -8,13 +8,14 @@ import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
+import com.project.utils.CRDTUtility;
 
 //static class that means generating new datatypes for the crdt becomes less messy
 
 public class ComponentGenerator {
 	
 	public static final int MAX_POSITION = Short.MAX_VALUE;	
-	public static final int ARITY = 99;
+	public static final int ARITY = CRDTUtility.base(0);
 	
 	private static int checkValue(int x) throws Exception {
 		
@@ -35,8 +36,6 @@ public class ComponentGenerator {
 
 	public static Identifier genIdentifierLseq(int p, long siteId) throws Exception {
 		
-		System.out.println("[COMPONENT GENERATOR] Int P: " + p);
-		
 		if(checkValue(p) == -1) {
 			throw new Exception("LSEQ Identifier Generation Failed!");
 		} else		
@@ -44,7 +43,7 @@ public class ComponentGenerator {
 	}
 	
 	public static Identifier genIdentifierMax() {
-		return new Identifier(MAX_POSITION, 0);
+		return new Identifier(MAX_POSITION - 1, 0);
 	}
 	
 	public static Identifier genIdentifierMin() {
@@ -57,7 +56,7 @@ public class ComponentGenerator {
 	}
 	
 	public static Identifier genIdentifierMaxLseq() {
-		return new Identifier(ARITY, 0);
+		return new Identifier(ARITY - 1, 0);
 	}
 	
 	public static Position genPosition() {

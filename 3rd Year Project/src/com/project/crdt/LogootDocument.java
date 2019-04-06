@@ -25,8 +25,9 @@ public class LogootDocument {
 	private long totalAddTime = 0L;
 	private long totalInsertTime = 0L;
 	private long lastInsertTime = 0L;
+	private int boundary = 10;
 	
-	LogootCRDT logoot = new LogootCRDT();
+	LogootCRDT logoot = new LogootCRDT(boundary);
 	
 	public LogootDocument(long siteId) {
 		
@@ -38,14 +39,14 @@ public class LogootDocument {
 	private void initDocument() {
 		
 		//creates the start and stop atoms that are necessary for the logoot document and algorithm to work
-		document.arr.add(CRDTUtility.genStartAtom(siteId));
-		document.arr.add(CRDTUtility.genStopAtom(siteId));
+		document.arr.add(CRDTUtility.genStartAtom());
+		document.arr.add(CRDTUtility.genStopAtom());
 	}
 	
 	public void initDocumentLSEQ() {
 				
-		document.arr.add(CRDTUtility.genStartAtom(siteId));
-		document.arr.add(CRDTUtility.genStopAtom(siteId));
+		document.arr.add(CRDTUtility.genStartAtomLseq());
+		document.arr.add(CRDTUtility.genStopAtomLseq());
 	}
 	
 	public SequenceAtom addMessage(String message, long site) throws Exception {

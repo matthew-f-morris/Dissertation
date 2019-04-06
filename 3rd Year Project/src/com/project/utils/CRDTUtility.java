@@ -39,7 +39,7 @@ public class CRDTUtility {
 		return rand.nextBoolean();
 	}
 	
-	public static SequenceAtom genStartAtom(long siteId) {
+	public static SequenceAtom genStartAtom() {
 
 		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
 		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
@@ -47,7 +47,7 @@ public class CRDTUtility {
 		return ComponentGenerator.genSequenceAtom(atom);
 	}
 	
-	public static SequenceAtom genStopAtom(long siteId) {
+	public static SequenceAtom genStopAtom() {
 
 		Position pMax = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
 		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMax, Clock.counter);
@@ -65,7 +65,7 @@ public class CRDTUtility {
 	
 	public static SequenceAtom genStopAtomLseq() {
 		
-		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq());
+		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMaxLseq());
 		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
 		Clock.increment();
 		return ComponentGenerator.genSequenceAtom(atom);
@@ -133,6 +133,7 @@ public class CRDTUtility {
 		
 	public static int base(int cpt) {
 		return (int) Math.pow(2, (5 + cpt));
+		//return (int) Math.pow(2, (3 + cpt));
 	}
 	
 	private static ArrayList<SequenceAtom> insert(ArrayList<SequenceAtom> array, SequenceAtom atom, int index) {

@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import com.project.controller.DocumentController;
 import com.project.network.Node;
+import com.project.utils.CRDTUtility;
 import com.project.utils.Message;
 import com.project.utils.MsgGen;
 
@@ -12,41 +13,70 @@ public class Main {
 	static Node node;
 
 	public static void main(String[] args) {		
-		
-		scanner = new Scanner(System.in);
-		
+				
 		node = new Node();
 		node.queueToSend("TO ALL!");
 		
-//		InputScanner input = new InputScanner();
-//		Thread inputThread = new Thread(input);
-//		inputThread.setName("INPUT SCANNER");
-//		inputThread.start();
-		
-//		DocumentController.modifyDoc(false);		
-//		for(int i = 0; i < 100; i++) {		
-//			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-//		}		
-//		DocumentController.printDocStats();		
-//		DocumentController.printDoc("BASIC");
-
-//		
-//		DocumentController.modifyDoc(true);		
-//		for(int i = 0; i < 100; i++) {		
-//			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-//		}
-//		DocumentController.printDocStats();
-//		DocumentController.printDoc("MODIFIED");
-		
-		DocumentController.setLseq(true);
-		for(int i = 0; i < 100; i++) {		
-			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-		}		
-		DocumentController.printDocStats();	
-		DocumentController.printDoc("LSEQ");
-		DocumentController.printStrategy();
+		//runBasic("Basic", 10, false);
+		//runModified("Modified", 10, false);
+		runLSEQ("LSEQ", 10, false);
 		
 		node.shutdown();
+	}
+	
+	public static void runBasic(String title, int num, Boolean toFile) {
+		
+		DocumentController.modifyDoc(false);
+		
+		for(int i = 0; i < num; i++) {		
+			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+		}		
+		
+		DocumentController.printDocStats();	
+		
+		if(toFile)
+			DocumentController.printDoc(title);
+	}
+	
+	public static void runModified(String title, int num, Boolean toFile) {
+		
+		DocumentController.modifyDoc(true);
+		
+		for(int i = 0; i < num; i++) {		
+			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+		}
+		
+		DocumentController.printDocStats();
+		
+		if(toFile)
+			DocumentController.printDoc(title);
+	}
+	
+	public static void runLSEQ(String title, int num, Boolean toFile) {
+		
+		DocumentController.setLseq(true);
+		DocumentController.printDocStats();
+		
+		for(int i = 0; i < num; i++) {		
+			node.bypass("" + i, MsgGen.getSite());
+			DocumentController.printDocStats();	
+		}
+		
+		//DocumentController.printDocStats();	
+		
+		if(toFile)
+			DocumentController.printDoc(title);
+		
+		DocumentController.printStrategy();
+	}
+	
+	public static void startScanner() {
+		
+		scanner = new Scanner(System.in);
+		InputScanner input = new InputScanner();
+		Thread inputThread = new Thread(input);
+		inputThread.setName("INPUT SCANNER");
+		inputThread.start();
 	}
 	
 	static class InputScanner extends Thread {

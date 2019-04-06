@@ -17,20 +17,23 @@ public class LogootCRDT {
 			
 	//method called that generates the sequence atom to be added to the document
 	
-	private static int boundary = 10;
+	private static int boundary;
 	private static Map<Integer, Boolean> strategy = new HashMap<Integer, Boolean>();
 	private static int depth = -1;
 	
+	public LogootCRDT(int boundary) {
+		LogootCRDT.boundary = boundary;
+	}
+	
 	public static SequenceAtom generate(String message, Position p, Position q, long siteId, Boolean modify, Boolean setLseq) throws Exception {	
 
-		depth = -1;
-		Position pos = new Position(generateLinePosition(p, q, siteId, modify, setLseq));		
+		Position pos = new Position(generateLinePosition(p, q, siteId, modify, setLseq, depth));		
 		return ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(pos, Clock.counter), message);
 	}
 
 	//generates the line position for the new atom, this method is recursive
 
-	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId, Boolean modify, Boolean setLseq) throws Exception {
+	private static List<Identifier> generateLinePosition(Position posP, Position posQ, long siteId, Boolean modify, Boolean setLseq, int depth) throws Exception {
 		
 		//this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
 		depth++;
@@ -53,16 +56,14 @@ public class LogootCRDT {
 			case -1:
 								
 				int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
-				System.out.println("Interval: " + interval);
 				
 				if(interval > 1) {
 
 					if(modify)
 						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
 					
-					else if(setLseq) {
-						build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position), siteId));
-					}
+					else if(setLseq)
+						build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, depth), siteId));
 					
 					else	
 						build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
@@ -72,7 +73,12 @@ public class LogootCRDT {
 				
 				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 					
-					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+//					if(setLseq)
+//						build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, depth), siteId));
+//					
+//					else 						
+						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+					
 					return build;
 					
 				} else {
@@ -82,7 +88,7 @@ public class LogootCRDT {
 					posP.ids = posP.ids.subList(1, posP.ids.size());
 					posQ.ids = posQ.ids.subList(1, posQ.ids.size());
 					
-					build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
+					build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq, depth));
 					return build;
 				}
 			
@@ -93,7 +99,7 @@ public class LogootCRDT {
 				posP.ids.subList(1, posP.ids.size());
 				posQ.ids.subList(1, posQ.ids.size());
 				
-				build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq));
+				build.addAll(generateLinePosition(posP, posQ, siteId, modify, setLseq, depth));
 				return build;
 			
 			case 1:				
@@ -104,31 +110,36 @@ public class LogootCRDT {
 		return build;
 	}
 	
-	private static int alloc(int step, int pos) {
+	private static int alloc(int step, int pos, int depth) {
 		
 		int id = 0;
 		
-		System.out.println("Step: " + step);
+		System.out.println("\nStep: " + step);
 		System.out.println("Pos: " + pos);		
 		System.out.println("Depth: " + depth);
+		System.out.println("Base at Depth: " + CRDTUtility.base(depth));
+		System.out.println("Boundary+: " + strategy.get(depth));
 		
 		if(!strategy.containsKey(depth)) {
 			Boolean rand = CRDTUtility.randomBool();
-			strategy.put(depth, rand);
+			//strategy.put(depth, rand);
+			strategy.put(depth, false);
 		}
 		
 		if(strategy.get(depth)){	//boundary+
 			
-			int addVal = CRDTUtility.randomInt(0, step) + 1;
-			id = pos + addVal;
+			int addVal = CRDTUtility.randomInt(0, step);
+			id = (CRDTUtility.base(depth) - 1) + addVal;
+			System.out.println("AddVal: " + addVal);
 			
 		} else {	//boundary-
 			
-			int subVal = CRDTUtility.randomInt(0, step) + 1;
-			id = pos - subVal;
-			
+			int subVal = CRDTUtility.randomInt(0, step);
+			id = (CRDTUtility.base(depth) - 1) - subVal;
+			System.out.println("SubVal: " + subVal);
 		}
 		
+		System.out.println("ID: " + id);
 		return id;
 	}
 	
@@ -136,6 +147,9 @@ public class LogootCRDT {
 		return strategy;
 	}
 	
+	public static void setBoundary(int boundary) {
+		LogootCRDT.boundary = boundary;
+	}	
 	//need to do the base thing properly
 }
 
