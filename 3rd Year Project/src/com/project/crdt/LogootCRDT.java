@@ -72,12 +72,8 @@ public class LogootCRDT {
 				}
 				
 				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
-					
-//					if(setLseq)
-//						build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, depth), siteId));
-//					
-//					else 						
-						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+						
+					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
 					
 					return build;
 					
@@ -113,6 +109,8 @@ public class LogootCRDT {
 	private static int alloc(int step, int pos, int depth) {
 		
 		int id = 0;
+		int addVal = 0;
+		int subVal = 0;
 		
 		System.out.println("\nStep: " + step);
 		System.out.println("Pos: " + pos);		
@@ -122,20 +120,27 @@ public class LogootCRDT {
 		
 		if(!strategy.containsKey(depth)) {
 			Boolean rand = CRDTUtility.randomBool();
-			//strategy.put(depth, rand);
-			strategy.put(depth, false);
+			strategy.put(depth, true);
 		}
 		
 		if(strategy.get(depth)){	//boundary+
 			
-			int addVal = CRDTUtility.randomInt(0, step);
-			id = (CRDTUtility.base(depth) - 1) + addVal;
+			if(pos <= step)
+				addVal = CRDTUtility.randomInt(pos, step) + 1;
+			else 
+				addVal = CRDTUtility.randomInt(step, pos) + 1;
+			
+			id = CRDTUtility.base(depth - 1) + addVal;
 			System.out.println("AddVal: " + addVal);
 			
 		} else {	//boundary-
 			
-			int subVal = CRDTUtility.randomInt(0, step);
-			id = (CRDTUtility.base(depth) - 1) - subVal;
+			if(pos >= step)
+				subVal = CRDTUtility.randomInt(step, pos) + 1;
+			else
+				subVal = CRDTUtility.randomInt(pos, step) + 1;
+			
+			id = CRDTUtility.base(depth - 1) - subVal;
 			System.out.println("SubVal: " + subVal);
 		}
 		

@@ -4,9 +4,6 @@ public class Main{
 	
 	public static void main(String[] args) {
 
-		long one = 4L;
-		long two = 4L;
-		
-		System.out.println(one == two);
+		System.out.println(32 * (int) Math.pow(2, 15));
 	}
 }

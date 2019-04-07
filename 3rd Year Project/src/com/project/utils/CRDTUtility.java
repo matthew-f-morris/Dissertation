@@ -132,8 +132,7 @@ public class CRDTUtility {
 	}
 		
 	public static int base(int cpt) {
-		return (int) Math.pow(2, (5 + cpt));
-		//return (int) Math.pow(2, (3 + cpt));
+		return (int) 32 * (int) Math.pow(2, cpt);
 	}
 	
 	private static ArrayList<SequenceAtom> insert(ArrayList<SequenceAtom> array, SequenceAtom atom, int index) {
