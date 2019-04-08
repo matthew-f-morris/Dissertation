@@ -54,8 +54,13 @@ public class LogootCRDT {
 		switch(CRDTUtility.compareIdentifier(posP.ids.get(0), posQ.ids.get(0))) {
 			
 			case -1:
-								
-				int interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
+				
+				int interval = 0;
+				
+				if(setLseq)
+					interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP) - 1;
+				else
+					interval = CRDTUtility.prefix(posQ) - CRDTUtility.prefix(posP);
 				
 				if(interval > 1) {
 
@@ -111,6 +116,8 @@ public class LogootCRDT {
 		int id = 0;
 		int addVal = 0;
 		int subVal = 0;
+		int base = CRDTUtility.base(depth - 1);
+		int prevBase = CRDTUtility.base(depth - 2);
 		
 		System.out.println("\nStep: " + step);
 		System.out.println("Pos: " + pos);		
@@ -118,29 +125,26 @@ public class LogootCRDT {
 		System.out.println("Base at Depth: " + CRDTUtility.base(depth));
 		System.out.println("Boundary+: " + strategy.get(depth));
 		
+		if(pos == 0 && (strategy.get(depth) == null || true))
+			pos += base; 
+		else
+			pos += base * 2;
+		
 		if(!strategy.containsKey(depth)) {
 			Boolean rand = CRDTUtility.randomBool();
-			strategy.put(depth, true);
+			strategy.put(depth, rand);
 		}
 		
 		if(strategy.get(depth)){	//boundary+
 			
-			if(pos <= step)
-				addVal = CRDTUtility.randomInt(pos, step) + 1;
-			else 
-				addVal = CRDTUtility.randomInt(step, pos) + 1;
-			
-			id = CRDTUtility.base(depth - 1) + addVal;
+			addVal = CRDTUtility.randomInt(0, step) + 1;			
+			id = pos + addVal;
 			System.out.println("AddVal: " + addVal);
 			
 		} else {	//boundary-
 			
-			if(pos >= step)
-				subVal = CRDTUtility.randomInt(step, pos) + 1;
-			else
-				subVal = CRDTUtility.randomInt(pos, step) + 1;
-			
-			id = CRDTUtility.base(depth - 1) - subVal;
+			subVal = CRDTUtility.randomInt(0, step) + 1;
+			id = pos - subVal;
 			System.out.println("SubVal: " + subVal);
 		}
 		
@@ -157,10 +161,6 @@ public class LogootCRDT {
 	}	
 	//need to do the base thing properly
 }
-
-
-
-
 
 
 

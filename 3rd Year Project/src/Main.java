@@ -17,9 +17,9 @@ public class Main {
 		node = new Node();
 		node.queueToSend("TO ALL!");
 		
-		//runBasic("Basic", 10, false);
+		//runBasic("Basic", 20, false);
 		//runModified("Modified", 10, false);
-		runLSEQ("LSEQ", 10, false);
+		runLSEQ("LSEQ", 15, false);
 		
 		node.shutdown();
 	}
