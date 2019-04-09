@@ -155,8 +155,23 @@ public class CRDTUtility {
 	
 	public static void printSequenceAtom(SequenceAtom seqAtom) {
 		System.out.println(seqAtom);
-	}
+	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ////	P has a greater identifier but a lower site Id
 //
