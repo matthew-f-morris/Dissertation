@@ -1,5 +1,8 @@
 package com.project.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 
 import com.project.crdt.LogootCRDT;
@@ -17,10 +20,12 @@ public class DocumentController {
 	private static LogootDocument doc;
 	
 	public static void init(long siteId) {
+		
 		DocumentController.siteId = siteId;
 		doc = new LogootDocument(siteId);
 		doc.modify(false);
 		doc.setLseq(false);
+		
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities
@@ -40,7 +45,7 @@ public class DocumentController {
 	public static void handleBypassMessage(String message, PeerData info, long site) {
 		
 		try {
-			doc.addMessage(message, siteId);
+			doc.addMessage(message, site);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,8 +69,13 @@ public class DocumentController {
 		return doc.docSize();
 	}
 	
-	public static void printDoc(String str) {
+	public static void printDoc(String str, Boolean printDocSnippet) {
+		
 		CRDTFileGen.start(doc.getStringList(), str);
+		
+		if(printDocSnippet) {
+			doc.printDocSnippet(10);
+		}
 	}
 	
 	public static void printDoc(LogootDocument doc) {
@@ -94,6 +104,10 @@ public class DocumentController {
 		
 		doc.clearLSEQ();
 		doc.setLseq(set);
+	}
+	
+	public static void lseqForce(Boolean force, Boolean boundaryPlus) {
+		doc.lseqForce(force, boundaryPlus);		
 	}
 	
 	public static void printStrategy() {

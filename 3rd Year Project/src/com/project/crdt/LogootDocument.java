@@ -26,6 +26,8 @@ public class LogootDocument {
 	private long totalInsertTime = 0L;
 	private long lastInsertTime = 0L;
 	private int boundary = 10;
+	private Boolean force = false;
+	private Boolean boundaryPlus = false;
 	
 	LogootCRDT logoot = new LogootCRDT(boundary);
 	
@@ -63,7 +65,7 @@ public class LogootDocument {
 		long endTime;		
 			
 		startTime = System.nanoTime();		
-		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify, setLseq);
+		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify, setLseq, force, boundaryPlus);
 		endTime = System.nanoTime();
 		totalAddTime += endTime - startTime;
 		
@@ -100,6 +102,11 @@ public class LogootDocument {
 	
 	public void setLseq(Boolean set) {
 		this.setLseq = set;
+	}
+	
+	public void lseqForce(Boolean force, Boolean boundaryPlus) {
+		this.force = force;
+		this.boundaryPlus = boundaryPlus;
 	}
 	
 	public void clear() {
@@ -168,29 +175,33 @@ public class LogootDocument {
 		return toString();
 	}
 	
-	private void print(int lines) {
+	public void printDocSnippet(int lines) {
 		
-		ArrayList<SequenceAtom> seq = document.arr;
+		int sizeMax = getSizeOfPos(getMaxPosition());
 		
-		System.out.println("\n--- START OF DOCUMENT ---\n");
+		if(sizeMax > 20)
+			
+			System.out.println("\nUnable to print document due to oversized ID's!\n");
 		
-		if(lines > seq.size())
-			lines = seq.size();
-		for(int i = seq.size() - lines; i < seq.size(); i++) {
-			System.out.println(seq.get(i).toString());
+		else {
+		
+			ArrayList<SequenceAtom> seq = document.arr;
+			
+			System.out.println("\n--- START OF DOCUMENT ---\n");
+			
+			if(lines > seq.size())
+				lines = seq.size();
+			for(int i = seq.size() - lines; i < seq.size(); i++) {
+				System.out.println(seq.get(i).toString());
+			}
+			
+			System.out.println("\n---- END OF DOCUMENT ----\n");
 		}
-		
-		System.out.println("\n---- END OF DOCUMENT ----\n");
 	}
 	
 	public void printInfo() {
 		
 		int sizeMax = getSizeOfPos(getMaxPosition());
-		
-		if(sizeMax > 20)
-			System.out.println("\nUnable to print document due to oversized ID's!\n");
-		else 
-			print(printNo);
 		
 		System.out.println("---- DATA ----\n");
 		System.out.println("Doc Size (Excluding Start/Stop): " + docSize());
@@ -209,10 +220,6 @@ public class LogootDocument {
 		System.out.println("Average time taken to insert messages (ms): " + (float) totalInsertTime / (docSize() * 1000000));
 		System.out.println("Time taken for last addition (ms): " + (float) lastInsertTime / 1000000);
 		
-	}
-	
-	private void print(SequenceAtom atom) {
-		System.out.println(atom.toString());
 	}
 	
 	public ArrayList<String> getStringList() {

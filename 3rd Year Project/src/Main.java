@@ -1,4 +1,7 @@
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import com.project.controller.DocumentController;
@@ -11,22 +14,49 @@ public class Main {
 
 	static Scanner scanner;
 	static Node node;
+	private static Boolean redirect = true;
 
 	public static void main(String[] args) {		
-				
-		node = new Node();
-		node.queueToSend("TO ALL!");
+			
+		if(redirect) {
+			
+			PrintStream out;	
+			
+			try {				
+				out = new PrintStream(new FileOutputStream("snippet.txt"));
+				System.setOut(out);				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}			
+		}
 		
-		//runBasic("Basic", 20, false);
-		//runModified("Modified", 10, false);
-		runLSEQ("LSEQ", 20, false);
+		node = new Node();
+		//node.queueToSend("TO ALL!");
+		
+		test(9);
 		
 		node.shutdown();
 	}
 	
-	public static void runBasic(String title, int num, Boolean toFile) {
+	private static void test(int exponent) {
 		
-		DocumentController.modifyDoc(false);
+		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
+			
+			System.out.println("\n I: " + i + "\n");
+			
+			runBasic("Basic", i, false, false);
+			runModified("Modified", i, false, true);
+			
+			//toFile, force, force boundary+ or boundary-
+			runLSEQ("LSEQ", i, false, false, false);
+			runLSEQ("LSEQ", i, false, true, false);
+			runLSEQ("LSEQ", i, false, true, true);
+		}		
+	}
+	
+	private static void runBasic(String title, int num, Boolean toFile, Boolean modify) {
+		
+		DocumentController.modifyDoc(modify);
 		
 		for(int i = 0; i < num; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
@@ -35,12 +65,12 @@ public class Main {
 		DocumentController.printDocStats();	
 		
 		if(toFile)
-			DocumentController.printDoc(title);
+			DocumentController.printDoc(title, true);
 	}
-	
-	public static void runModified(String title, int num, Boolean toFile) {
 		
-		DocumentController.modifyDoc(true);
+	private static void runModified(String title, int num, Boolean toFile, Boolean modify) {
+		
+		DocumentController.modifyDoc(modify);
 		
 		for(int i = 0; i < num; i++) {		
 			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
@@ -49,28 +79,27 @@ public class Main {
 		DocumentController.printDocStats();
 		
 		if(toFile)
-			DocumentController.printDoc(title);
+			DocumentController.printDoc(title, true);
 	}
 	
-	public static void runLSEQ(String title, int num, Boolean toFile) {
+	private static void runLSEQ(String title, int num, Boolean toFile, Boolean force, Boolean boundaryPlus) {
 		
+		DocumentController.lseqForce(force, boundaryPlus);
 		DocumentController.setLseq(true);
-		DocumentController.printDocStats();
 		
 		for(int i = 0; i < num; i++) {		
-			node.bypass("" + i, MsgGen.getSite());
-			DocumentController.printDocStats();	
+			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
 		}
 		
-		//DocumentController.printDocStats();	
+		DocumentController.printDocStats();	
 		
 		if(toFile)
-			DocumentController.printDoc(title);
+			DocumentController.printDoc(title, true);
 		
 		DocumentController.printStrategy();
 	}
 	
-	public static void startScanner() {
+	private static void startScanner() {
 		
 		scanner = new Scanner(System.in);
 		InputScanner input = new InputScanner();
@@ -97,7 +126,7 @@ public class Main {
 					node.shutdown();
 					isRunning = false;
 				} else if(text.equals("PRINT")){
-					node.print();
+					node.print(true);
 				} else {
 					node.queueToSend(text);
 				}

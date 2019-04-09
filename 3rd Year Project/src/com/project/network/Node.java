@@ -162,8 +162,8 @@ public class Node {
 		}
 	}
 	
-	public void print() {
-		DocumentController.printDoc("");
+	public void print(Boolean printDocSnippet) {
+		DocumentController.printDoc("", printDocSnippet);
 	}
 	
 	public void bypass(String str, long site) {
