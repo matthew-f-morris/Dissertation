@@ -19,7 +19,7 @@ public class Main {
 		
 		//runBasic("Basic", 20, false);
 		//runModified("Modified", 10, false);
-		runLSEQ("LSEQ", 15, false);
+		runLSEQ("LSEQ", 20, false);
 		
 		node.shutdown();
 	}
