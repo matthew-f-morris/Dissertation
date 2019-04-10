@@ -203,7 +203,7 @@ public class LogootDocument {
 		
 		int sizeMax = getSizeOfPos(getMaxPosition());
 		
-		System.out.println("---- DATA ----\n");
+		System.out.println("\r\n---- DATA ----\r\n");
 		System.out.println("Doc Size (Excluding Start/Stop): " + docSize());
 		
 		if(sizeMax > 30)
@@ -219,7 +219,7 @@ public class LogootDocument {
 		System.out.println("Total time taken to insert messages (ms): " + (float) totalInsertTime / 1000000);	
 		System.out.println("Average time taken to insert messages (ms): " + (float) totalInsertTime / (docSize() * 1000000));
 		System.out.println("Time taken for last addition (ms): " + (float) lastInsertTime / 1000000);
-		
+		System.out.println("\r\n");
 	}
 	
 	public ArrayList<String> getStringList() {

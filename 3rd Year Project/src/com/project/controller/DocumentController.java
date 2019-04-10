@@ -111,7 +111,8 @@ public class DocumentController {
 	}
 	
 	public static void printStrategy() {
-		System.out.println("\n--- STRATEGY ---\n");
+		System.out.println("\r\n--- STRATEGY ---\r\n");
 		System.out.println(Arrays.asList(LogootCRDT.getStrategy()));
+		System.out.println("\r\n----------------\r\n");
 	}
 }

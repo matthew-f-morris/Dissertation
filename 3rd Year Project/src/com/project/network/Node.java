@@ -130,10 +130,9 @@ public class Node {
 		
 	public void shutdown() {
 		
-		System.out.println("\n --- NODE SHUTTING DOWN ---\n");
+		System.out.println("\r\n --- NODE SHUTTING DOWN ---\r\n");
 		manager.leaveNetwork();
-		//DocumentController.printDoc();
-		System.out.println("\n --- NODE SHUTDOWN ---\n");
+		System.out.println("\r\n --- NODE SHUTDOWN ---\r\n");
 		Platform.exit();
 		System.exit(0);
 	}

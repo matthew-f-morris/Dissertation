@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -6,8 +7,6 @@ import java.util.Scanner;
 
 import com.project.controller.DocumentController;
 import com.project.network.Node;
-import com.project.utils.CRDTUtility;
-import com.project.utils.Message;
 import com.project.utils.MsgGen;
 
 public class Main {
@@ -23,17 +22,20 @@ public class Main {
 			PrintStream out;	
 			
 			try {				
-				out = new PrintStream(new FileOutputStream("snippet.txt"));
+				out = new PrintStream(new FileOutputStream(new File("test_data.txt")));
 				System.setOut(out);				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}			
+			}
 		}
 		
 		node = new Node();
 		//node.queueToSend("TO ALL!");
 		
-		test(9);
+		test(10);
+		
+		System.setOut(System.out);
+		System.out.println("\r\n // Ended Redirect // \r\n ");
 		
 		node.shutdown();
 	}
@@ -42,7 +44,7 @@ public class Main {
 		
 		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
 			
-			System.out.println("\n I: " + i + "\n");
+			System.out.println("\r\nNEXT TEST, I = " + i + "\r\n");
 			
 			runBasic("Basic", i, false, false);
 			runModified("Modified", i, false, true);
