@@ -151,12 +151,14 @@ public class LogootCRDT {
 					return build;
 				}
 				
-				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
-					
-					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));					
-					return build;
-					
-				} else {
+//				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
+//					
+//					//build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));	
+//					build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, posQ.ids.get(0).position, depth), siteId));						
+//					return build;
+//				}
+				
+				else {
 					
 					build.add(posP.ids.get(0));
 					

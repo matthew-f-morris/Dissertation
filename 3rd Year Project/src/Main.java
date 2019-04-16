@@ -13,7 +13,7 @@ public class Main {
 
 	static Scanner scanner;
 	static Node node;
-	private static Boolean redirect = true;
+	private static Boolean redirect = false;
 
 	public static void main(String[] args) {		
 			
@@ -34,8 +34,10 @@ public class Main {
 		
 		test(10);
 		
-		System.setOut(System.out);
-		System.out.println("\r\n // Ended Redirect // \r\n ");
+		if(redirect) {
+			System.setOut(System.out);
+			System.out.println("\r\n // Ended Redirect // \r\n ");
+		}		
 		
 		node.shutdown();
 	}
@@ -46,13 +48,13 @@ public class Main {
 			
 			System.out.println("\r\nNEXT TEST, I = " + i + "\r\n");
 			
-			runBasic("Basic", i, false, false);
-			runModified("Modified", i, false, true);
+			runBasic("Basic", i, true, false);
+			runModified("Modified", i, true, true);
 			
 			//toFile, force, force boundary+ or boundary-
-			runLSEQ("LSEQ", i, false, false, false);
-			runLSEQ("LSEQ", i, false, true, false);
-			runLSEQ("LSEQ", i, false, true, true);
+			runLSEQ("LSEQ", i, true, false, false);
+			runLSEQ("LSEQ", i, true, true, false);
+			runLSEQ("LSEQ", i, true, true, true);
 		}		
 	}
 	
