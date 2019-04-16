@@ -101,7 +101,7 @@ public class CRDTUtility {
 		}
 	}
 	
-	private static int comparePosition(Position p, Position q) {
+	public static int comparePosition(Position p, Position q) {
 
 		//return 0 if equal, retur 1 if q is greater than p, return -1 if p is greater than q
 		
