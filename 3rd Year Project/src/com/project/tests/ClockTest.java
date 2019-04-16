@@ -2,17 +2,18 @@ package com.project.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.project.clock.Clock;
 
  public class ClockTest {
 
-	private Clock clock;
+	private Clock clock = null;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -20,6 +21,7 @@ import com.project.clock.Clock;
 	}
 
 	@Test
+	@DisplayName("Clock Basic Test")
 	void testClock() {
 		
 		Clock clock = new Clock();
@@ -27,25 +29,29 @@ import com.project.clock.Clock;
 	}
 	
 	@Test
+	@DisplayName("Clock Basic Initialization")
 	void testClockInitialize() {
 		
 		clock = new Clock();
 		assertEquals(0, Clock.counter);
 	}
 	
-	@Test
-	void testClockSet() {
+	@ParameterizedTest
+	@DisplayName("Clock Test Correct Integer Initialization")
+	@ValueSource(ints = { 4, 50, 1000, 100000, 123913})
+	void testClockSet(int num) {
 		
 		try {
-			clock = new Clock(56);
+			clock = new Clock(num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		assertEquals(56, Clock.counter);
+		assertEquals(num, Clock.counter);
 	}
 	
 	@Test
+	@DisplayName("Clock Test Throws Exception")
 	void testClockBadSet() {
 						
 		assertThrows(Exception.class, () -> {			
@@ -54,6 +60,7 @@ import com.project.clock.Clock;
 	}
 	
 	@Test
+	@DisplayName("Clock Test Increment")
 	void testCounterIncrement() {
 		
 		Clock clock = new Clock();
