@@ -174,4 +174,8 @@ public class Node {
 	public ThreadManager getThreadManager() {
 		return manager;
 	}
+	
+	public MessageController getMessageController() {
+		return msgController;
+	}
 }

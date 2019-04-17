@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.project.clock.Clock;
 
- public class ClockTest {
+class ClockTest {
 
 	private Clock clock = null;
 

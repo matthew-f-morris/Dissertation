@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.project.utils.PeerData;
 
-public class PeerDataTest {
+class PeerDataTest {
 	
 	static PeerData data;
 
