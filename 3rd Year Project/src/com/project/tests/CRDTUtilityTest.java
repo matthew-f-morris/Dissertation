@@ -49,7 +49,8 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Gen Start Atom")
 	void testGenStartAtom() {
-		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin()), Clock.counter));
+		SequenceAtom seq = CRDTUtility.genStartAtom();
+		
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
 			() -> assertEquals(0, seq.atomId.clock, "Clock was incorrect on generation"),
@@ -61,7 +62,9 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Gen Stop Atom")
 	void testGenStopAtom() {
-		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
+		SequenceAtom seq1 = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
+		SequenceAtom seq = CRDTUtility.genStopAtom();
+		
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
 			() -> assertEquals(0, seq.atomId.clock, "Clock was incorrect on generation"),
@@ -73,7 +76,9 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Lseq Gen Start Atom")
 	void testGenStartAtomLseq() {
-		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq()), Clock.counter));
+		SequenceAtom seq1 = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq()), Clock.counter));
+		SequenceAtom seq = CRDTUtility.genStartAtomLseq();
+				
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
 			() -> assertEquals(0, seq.atomId.clock, "Clock was incorrect on generation"),
@@ -86,6 +91,8 @@ class CRDTUtilityTest {
 	@DisplayName("Test Lseq Gen Stop Atom")
 	void testGenStopAtomLseq() {
 		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMaxLseq()), Clock.counter));
+		SequenceAtom seq1 = CRDTUtility.genStopAtomLseq();	
+	
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
 			() -> assertEquals(0, seq.atomId.clock, "Clock was incorrect on generation"),
@@ -99,8 +106,8 @@ class CRDTUtilityTest {
 	void testGenSequenceAtom() throws Exception {		
 		
 		clock = new Clock(50);
-		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)), Clock.counter), "message");
-			
+		SequenceAtom seq = CRDTUtility.genSequenceAtom("message", ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)));
+				
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
 			() -> assertEquals(50, seq.atomId.clock, "Clock was incorrect on generation"),
@@ -125,6 +132,23 @@ class CRDTUtilityTest {
 		CRDTUtility.insertSequenceAtom(seq, add);
 		
 		assertEquals(true, seq.get(1).equals(add), "Insertion Failed");
+	}
+	
+	@Test
+	@DisplayName("Test Insert Throws Exception")
+	void testInsertThrowException() throws Exception {
+		
+		SequenceAtom start = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin()), Clock.counter));
+		SequenceAtom stop = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
+		SequenceAtom add = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)), Clock.counter), "message");
+		
+		ArrayList<SequenceAtom> seq = new ArrayList<SequenceAtom>();
+		seq.add(stop);
+		seq.add(start);		
+		
+		assertThrows(Exception.class, () -> {
+			CRDTUtility.insertSequenceAtom(seq, add);
+		}, "Insertion Failed");
 	}
 	
 	@Test
@@ -174,9 +198,20 @@ class CRDTUtilityTest {
 		
 		Identifier id1 = new Identifier(8394, 0L);
 		Identifier id2 = new Identifier(12389, 5L);
-			
 		Position pos1 = new Position(new ArrayList<Identifier>(Arrays.asList(id1, id2)));
 		
 		assertEquals(8394, CRDTUtility.prefix(pos1), "Incorrect Prefix");
+	}
+	
+	@Test
+	@DisplayName("Test Base Calculation")
+	void testBase() {
+		
+		assertAll("Base",
+			() -> assertEquals(0, CRDTUtility.base(-1)),
+			() -> assertEquals(32, CRDTUtility.base(0)),
+			() -> assertEquals(64, CRDTUtility.base(1)),
+			() -> assertEquals(128, CRDTUtility.base(2))
+		);
 	}
 }

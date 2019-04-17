@@ -44,7 +44,7 @@ public class CRDTFileGen {
 			
 			for(String str: array) {
 			  try {
-				writer.write(str);
+				writer.write(str + "\r\n");
 			  } catch (IOException e) {
 				e.printStackTrace();
 			  }

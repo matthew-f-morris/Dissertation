@@ -35,7 +35,7 @@ public class Main {
 		
 		if(redirect) {
 			System.setOut(System.out);
-			System.out.println("\r\n // Ended Redirect // \r\n ");
+			System.out.println(" // Ended Redirect //  ");
 		}		
 		
 		node.shutdown();
@@ -45,7 +45,7 @@ public class Main {
 		
 		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
 			
-			System.out.println("\r\nNEXT TEST, I = " + i + "\r\n");
+			System.out.println("NEXT TEST, I = " + i + "");
 			
 			runBasic("Basic", i, true, false);
 			runModified("Modified", i, true, true);
