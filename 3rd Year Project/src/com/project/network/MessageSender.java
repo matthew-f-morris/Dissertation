@@ -39,7 +39,7 @@ public class MessageSender {
 		return true;
 	}
 	
-	public void sendLeaveNetworkMessage(InetAddress address, Message message) {		
+	public Boolean sendLeaveNetworkMessage(InetAddress address, Message message) {		
 		
 		RecipientHandler handler = new RecipientHandler(address, message);
 		handler.start();
@@ -48,7 +48,10 @@ public class MessageSender {
 			handler.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			return false;
 		}
+		
+		return true;
 	}
 	
 	class RecipientHandler extends Thread {

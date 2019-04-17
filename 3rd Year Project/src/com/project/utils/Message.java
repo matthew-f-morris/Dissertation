@@ -17,9 +17,13 @@ public class Message implements Serializable{
 	}
 	
 	public Message(boolean leaveNetwork) {
+		
 		if(!this.leaveNetwork) {
 			this.leaveNetwork = true;
 		}
+		
+		atom = null;
+		peerData = null;
 	}
 		
 	public String getText() {		

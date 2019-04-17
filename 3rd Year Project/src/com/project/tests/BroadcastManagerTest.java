@@ -33,6 +33,7 @@ class BroadcastManagerTest {
 		
 		test.start();
 		starts = test.threadState();
+		
 		test.stop();
 		stops = !test.threadState();
 		
