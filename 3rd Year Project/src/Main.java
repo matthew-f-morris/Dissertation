@@ -29,6 +29,7 @@ public class Main {
 		}
 		
 		node = new Node();
+		node.joinNetwork();
 		//node.queueToSend("TO ALL!");
 		
 		test(10);

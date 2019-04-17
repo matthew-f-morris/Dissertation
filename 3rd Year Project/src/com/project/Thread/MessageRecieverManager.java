@@ -39,6 +39,10 @@ public class MessageRecieverManager implements Manager {
 		}		
 	}
 	
+	public Boolean threadState() {
+		return threadServerSocket.isAlive();		
+	}
+	
 	class ClientServerSocket implements Runnable, ThreadStop {
 		
 		private ServerSocket servSocket;

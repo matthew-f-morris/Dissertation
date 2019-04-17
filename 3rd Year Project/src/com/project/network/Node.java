@@ -54,15 +54,17 @@ public class Node {
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
      	
     	manager = new ThreadManager(this, msgController);
-    	manager.joinNetwork();
-    	
-    	joined = true;   
     	    	
     	try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+    }
+    
+    public void initThreads() {
+    	manager.joinNetwork();
+    	joined = true;   
     }
     
 	public void addPeer(long uuid, String hostname, InetAddress address, int port) {

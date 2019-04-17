@@ -1,5 +1,8 @@
 package com.project.Thread;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.project.controller.MessageController;
 import com.project.network.Node;
 
@@ -12,6 +15,8 @@ public class ThreadManager {
 	private ResenderManager resender;
 	private MessageController controller;
 	
+	private List<Manager> subManagers = new ArrayList<Manager>();
+	
 	public ThreadManager(Node node, MessageController controller) {
 		
 		this.controller = controller;
@@ -21,38 +26,48 @@ public class ThreadManager {
 		reciever = new MessageRecieverManager(controller);
 		sender = new SenderCheckerManager(controller);
 		resender = new ResenderManager(controller);
+		
+		subManagers.add(broadcastListener);
+		subManagers.add(broadcast);
+		subManagers.add(reciever);
+		subManagers.add(sender);
+		subManagers.add(resender);
 	}
 	
 	public void joinNetwork() {
 	
-		broadcastListener.start();
-		broadcast.start();
-		reciever.start();
-		sender.start();
-		resender.start();
+		for(Manager m : subManagers) {
+			m.start();
+		}
 	}
 	
 	public void leaveNetwork() {
 		
-		broadcastListener.stop();
-		broadcast.stop();
-		reciever.stop();
-		sender.stop();
-		resender.stop();
-		
+		for(Manager m : subManagers) {
+			m.stop();
+		}
+				
 		controller.sendLeaveMessage();
 	}
 	
 	public Boolean checkStopped() {
-		
-		//Write methods getting the state of each thread from each individual manager
+				
+		for(Manager m : subManagers) {
+			if(m.threadState()) {
+				return false;
+			}
+		}
 		
 		return true;
 	}
 	
 	public Boolean checkRunning() {
 		
-		//Write methods getting the state of each thread from each individual manager
+		for(Manager m : subManagers) {
+			if(!m.threadState()) {
+				return false;
+			}
+		}
 		
 		return true;
 	}

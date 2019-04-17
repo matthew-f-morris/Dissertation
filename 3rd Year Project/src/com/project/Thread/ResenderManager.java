@@ -34,6 +34,10 @@ public class ResenderManager implements Manager {
 		}		
 	}
 	
+	public Boolean threadState() {
+		return threadResender.isAlive();		
+	}
+	
 	class Resender implements Runnable, ThreadStop {
 		
 		private boolean isRunning = ThreadStop.isRunning;
@@ -65,9 +69,7 @@ public class ResenderManager implements Manager {
 			System.out.println("[MESSAGE CONTROLLER] Resender Thread Ended");
 		}
 
-
 		public void stopThread() {
-			
 			isRunning = false;
 		}
 	}

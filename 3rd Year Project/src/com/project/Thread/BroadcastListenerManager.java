@@ -38,7 +38,11 @@ public class BroadcastListenerManager implements Manager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	public Boolean threadState() {
+		return threadListener.isAlive();		
+	}
 	
 	class BroadcastListener implements Runnable, ThreadStop {
 		

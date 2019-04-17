@@ -41,6 +41,10 @@ public class BroadcastManager implements Manager {
 		}
 	}
 	
+	public Boolean threadState() {
+		return threadBroadcaster.isAlive();		
+	}
+	
 	class Broadcaster implements Runnable, ThreadStop {
 
 		private DatagramSocket socket;

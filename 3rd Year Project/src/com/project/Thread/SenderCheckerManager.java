@@ -36,6 +36,10 @@ public class SenderCheckerManager implements Manager{
 		}
 	}
 	
+	public Boolean threadState() {
+		return threadSender.isAlive();		
+	}
+	
 	class SenderChecker implements Runnable, ThreadStop {		
 		
 		private boolean isRunning = ThreadStop.isRunning;
