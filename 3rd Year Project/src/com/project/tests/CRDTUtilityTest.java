@@ -41,12 +41,6 @@ class CRDTUtilityTest {
 	}
 	
 	@Test
-	@DisplayName("Test Random Bool Gen")
-	void testRandomBool() {
-		assertEquals(true, CRDTUtility.randomBool() || CRDTUtility.randomBool());
-	}
-	
-	@Test
 	@DisplayName("Test Gen Start Atom")
 	void testGenStartAtom() {
 		SequenceAtom seq = CRDTUtility.genStartAtom();

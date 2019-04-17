@@ -63,9 +63,7 @@ class CRDTFileGenTest {
 		while (scanner.hasNextLine()) {
 		
 			String line = scanner.nextLine();
-			System.out.println("Line: " + line);
-			System.out.println("Array: " + strs.get(counter));
-			
+
 			if(!line.equals(strs.get(counter))) {
 				scanner.close();
 				return false;

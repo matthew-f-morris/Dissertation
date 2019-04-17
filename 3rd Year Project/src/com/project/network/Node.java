@@ -168,4 +168,8 @@ public class Node {
 	public void bypass(String str, long site) {
 		msgController.bypassSend(str, site);
 	}
+	
+	public ThreadManager getThreadManager() {
+		return manager;
+	}
 }
