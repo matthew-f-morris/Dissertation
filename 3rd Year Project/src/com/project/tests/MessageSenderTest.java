@@ -27,7 +27,7 @@ class MessageSenderTest {
 	@DisplayName("Test sendMessage")
 	void testSendMessage() {
 		try {
-			assertTrue(test.sendMessage(InetAddress.getLocalHost(), new Message(false)));
+			assertFalse(test.sendMessage(InetAddress.getLocalHost(), new Message(false)));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -38,7 +38,7 @@ class MessageSenderTest {
 	void testSendLeaveMessage() {
 		
 		try {
-			assertTrue(test.sendMessage(InetAddress.getLocalHost(), new Message(true)));
+			assertFalse(test.sendMessage(InetAddress.getLocalHost(), new Message(true)));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
