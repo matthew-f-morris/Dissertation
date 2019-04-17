@@ -20,13 +20,3 @@ public class AtomIdentifier {
 		return "[" + position.toString() + ", " + clock + "]";
 	}
 }
-
-
-//
-//public Clock getClock() {
-//	return clock;
-//}
-//
-//public Position getPosition() {
-//	return position;
-//}
