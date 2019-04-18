@@ -47,6 +47,14 @@ public class CRDTUtility {
 		return CGen.genSequenceAtom(atom);
 	}
 	
+	public static SequenceAtom genAtom(int p, long siteId) throws Exception {
+		
+		Position pMin = CGen.genPosition(CGen.genIdentifier(p, siteId));
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
+		Clock.increment();
+		return CGen.genSequenceAtom(atom);
+	}
+	
 	public static SequenceAtom genStopAtom() {
 
 		Position pMax = CGen.genPosition(CGen.genIdentifierMax());

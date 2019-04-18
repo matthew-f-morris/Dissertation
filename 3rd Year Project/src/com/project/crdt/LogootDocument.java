@@ -1,9 +1,6 @@
 package com.project.crdt;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Position;
@@ -49,6 +46,10 @@ public class LogootDocument {
 				
 		document.arr.add(CRDTUtility.genStartAtomLseq());
 		document.arr.add(CRDTUtility.genStopAtomLseq());
+	}
+	
+	public Sequence getSequence() {
+		return document;
 	}
 	
 	public SequenceAtom addMessage(String message, long site) throws Exception {
@@ -112,11 +113,13 @@ public class LogootDocument {
 	public void clear() {
 		document.arr.clear();
 		initDocument();
+		setLseq(false);
 	}
 	
 	public void clearLSEQ() {
 		document.arr.clear();
 		initDocumentLSEQ();
+		setLseq(true);
 	}
 	
 	//The following methods mearly calculate some metrics about the document and print the state of
