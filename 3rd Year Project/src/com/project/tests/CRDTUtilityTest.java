@@ -56,7 +56,7 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Gen Stop Atom")
 	void testGenStopAtom() {
-		SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMax()), Clock.counter));
+		//SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMax()), Clock.counter));
 		SequenceAtom seq = CRDTUtility.genStopAtom();
 		
 		assertAll("properties",
@@ -70,7 +70,7 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Lseq Gen Start Atom")
 	void testGenStartAtomLseq() {
-		SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMinLseq()), Clock.counter));
+		//SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMinLseq()), Clock.counter));
 		SequenceAtom seq = CRDTUtility.genStartAtomLseq();
 				
 		assertAll("properties",
@@ -84,8 +84,8 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Lseq Gen Stop Atom")
 	void testGenStopAtomLseq() {
-		SequenceAtom seq = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMaxLseq()), Clock.counter));
-		SequenceAtom seq1 = CRDTUtility.genStopAtomLseq();	
+		//SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMaxLseq()), Clock.counter));
+		SequenceAtom seq = CRDTUtility.genStopAtomLseq();	
 	
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),

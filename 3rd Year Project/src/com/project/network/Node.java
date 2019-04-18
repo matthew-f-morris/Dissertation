@@ -51,8 +51,7 @@ public class Node {
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
    
-    	msgController = new MessageController(this, peers, nodeInfo.getUuid());    	
-     	
+    	msgController = new MessageController(this, peers, nodeInfo.getUuid());     	
     	manager = new ThreadManager(this, msgController);
     	    	
     	try {
@@ -108,28 +107,13 @@ public class Node {
 	
 	public void viewPeers() {
 		
-		for(PeerData peer : this.peers.values()) {
-			System.out.println("[NODE] Peer: " + peer.getAddress());
-		}
+		peers.values().forEach((e) -> {
+			e.printData();
+		}); 
 		
 		System.out.println("[NODE] Number of peers: " + peers.size());	
 	}
-	
-//	private void setUsername(String username) {
-//		
-//		if(!username.isEmpty()) {
-//			this.username = username;
-//			System.out.println("Username: " + this.username);
-//		}
-//	}
-//	
-//	public void confirmLogin(String username, String password) {
-//		
-//		if(password.equals(Node.password)) {
-//			this.setUsername(username);
-//		}
-//	}
-		
+			
 	public void shutdown() {
 		
 		System.out.println(" --- NODE SHUTTING DOWN ---");
@@ -163,6 +147,10 @@ public class Node {
 		}
 	}
 	
+	public Boolean isJoined() {
+		return joined;
+	}
+	
 	public void print(Boolean printDocSnippet) {
 		DocumentController.printDoc("", printDocSnippet);
 	}
@@ -177,5 +165,9 @@ public class Node {
 	
 	public MessageController getMessageController() {
 		return msgController;
+	}
+	
+	public ConcurrentHashMap<Long, PeerData> getPeers() {
+		return peers;
 	}
 }
