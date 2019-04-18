@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.utils.AddressMessage;
-import com.project.utils.CRDTFileGen;
 import com.project.utils.Message;
 import com.project.utils.PeerData;
 
@@ -26,19 +25,17 @@ public class MessageController {
 	
 	public ConcurrentHashMap<Long, PeerData> peers;
 	public MessageSender sender;
-	public LinkedList<Message> messagesRecieved;
-	public LinkedList<Message> messagesToSend;
-	public ConcurrentLinkedQueue<AddressMessage> toResend;	
-	private long uuid = 0L;
+	public LinkedList<Message> messagesRecieved = new LinkedList<Message>();
+	public LinkedList<Message> messagesToSend = new LinkedList<Message>();
+	public ConcurrentLinkedQueue<AddressMessage> toResend = new ConcurrentLinkedQueue<AddressMessage>();
+//	private long uuid = 0L;
 	
 	public MessageController(Node node, ConcurrentHashMap<Long, PeerData> peers, long uuid) {
 
 		this.node = node;
 		this.peers = peers;
-		this.uuid = uuid;
+//		this.uuid = uuid;
 
-		setMessagesToSend(new LinkedList<Message>());
-		toResend = new ConcurrentLinkedQueue<AddressMessage>();		
 		DocumentController.init(uuid);
 	}
 
@@ -49,7 +46,7 @@ public class MessageController {
 		
 		System.out.println("[MESSAGE CONTROLLER] Sending Message: " + message);
 		Message crdtMessage = DocumentController.handleMessage(message, node.nodeInfo);		
-		getMessagesToSend().add(crdtMessage);
+		messagesToSend.add(crdtMessage);
 	}
 	
 	public void bypassSend(String str, long site) {		
@@ -63,12 +60,16 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
-		DocumentController.addMessage(message);
+		
+		if(message.leaveNetwork()) {
+			
+		} else 
+			DocumentController.addMessage(message);
 	}
 	
 	private boolean checkEmptySend() {
 
-		if (getMessagesToSend().size() <= 0) {
+		if (messagesToSend.size() <= 0) {
 			return true;
 		} else
 			return false;
@@ -81,15 +82,6 @@ public class MessageController {
 		} else
 			return false;
 	}
-
-//	public Message getNewMessage() {
-//
-//		if (checkEmptyRecieved()) {
-//			return new Message(null);
-//		} else {
-//			return messagesRecieved.removeFirst();
-//		}
-//	}
 	
 	//checks the number of messages in the 'To-Send' queue
 	
@@ -100,11 +92,11 @@ public class MessageController {
 
 		} else {
 
-			for (Message msg : getMessagesToSend()) {
+			for (Message msg : messagesToSend) {
 				System.out.println("[MESSAGE CONTROLLER] Messaages To Send: " + msg.getText());
 			}
 
-			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + getMessagesToSend().size());
+			System.out.println("[MESSAGE CONTROLLER] No. of messages to send: " + messagesToSend.size());
 		}
 	}
 	
@@ -144,10 +136,6 @@ public class MessageController {
 	
 	public void removePeer(long uuid) {
 		node.removePeer(uuid);
-	}
-
-	public LinkedList<Message> getMessagesToSend() {
-		return messagesToSend;
 	}
 
 	public void setMessagesToSend(LinkedList<Message> messagesToSend) {

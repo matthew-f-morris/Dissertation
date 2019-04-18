@@ -14,22 +14,6 @@ import com.project.crdt.LogootDocument;
 class LogootDocumentTest {
 
 	private static LogootDocument doc = new LogootDocument(5L);
-	
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
 
 	@Test
 	@DisplayName("Test Doc Init Correctly")

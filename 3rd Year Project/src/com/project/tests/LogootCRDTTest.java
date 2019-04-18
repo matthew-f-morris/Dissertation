@@ -53,8 +53,7 @@ class LogootCRDTTest {
 			() -> assertNotNull(atom),
 			() -> assertTrue(atom.atomId.position.ids.size() == 1, "Failed to gen atom correctly"),
 			() -> assertTrue((0 < atom.atomId.position.ids.get(0).position) && (atom.atomId.position.ids.get(0).position < Short.MAX_VALUE), "Failed to gen correct atom"),
-			() -> assertTrue(atom.atomId.position.ids.get(0).siteId == 1),
-			() -> assertTrue(atom.atomId.clock == 2)
+			() -> assertTrue(atom.atomId.position.ids.get(0).siteId == 1)
 		);
 	}
 	

@@ -61,7 +61,7 @@ public class DocumentController {
 		doc.insertIntoDocument(message.getAtom());
 	}
 	
-	public static Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
+	private static Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
 		return new Message(nodeInfo, atom);
 	}
 	
@@ -86,7 +86,7 @@ public class DocumentController {
 		doc.printInfo();
 	}
 	
-	public static void modifyDoc(Boolean mod) {
+	public static Boolean modifyDoc(Boolean mod) {
 		
 		if(doc.getSetLseq()) {
 			setLseq(false);
@@ -94,9 +94,11 @@ public class DocumentController {
 		
 		doc.clear();
 		doc.modify(mod);
+		
+		return doc.getModify();
 	}
 	
-	public static void setLseq(Boolean set) {
+	public static Boolean setLseq(Boolean set) {
 		
 		if(doc.getModify()) {
 			modifyDoc(false);
@@ -104,6 +106,8 @@ public class DocumentController {
 		
 		doc.clearLSEQ();
 		doc.setLseq(set);
+		
+		return doc.getSetLseq();
 	}
 	
 	public static void lseqForce(Boolean force, Boolean boundaryPlus) {
