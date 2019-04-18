@@ -38,7 +38,8 @@ class MessageSenderTest {
 	void testSendLeaveMessage() {
 		
 		try {
-			assertFalse(test.sendMessage(InetAddress.getLocalHost(), new Message(true)));
+			assertFalse
+			(test.sendMessage(InetAddress.getLocalHost(), new Message(true)));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
