@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import com.project.clock.Clock;
-import com.project.crdt.ComponentGenerator;
+import com.project.crdt.CGen;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
@@ -56,7 +56,7 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Gen Stop Atom")
 	void testGenStopAtom() {
-		SequenceAtom seq1 = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
+		SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMax()), Clock.counter));
 		SequenceAtom seq = CRDTUtility.genStopAtom();
 		
 		assertAll("properties",
@@ -70,7 +70,7 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Lseq Gen Start Atom")
 	void testGenStartAtomLseq() {
-		SequenceAtom seq1 = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq()), Clock.counter));
+		SequenceAtom seq1 = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMinLseq()), Clock.counter));
 		SequenceAtom seq = CRDTUtility.genStartAtomLseq();
 				
 		assertAll("properties",
@@ -84,7 +84,7 @@ class CRDTUtilityTest {
 	@Test
 	@DisplayName("Test Lseq Gen Stop Atom")
 	void testGenStopAtomLseq() {
-		SequenceAtom seq = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMaxLseq()), Clock.counter));
+		SequenceAtom seq = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMaxLseq()), Clock.counter));
 		SequenceAtom seq1 = CRDTUtility.genStopAtomLseq();	
 	
 		assertAll("properties",
@@ -100,7 +100,7 @@ class CRDTUtilityTest {
 	void testGenSequenceAtom() throws Exception {		
 		
 		clock = new Clock(50);
-		SequenceAtom seq = CRDTUtility.genSequenceAtom("message", ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)));
+		SequenceAtom seq = CRDTUtility.genSequenceAtom("message", CGen.genPosition(CGen.genIdentifier(10, 0L)));
 				
 		assertAll("properties",
 			() -> assertNotNull(seq, "Sequence Atom was not generated"),
@@ -115,9 +115,9 @@ class CRDTUtilityTest {
 	@DisplayName("Test Insert Sequence Atom")
 	void testInsertSequenceAtom() throws Exception {
 		
-		SequenceAtom start = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin()), Clock.counter));
-		SequenceAtom stop = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
-		SequenceAtom add = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)), Clock.counter), "message");
+		SequenceAtom start = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMin()), Clock.counter));
+		SequenceAtom stop = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMax()), Clock.counter));
+		SequenceAtom add = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifier(10, 0L)), Clock.counter), "message");
 		
 		ArrayList<SequenceAtom> seq = new ArrayList<SequenceAtom>();
 		seq.add(start);
@@ -132,9 +132,9 @@ class CRDTUtilityTest {
 	@DisplayName("Test Insert Throws Exception")
 	void testInsertThrowException() throws Exception {
 		
-		SequenceAtom start = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin()), Clock.counter));
-		SequenceAtom stop = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax()), Clock.counter));
-		SequenceAtom add = ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)), Clock.counter), "message");
+		SequenceAtom start = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMin()), Clock.counter));
+		SequenceAtom stop = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifierMax()), Clock.counter));
+		SequenceAtom add = CGen.genSequenceAtom(CGen.genAtomIdentifier(CGen.genPosition(CGen.genIdentifier(10, 0L)), Clock.counter), "message");
 		
 		ArrayList<SequenceAtom> seq = new ArrayList<SequenceAtom>();
 		seq.add(stop);

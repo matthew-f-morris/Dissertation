@@ -39,7 +39,7 @@ public class LogootCRDT {
 		else
 			pos = new Position(generateLinePosition(p, q, siteId, modify));
 	
-		return ComponentGenerator.genSequenceAtom(ComponentGenerator.genAtomIdentifier(pos, Clock.counter), message);
+		return CGen.genSequenceAtom(CGen.genAtomIdentifier(pos, Clock.counter), message);
 	}
 
 	//generates the line position for the new atom, this method is recursive
@@ -49,11 +49,11 @@ public class LogootCRDT {
 		//this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
 				
 		if(posP.ids.size() == 0) {
-			posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
+			posP = CGen.genPosition(CGen.genIdentifierMin());
 		}
 		
 		if(posQ.ids.size() == 0) {
-			posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
+			posQ = CGen.genPosition(CGen.genIdentifierMax());
 		}
 
 		//compares the identifiers in the 1st position
@@ -72,16 +72,16 @@ public class LogootCRDT {
 				if(interval > 1) {
 
 					if(modify)
-						build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));					
+						build.add(CGen.genIdentifier(posP.ids.get(0).position + 1, siteId));					
 					else	
-						build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+						build.add(CGen.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
 					
 					return build;
 				}
 				
 				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 						
-					build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+					build.add(CGen.genIdentifier(posP.ids.get(0).position, siteId));
 					
 					return build;
 					
@@ -125,12 +125,12 @@ public class LogootCRDT {
 //		System.out.println("Position Q SIZE: " + posQ.ids.size());
 		
 		if(posP.ids.size() == 0) {
-			posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierLseq(CRDTUtility.base(depth - 1), 0));
+			posP = CGen.genPosition(CGen.genIdentifierLseq(CRDTUtility.base(depth - 1), 0));
 			//System.out.println("Position P NEW: " + posP.toString());
 		}
 		
 		if(posQ.ids.size() == 0) {
-			posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierLseq(CRDTUtility.base(depth), 0));
+			posQ = CGen.genPosition(CGen.genIdentifierLseq(CRDTUtility.base(depth), 0));
 			//ystem.out.println("Position Q NEW: " + posQ.toString());
 		}
 
@@ -147,14 +147,14 @@ public class LogootCRDT {
 				
 				if(interval > 1) {
 
-					build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, posQ.ids.get(0).position, depth), siteId));
+					build.add(CGen.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, posQ.ids.get(0).position, depth), siteId));
 					return build;
 				}
 				
 //				else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 //					
-//					//build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));	
-//					build.add(ComponentGenerator.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, posQ.ids.get(0).position, depth), siteId));						
+//					//build.add(CGen.genIdentifier(posP.ids.get(0).position, siteId));	
+//					build.add(CGen.genIdentifierLseq(alloc(Math.min(boundary, interval), posP.ids.get(0).position, posQ.ids.get(0).position, depth), siteId));						
 //					return build;
 //				}
 				
@@ -230,7 +230,11 @@ public class LogootCRDT {
 	
 	public static void setBoundary(int boundary) {
 		LogootCRDT.boundary = boundary;
-	}	
+	}
+	
+	public static int getBoundary() {
+		return boundary;
+	}
 }
 
 
@@ -254,11 +258,11 @@ public class LogootCRDT {
 ////this method calculates the proper Identifier (list of positions) that means the new sequence atom can be added between position p and q
 //	
 //if(posP.ids.size() == 0) {
-//posP = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
+//posP = CGen.genPosition(CGen.genIdentifierMin());
 //}
 //
 //if(posQ.ids.size() == 0) {
-//posQ = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
+//posQ = CGen.genPosition(CGen.genIdentifierMax());
 //}
 //
 ////compares the identifiers in the 1st position
@@ -275,15 +279,15 @@ public class LogootCRDT {
 //	if(interval > 1) {
 //
 //		if(modify)
-//			build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position + 1, siteId));
+//			build.add(CGen.genIdentifier(posP.ids.get(0).position + 1, siteId));
 //		else 
-//			build.add(ComponentGenerator.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
+//			build.add(CGen.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
 //		return build;
 //	}
 //	
 //	else if(interval == 1 && siteId > posP.ids.get(0).siteId) {
 //		
-//		build.add(ComponentGenerator.genIdentifier(posP.ids.get(0).position, siteId));
+//		build.add(CGen.genIdentifier(posP.ids.get(0).position, siteId));
 //		return build;
 //		
 //	} else {

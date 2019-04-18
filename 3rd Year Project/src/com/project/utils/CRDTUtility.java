@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.project.clock.Clock;
-import com.project.crdt.ComponentGenerator;
+import com.project.crdt.CGen;
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
@@ -41,41 +41,41 @@ public class CRDTUtility {
 	
 	public static SequenceAtom genStartAtom() {
 
-		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMin());
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
+		Position pMin = CGen.genPosition(CGen.genIdentifierMin());
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
 		Clock.increment();
-		return ComponentGenerator.genSequenceAtom(atom);
+		return CGen.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genStopAtom() {
 
-		Position pMax = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMax());
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMax, Clock.counter);
+		Position pMax = CGen.genPosition(CGen.genIdentifierMax());
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMax, Clock.counter);
 		Clock.increment();
-		return ComponentGenerator.genSequenceAtom(atom);
+		return CGen.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genStartAtomLseq() {
 		
-		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMinLseq());
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
+		Position pMin = CGen.genPosition(CGen.genIdentifierMinLseq());
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
 		Clock.increment();
-		return ComponentGenerator.genSequenceAtom(atom);
+		return CGen.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genStopAtomLseq() {
 		
-		Position pMin = ComponentGenerator.genPosition(ComponentGenerator.genIdentifierMaxLseq());
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(pMin, Clock.counter);
+		Position pMin = CGen.genPosition(CGen.genIdentifierMaxLseq());
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
 		Clock.increment();
-		return ComponentGenerator.genSequenceAtom(atom);
+		return CGen.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genSequenceAtom(String message, Position p) {
 		
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(p, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(p, Clock.counter);
 		Clock.increment();
-		return ComponentGenerator.genSequenceAtom(atom, message);
+		return CGen.genSequenceAtom(atom, message);
 
 	}
 	

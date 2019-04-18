@@ -12,7 +12,7 @@ import com.project.utils.CRDTUtility;
 
 //static class that means generating new datatypes for the crdt becomes less messy
 
-public class ComponentGenerator {
+public class CGen {
 	
 	public static final int MAX_POSITION = Short.MAX_VALUE;	
 	public static final int ARITY = CRDTUtility.base(0);

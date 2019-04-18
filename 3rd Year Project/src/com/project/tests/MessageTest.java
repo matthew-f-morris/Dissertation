@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.project.clock.Clock;
-import com.project.crdt.ComponentGenerator;
+import com.project.crdt.CGen;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTUtility;
 import com.project.utils.Message;
@@ -29,7 +29,7 @@ class MessageTest {
 	static void setUpBeforeClass() throws Exception {
 		clock = new Clock(50);
 		data = new PeerData(1L, "hostname", InetAddress.getLocalHost(), 1000);
-		seq = CRDTUtility.genSequenceAtom("message", ComponentGenerator.genPosition(ComponentGenerator.genIdentifier(10, 0L)));
+		seq = CRDTUtility.genSequenceAtom("message", CGen.genPosition(CGen.genIdentifier(10, 0L)));
 		msg = new Message(data, seq);
 	}
 

@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.project.crdt.ComponentGenerator;
+import com.project.crdt.CGen;
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
 
-class ComponentGeneratorTest {
+class CGenTest {
 
 	private static ArrayList<Identifier> list = new ArrayList<Identifier>();
 	private Boolean check = false;
@@ -30,7 +30,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier")
 	void testGenIdentifier() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifier(2, 2L);
+		Identifier id = CGen.genIdentifier(2, 2L);
 		
 		assertAll("Identifier Properties",
 			() -> assertNotNull(id),
@@ -43,7 +43,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier Max")
 	void testGenIdentifierMax() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifierMax();
+		Identifier id = CGen.genIdentifierMax();
 		
 		assertAll("Identifier Properties",
 			() -> assertNotNull(id),
@@ -56,7 +56,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier Min")
 	void testGenIdentifierMin() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifierMin();
+		Identifier id = CGen.genIdentifierMin();
 		
 		assertAll("Identifier Properties",
 			() -> assertNotNull(id),
@@ -69,7 +69,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier Min LSEQ")
 	void testGenIdentifierMinLseq() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifierMinLseq();
+		Identifier id = CGen.genIdentifierMinLseq();
 		
 		assertAll("LSEQ Id Properties",
 			() -> assertNotNull(id),
@@ -82,7 +82,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier Max LSEQ")
 	void testGenIdentifierMaxLseq() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifierMaxLseq();
+		Identifier id = CGen.genIdentifierMaxLseq();
 		
 		assertAll("LSEQ Id Properties",
 			() -> assertNotNull(id),
@@ -98,13 +98,13 @@ class ComponentGeneratorTest {
 		assertAll("Gen Identifier Throws Error",
 				
 			() -> assertThrows(Exception.class, () -> {
-					ComponentGenerator.genIdentifier(0, 1L);
+					CGen.genIdentifier(0, 1L);
 					}, "Component Gen Failed to Fail"),
 			() -> assertThrows(Exception.class, () -> {
-					ComponentGenerator.genIdentifier(Integer.MAX_VALUE, 1L);
+					CGen.genIdentifier(Integer.MAX_VALUE, 1L);
 					}, "Component Gen Failed to Fail"),
 			() -> assertThrows(Exception.class, () -> {
-					ComponentGenerator.genIdentifierLseq(0, 1L);
+					CGen.genIdentifierLseq(0, 1L);
 					}, "Component Gen Failed to Fail")
 		);		
 	}
@@ -113,7 +113,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Identifier LSEQ")
 	void testGenIdentifierLseq() throws Exception {
 		
-		Identifier id = ComponentGenerator.genIdentifierLseq(3, 2L);
+		Identifier id = CGen.genIdentifierLseq(3, 2L);
 		
 		assertAll("LSEQ Id Properties",
 			() -> assertNotNull(id),
@@ -127,7 +127,7 @@ class ComponentGeneratorTest {
 	void testGenPosition() {
 		
 		Position pos = null;
-		pos = ComponentGenerator.genPosition();
+		pos = CGen.genPosition();
 		
 		assertNotNull(pos);
 	}
@@ -136,7 +136,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Position with Identifier")
 	void testGenPositionIdentifier() {
 		
-		Position pos = ComponentGenerator.genPosition(new Identifier(1, 1L));		
+		Position pos = CGen.genPosition(new Identifier(1, 1L));		
 		assertAll("Position Properties",
 			() -> assertNotNull(pos),
 			() -> assertTrue(pos.ids.get(0).position == 1),
@@ -148,7 +148,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Position with List of Identifier")
 	void testGenPositionIdentifierList() {
 		
-		Position pos = ComponentGenerator.genPosition(list);		
+		Position pos = CGen.genPosition(list);		
 		check = true;
 		
 		for(int i = 0; i < pos.ids.size(); i++) {
@@ -172,7 +172,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Atom Identifier Gen With Clock")
 	void testGenAtomIdentifier() {
 		
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(321);		
+		AtomIdentifier atom = CGen.genAtomIdentifier(321);		
 		assertTrue(atom.clock == 321, "Atom Identifier Clock Gen Failed");
 	}
 	
@@ -180,7 +180,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Atom Identifier Gen with Position and Clock")
 	void testGenAtomIdentifierPosClock() {
 		
-		AtomIdentifier atom = ComponentGenerator.genAtomIdentifier(new Position(new Identifier(1, 1L)), 321);		
+		AtomIdentifier atom = CGen.genAtomIdentifier(new Position(new Identifier(1, 1L)), 321);		
 		
 		assertAll("Atom Properties",
 			() -> assertNotNull(atom),
@@ -195,7 +195,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Sequence Atom Gen with Atom Id")
 	void testGenSequenceWithAtom() {
 		AtomIdentifier atom = new AtomIdentifier(new Position(new Identifier(1, 1L)), 321);
-		SequenceAtom seqAt = ComponentGenerator.genSequenceAtom(atom);
+		SequenceAtom seqAt = CGen.genSequenceAtom(atom);
 		
 		assertAll("Atom Properties",
 			() -> assertNotNull(seqAt),
@@ -210,7 +210,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Sequence Atom Gen with Atom Id and Message")
 	void testGenSequenceWithAtomMessage() {
 		AtomIdentifier atom = new AtomIdentifier(new Position(new Identifier(1, 1L)), 321);
-		SequenceAtom seqAt = ComponentGenerator.genSequenceAtom(atom, "message");
+		SequenceAtom seqAt = CGen.genSequenceAtom(atom, "message");
 		
 		assertAll("Atom Properties",
 			() -> assertNotNull(seqAt),
@@ -226,7 +226,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Sequence Gen")
 	void testGenSequence() {
 		
-		Sequence seq = ComponentGenerator.genSequence();
+		Sequence seq = CGen.genSequence();
 		
 		assertAll("Sequence Properties",
 			() -> assertNotNull(seq),
@@ -239,7 +239,7 @@ class ComponentGeneratorTest {
 	@DisplayName("Test Gen Sequence With Sequence Atom")
 	void testGenSequenceSeqAtom() {
 		
-		Sequence seq = ComponentGenerator.genSequence(new SequenceAtom(new AtomIdentifier(1), "message"));
+		Sequence seq = CGen.genSequence(new SequenceAtom(new AtomIdentifier(1), "message"));
 		
 		assertAll("Sequence Properties",
 			() -> assertNotNull(seq),
