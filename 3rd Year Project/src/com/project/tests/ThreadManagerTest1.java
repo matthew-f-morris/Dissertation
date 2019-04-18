@@ -34,7 +34,15 @@ class ThreadManagerTest1 {
 	@Test
 	@DisplayName("Test Thread Manager Starts Threads")
 	void testThreadManagerStart() {
+		
 		manager.joinNetwork();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		assertTrue(manager.checkRunning(), "1 or more threads has stopped");
 		
 		manager.leaveNetwork();
