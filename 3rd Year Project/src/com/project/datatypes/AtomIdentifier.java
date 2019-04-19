@@ -1,7 +1,10 @@
 package com.project.datatypes;
 
-public class AtomIdentifier {
+import java.io.Serializable;
 
+public class AtomIdentifier implements Serializable {
+
+	private static final long serialVersionUID = 20L;
 	public Position position;
 	public int clock;
 

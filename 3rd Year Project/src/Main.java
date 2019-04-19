@@ -32,14 +32,12 @@ public class Main {
 		node.joinNetwork();
 		//node.queueToSend("TO ALL!");
 		
-		test(10);
+		startScanner();
 		
 		if(redirect) {
 			System.setOut(System.out);
 			System.out.println(" // Ended Redirect //  ");
 		}		
-		
-		node.shutdown();
 	}
 	
 	private static void test(int exponent) {

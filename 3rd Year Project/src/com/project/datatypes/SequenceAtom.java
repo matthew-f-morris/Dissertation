@@ -1,7 +1,10 @@
 package com.project.datatypes;
 
-public class SequenceAtom {
-	
+import java.io.Serializable;
+
+public class SequenceAtom implements Serializable {
+
+	private static final long serialVersionUID = 10L;
 	public AtomIdentifier atomId;
 	public String message;
 	

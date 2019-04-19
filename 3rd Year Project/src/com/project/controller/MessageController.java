@@ -35,7 +35,8 @@ public class MessageController {
 		this.node = node;
 		this.peers = peers;
 //		this.uuid = uuid;
-
+		
+		sender = new MessageSender(this);
 		DocumentController.init(uuid);
 	}
 
@@ -45,7 +46,8 @@ public class MessageController {
 	public void queueToSend(String message) {
 		
 		System.out.println("[MESSAGE CONTROLLER] Sending Message: " + message);
-		Message crdtMessage = DocumentController.handleMessage(message, node.nodeInfo);		
+		Message crdtMessage = DocumentController.handleMessage(message, node.nodeInfo);
+		System.out.println("[MESSAGE CONTROLLER] CRDT MESSAGE:" + crdtMessage.getText());
 		messagesToSend.add(crdtMessage);
 	}
 	

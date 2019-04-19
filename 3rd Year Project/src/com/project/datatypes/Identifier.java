@@ -1,7 +1,10 @@
 package com.project.datatypes;
 
-public class Identifier {
-	
+import java.io.Serializable;
+
+public class Identifier implements Serializable {
+
+	private static final long serialVersionUID = 30L;
 	public int position;
 	public long siteId;
 	

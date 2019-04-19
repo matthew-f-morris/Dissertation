@@ -36,6 +36,7 @@ public class MessageSender {
 			return false;
 		}
 		
+		System.out.println("[MESSAGE SENDER] Message Sent!");
 		return true;
 	}
 	

@@ -1,10 +1,12 @@
 package com.project.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Position {
-	
+public class Position implements Serializable {
+
+	private static final long serialVersionUID = 40L;
 	public List<Identifier> ids;
 	
 	public Position(Identifier identifier) {		
