@@ -127,8 +127,10 @@ public class Main {
 				} else if(text.equals("SHUTDOWN")) {
 					node.shutdown();
 					isRunning = false;
-				} else if(text.equals("PRINT")){
+				} else if(text.equals("PRINT_CRDT")){
 					node.print(true);
+				} else if(text.equals("PRINT_PEERS")){
+					node.viewPeers();
 				} else {
 					node.queueToSend(text);
 				}
