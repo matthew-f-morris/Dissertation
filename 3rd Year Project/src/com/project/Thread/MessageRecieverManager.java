@@ -112,8 +112,9 @@ public class MessageRecieverManager implements Manager {
 				
 				} else {
 					
-					long uuid = message.getPeerData().getUuid();
-					controller.removePeer(uuid);					
+					System.out.println("[MESSAGE RECIEVER] Leave message from: \n");
+					message.getPeerData().printData();
+					controller.removePeer(message.getPeerData().getUuid());					
 				}
 					
 			} catch (IOException | ClassNotFoundException e) {

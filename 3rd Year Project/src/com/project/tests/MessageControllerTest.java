@@ -39,7 +39,7 @@ class MessageControllerTest {
 	@DisplayName("Test Add To Recieved")
 	void testAddToRecieved() {
 		
-		Message msg = new Message(true);
+		Message msg = new Message(node.nodeInfo, true);
 		ctrl.addToRecieved(msg);
 		LinkedList<Message> msgs = ctrl.messagesRecieved;		
 		

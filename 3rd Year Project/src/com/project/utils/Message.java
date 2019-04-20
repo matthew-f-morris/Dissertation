@@ -16,14 +16,14 @@ public class Message implements Serializable {
 		this.atom = atom;
 	}
 	
-	public Message(boolean leaveNetwork) {
+	public Message(PeerData data, boolean leaveNetwork) {
 		
 		if(!this.leaveNetwork) {
 			this.leaveNetwork = true;
 		}
 		
 		atom = null;
-		peerData = null;
+		peerData = data;
 	}
 		
 	public String getText() {		

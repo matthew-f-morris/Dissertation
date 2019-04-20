@@ -79,8 +79,11 @@ public class Node {
 	
 	public void removePeer(long uuid) {
 		
+		System.out.println("[NODE] Removing peer... " + uuid);
+		
 		if(peers.contains(uuid)) {
 			peers.remove(uuid);
+			System.out.println("[NODE] " + timeStamp + " -  Removed Peer: " + uuid);
 		} else {
 			System.err.println("Peer does not exist!");
 		}		

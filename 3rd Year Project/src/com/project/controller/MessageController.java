@@ -61,11 +61,7 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
-		
-		if(message.leaveNetwork()) {
-			
-		} else 
-			DocumentController.addMessage(message);
+		DocumentController.addMessage(message);
 	}
 	
 	private boolean checkEmptySend() {
@@ -122,7 +118,7 @@ public class MessageController {
 	
 	public void sendLeaveMessage() {
 	
-		Message leaveMessage = new Message(true);
+		Message leaveMessage = new Message(node.nodeInfo, true);
 		
 		for(PeerData peer : peers.values()) {
 			if(!(peer.getUuid() == node.nodeInfo.getUuid())){		
