@@ -112,8 +112,6 @@ public class MessageRecieverManager implements Manager {
 				
 				} else {
 					
-					System.out.println("[MESSAGE RECIEVER] Leave message from: \n");
-					message.getPeerData().printData();
 					controller.removePeer(message.getPeerData().getUuid());					
 				}
 					

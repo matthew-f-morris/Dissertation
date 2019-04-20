@@ -81,12 +81,14 @@ public class Node {
 		
 		System.out.println("[NODE] Removing peer... " + uuid);
 		
-		if(peers.contains(uuid)) {
+		if(peers.containsKey(uuid)) {
 			peers.remove(uuid);
-			System.out.println("[NODE] " + timeStamp + " -  Removed Peer: " + uuid);
+			System.out.println("[NODE] -  Removed Peer: " + uuid + " at time " + timeStamp);
 		} else {
 			System.err.println("Peer does not exist!");
-		}		
+		}
+		
+		viewPeers();
 	}
 	
 	public void queueToSend(String message) {		
