@@ -47,7 +47,6 @@ public class MessageController {
 		
 		System.out.println("[MESSAGE CONTROLLER] Sending Message: " + message);
 		Message crdtMessage = DocumentController.handleMessage(message, node.nodeInfo);
-		System.out.println("[MESSAGE CONTROLLER] CRDT MESSAGE:" + crdtMessage.getText());
 		messagesToSend.add(crdtMessage);
 	}
 	

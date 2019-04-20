@@ -151,6 +151,10 @@ public class Node {
 		return joined;
 	}
 	
+	public void printData() {
+		nodeInfo.printData();
+	}
+	
 	public void print(Boolean printDocSnippet) {
 		DocumentController.printDoc("", printDocSnippet);
 	}

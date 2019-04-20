@@ -131,6 +131,8 @@ public class Main {
 					node.print(true);
 				} else if(text.equals("PRINT_PEERS")){
 					node.viewPeers();
+				} else if(text.equals("PRINT_DATA")){
+					node.viewPeers();
 				} else {
 					node.queueToSend(text);
 				}

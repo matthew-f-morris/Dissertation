@@ -27,7 +27,8 @@ public class PeerData implements Serializable {
     	System.out.println("[PEER DATA] PEER DATA: \n");
     	System.out.println("	UUID: " + uuid);
     	System.out.println("	Hostname: " + hostname);
-    	System.out.println("	Port: " + port + "\n");
+    	System.out.println("	Port: " + port);
+    	System.out.println("	IP: " + address.getHostAddress() + "\n");
     }
 
     public long getUuid() {
