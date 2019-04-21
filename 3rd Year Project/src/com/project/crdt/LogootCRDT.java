@@ -40,7 +40,7 @@ public class LogootCRDT {
 		else
 			pos = new Position(generateLinePosition(p, q, siteId, modify));
 	
-		return CGen.genSequenceAtom(CGen.genAtomIdentifier(pos, VersionVector.vv), message);
+		return CGen.genSequenceAtom(CGen.genAtomIdentifier(pos, VersionVector.copy()), message);
 	}
 
 	//generates the line position for the new atom, this method is recursive

@@ -3,6 +3,7 @@ package com.project.crdt;
 import java.util.ArrayList;
 
 import com.project.clock.Clock;
+import com.project.clock.VersionVector;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
@@ -70,7 +71,7 @@ public class LogootDocument {
 		endTime = System.nanoTime();
 		totalAddTime += endTime - startTime;
 		
-		Clock.increment();
+		VersionVector.increment();
 		
 		startTime = System.nanoTime();
 		CRDTUtility.insertSequenceAtom(document.arr, atom);

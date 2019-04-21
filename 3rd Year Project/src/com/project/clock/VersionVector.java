@@ -9,11 +9,14 @@ import com.project.datatypes.VVPair;
 public class VersionVector {
 
 	public static List<VVPair> vv;
+	private static long siteId;
 	
 	public static void init(long siteId) {
 	
 		vv = new ArrayList<VVPair>();
-		vv.add(new VVPair(siteId, 0));		
+		vv.add(new VVPair(siteId, 0));
+		
+		VersionVector.siteId = siteId;
 	}
 	
 	public void VVAdd(long siteId, int clock) throws Exception {
@@ -31,12 +34,12 @@ public class VersionVector {
 		return -1;
 	}
 	
-	public static boolean increment(long uid) {
+	public static boolean increment() {
 		
 		Boolean found = false;
 		
 		for(VVPair tuple : vv) {
-			if(tuple.uuid == uid) {
+			if(tuple.uuid == siteId) {
 				tuple.clock++;
 				found = true;
 			}
@@ -50,6 +53,17 @@ public class VersionVector {
 		List<VVPair> arr = new ArrayList<VVPair>();
 		
 		for(VVPair i : clone) {
+			arr.add(i.clone());
+		}
+		
+		return arr;
+	}
+	
+	public static List<VVPair> copy(){
+		
+		List<VVPair> arr = new ArrayList<VVPair>();
+		
+		for(VVPair i : vv) {
 			arr.add(i.clone());
 		}
 		
