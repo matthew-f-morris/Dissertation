@@ -51,8 +51,8 @@ public class Main {
 			
 			//toFile, force, force boundary+ or boundary-
 			runLSEQ("LSEQ", i, true, false, false);
-			runLSEQ("LSEQ", i, true, true, false);
-			runLSEQ("LSEQ", i, true, true, true);
+			runLSEQ("LSEQ force boundary -", i, true, true, false);
+			runLSEQ("LSEQ force boundary +", i, true, true, true);
 		}		
 	}
 	
