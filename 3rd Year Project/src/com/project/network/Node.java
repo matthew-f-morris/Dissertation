@@ -48,7 +48,7 @@ public class Node {
     	System.out.println("[NODE] Initialising Node...");
     	
     	nodeInfo = new PeerData(Math.abs(UUID.randomUUID().getLeastSignificantBits()), hostname, localhost, CommunicationInfo.commPort);
-  	    VersionVector.init(nodeInfo.getUuid());
+  	    VersionVector.init(nodeInfo.getUuid(), nodeInfo.getVectorClock());
     	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
@@ -68,12 +68,19 @@ public class Node {
     	joined = true;   
     }
     
-	public void addPeer(long uuid, String hostname, InetAddress address, int port) {
+	public void addPeer(long uuid, String hostname, InetAddress address, int port, int clock) {
 		
 		if(!peers.containsKey(uuid)) {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
+    		
+    		try {
+				VersionVector.add(uuid, clock);
+			} catch (Exception e) {
+				System.err.println("[NODE] Failed to add peers clock to version vector");
+				e.printStackTrace();
+			}
     		
     		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
 		}

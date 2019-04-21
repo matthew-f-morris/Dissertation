@@ -9,17 +9,17 @@ import com.project.datatypes.VVPair;
 public class VersionVector {
 
 	public static List<VVPair> vv;
-	private static long siteId;
+	public static long siteId;
 	
-	public static void init(long siteId) {
+	public static void init(long siteId, int initClock) {
 	
 		vv = new ArrayList<VVPair>();
-		vv.add(new VVPair(siteId, 0));
+		vv.add(new VVPair(siteId, initClock));
 		
 		VersionVector.siteId = siteId;
 	}
 	
-	public void VVAdd(long siteId, int clock) throws Exception {
+	public static void add(long siteId, int clock) throws Exception {
 		
 		if(sanityCheck(clock) == -1)		
 			throw new Exception("VV clock seet to invalid value!");			
@@ -43,6 +43,24 @@ public class VersionVector {
 				tuple.clock++;
 				found = true;
 			}
+		}
+		
+		return found;
+	}
+	
+	public static boolean increment(long replica) {
+		
+		Boolean found = false;
+		
+		for(VVPair tuple : vv) {
+			if(tuple.uuid == replica) {
+				tuple.clock++;
+				found = true;
+			}
+		}
+		
+		if(!found) {
+			System.err.println("Failed To Find Replica's clock to increment");
 		}
 		
 		return found;

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.UUID;
 
+import com.project.clock.Clock;
+
 public class PeerData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -13,8 +15,9 @@ public class PeerData implements Serializable {
     private String hostname;
     private InetAddress address;
     private int port;
+    private int vectorClock = Clock.counter;
 
-    public PeerData(long uuid, String hostname, InetAddress address, int port ){
+    public PeerData(long uuid, String hostname, InetAddress address, int port){
 
     	this.uuid = uuid;
         this.hostname = hostname;
@@ -46,4 +49,8 @@ public class PeerData implements Serializable {
     public int getPort() {
         return port;
     }
+
+	public int getVectorClock() {
+		return vectorClock;
+	}
 }

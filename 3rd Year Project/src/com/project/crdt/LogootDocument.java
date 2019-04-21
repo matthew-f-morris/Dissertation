@@ -71,7 +71,11 @@ public class LogootDocument {
 		endTime = System.nanoTime();
 		totalAddTime += endTime - startTime;
 		
-		VersionVector.increment();
+		VersionVector.increment(site);
+		
+		if(site == siteId) {
+			Clock.increment();
+		}
 		
 		startTime = System.nanoTime();
 		CRDTUtility.insertSequenceAtom(document.arr, atom);

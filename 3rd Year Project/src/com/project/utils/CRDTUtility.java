@@ -52,7 +52,12 @@ public class CRDTUtility {
 		
 		Position pMin = CGen.genPosition(CGen.genIdentifier(p, siteId));
 		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.copy());
-		VersionVector.increment();
+		VersionVector.increment(siteId);
+		
+		if(siteId == VersionVector.siteId) {
+			Clock.increment();
+		}
+		
 		return CGen.genSequenceAtom(atom);
 	}
 	
@@ -61,6 +66,7 @@ public class CRDTUtility {
 		Position pMax = CGen.genPosition(CGen.genIdentifierMax());
 		AtomIdentifier atom = CGen.genAtomIdentifier(pMax, VersionVector.copy());
 		VersionVector.increment();
+		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
 	
