@@ -3,9 +3,11 @@ package com.project.utils;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.List;
 import java.util.UUID;
 
 import com.project.clock.Clock;
+import com.project.datatypes.VVPair;
 
 public class PeerData implements Serializable {
 
@@ -15,7 +17,7 @@ public class PeerData implements Serializable {
     private String hostname;
     private InetAddress address;
     private int port;
-    private int vectorClock = Clock.counter;
+    private List<VVPair> versionVector;
 
     public PeerData(long uuid, String hostname, InetAddress address, int port){
 
@@ -50,7 +52,11 @@ public class PeerData implements Serializable {
         return port;
     }
 
-	public int getVectorClock() {
-		return vectorClock;
+	public List<VVPair> getVectorClock() {
+		return versionVector;
+	}
+	
+	public void setVersionVector(List<VVPair> versionVector) {
+		this.versionVector = versionVector;
 	}
 }

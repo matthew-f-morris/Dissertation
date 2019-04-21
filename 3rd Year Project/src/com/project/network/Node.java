@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +12,7 @@ import com.project.Thread.ThreadManager;
 import com.project.clock.VersionVector;
 import com.project.controller.DocumentController;
 import com.project.controller.MessageController;
+import com.project.datatypes.VVPair;
 import com.project.utils.CRDTFileGen;
 import com.project.utils.CommunicationInfo;
 import com.project.utils.MsgGen;
@@ -48,7 +50,8 @@ public class Node {
     	System.out.println("[NODE] Initialising Node...");
     	
     	nodeInfo = new PeerData(Math.abs(UUID.randomUUID().getLeastSignificantBits()), hostname, localhost, CommunicationInfo.commPort);
-  	    VersionVector.init(nodeInfo.getUuid(), nodeInfo.getVectorClock());
+  	    VersionVector.init(nodeInfo.getUuid(), 0);
+  	    nodeInfo.setVersionVector(VersionVector.vv);
     	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
@@ -68,21 +71,34 @@ public class Node {
     	joined = true;   
     }
     
-	public void addPeer(long uuid, String hostname, InetAddress address, int port, int clock) {
+	public void addPeer(long uuid, String hostname, InetAddress address, int port, List<VVPair> clock) {
 		
 		if(!peers.containsKey(uuid)) {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
     		
-    		try {
-				VersionVector.add(uuid, clock);
-			} catch (Exception e) {
-				System.err.println("[NODE] Failed to add peers clock to version vector");
-				e.printStackTrace();
-			}
+    		VVPair newPeer = null;
     		
-    		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
+    		for(VVPair pair : clock) {
+    			if(pair.uuid == uuid) {
+    				newPeer = pair;
+    			}
+    		}
+    		
+    		if(newPeer == null) {
+    			System.err.println("[NODE] Failed to add new Peer!");
+    		} else {
+    		
+	    		try {
+					VersionVector.add(newPeer.uuid, newPeer.clock);
+				} catch (Exception e) {
+					System.err.println("[NODE] Failed to add peers clock to version vector");
+					e.printStackTrace();
+				}
+	    		
+	    		System.out.println("[NODE] " + timeStamp + " -  Added New Peer: " + address.getHostName() + ", " + address.getHostAddress());
+	    	}
 		}
     }
 	

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.project.clock.VersionVector;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.utils.AddressMessage;
@@ -61,6 +62,7 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
+		VersionVector.sync(message.getPeerData().getVectorClock());
 		DocumentController.addMessage(message);
 	}
 	
