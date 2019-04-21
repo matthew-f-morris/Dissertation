@@ -3,11 +3,13 @@ package com.project.crdt;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.clock.VersionVector;
 import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
+import com.project.datatypes.VVPair;
 import com.project.utils.CRDTUtility;
 
 //static class that means generating new datatypes for the crdt becomes less messy
@@ -67,15 +69,15 @@ public class CGen {
 		return new Position(identifier);
 	}
 	
-	public static Position genPosition(ArrayList<Identifier> identifier) {
+	public static Position genPosition(List<Identifier> identifier) {
 		return new Position(identifier);
 	}
 	
-	public static AtomIdentifier genAtomIdentifier(int clock) {
+	public static AtomIdentifier genAtomIdentifier(List<VVPair> clock) {
 		return new AtomIdentifier(clock);
 	}
 	
-	public static AtomIdentifier genAtomIdentifier(Position position, int clock) {
+	public static AtomIdentifier genAtomIdentifier(Position position, List<VVPair> clock) {
 		return new AtomIdentifier(position, clock);
 	}
 	

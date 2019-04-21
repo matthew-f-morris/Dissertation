@@ -13,4 +13,9 @@ public class VVPair {
 	public VVPair clone() {
 		return new VVPair(this.uuid, this.clock);
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + this.uuid + ", " + this.clock + "]";
+	}
 }

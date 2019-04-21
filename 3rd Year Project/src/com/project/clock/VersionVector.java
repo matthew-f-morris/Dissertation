@@ -84,6 +84,10 @@ public class VersionVector {
 		return true;
 	}
 	
+	public List<VVPair> getCurrentVersionVector(){
+		return vv;
+	}
+	
 	private static VVPair max(VVPair a, VVPair b) {
 		
 		if(a.clock > b.clock)
