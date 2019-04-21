@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.clock.Clock;
+import com.project.clock.VersionVector;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
@@ -39,7 +40,7 @@ public class LogootCRDT {
 		else
 			pos = new Position(generateLinePosition(p, q, siteId, modify));
 	
-		return CGen.genSequenceAtom(CGen.genAtomIdentifier(pos, Clock.counter), message);
+		return CGen.genSequenceAtom(CGen.genAtomIdentifier(pos, VersionVector.vv), message);
 	}
 
 	//generates the line position for the new atom, this method is recursive

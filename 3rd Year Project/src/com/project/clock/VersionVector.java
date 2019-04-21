@@ -3,13 +3,14 @@ package com.project.clock;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.datatypes.SequenceAtom;
 import com.project.datatypes.VVPair;
 
 public class VersionVector {
 
 	public static List<VVPair> vv;
 	
-	public VersionVector(long siteId) {
+	public static void init(long siteId) {
 	
 		vv = new ArrayList<VVPair>();
 		vv.add(new VVPair(siteId, 0));		
@@ -89,5 +90,21 @@ public class VersionVector {
 		if(a.clock > b.clock)
 			return a;
 		return b;
+	}
+	
+	@Override
+	public String toString() {
+		
+		String s = "";
+		
+		if(!(vv.size() == 0)) {
+			for(VVPair pair : vv) {			
+				s+= pair.toString() + ", ";
+			}
+			return s.substring(0, s.length()-2);
+		}
+		
+		return "Empty Sequence";		
+		
 	}
 }

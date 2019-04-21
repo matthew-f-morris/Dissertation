@@ -42,7 +42,7 @@ public class CRDTUtility {
 	public static SequenceAtom genStartAtom() {
 
 		Position pMin = CGen.genPosition(CGen.genIdentifierMin());
-		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
@@ -50,7 +50,7 @@ public class CRDTUtility {
 	public static SequenceAtom genAtom(int p, long siteId) throws Exception {
 		
 		Position pMin = CGen.genPosition(CGen.genIdentifier(p, siteId));
-		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
@@ -58,7 +58,7 @@ public class CRDTUtility {
 	public static SequenceAtom genStopAtom() {
 
 		Position pMax = CGen.genPosition(CGen.genIdentifierMax());
-		AtomIdentifier atom = CGen.genAtomIdentifier(pMax, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMax, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
@@ -66,7 +66,7 @@ public class CRDTUtility {
 	public static SequenceAtom genStartAtomLseq() {
 		
 		Position pMin = CGen.genPosition(CGen.genIdentifierMinLseq());
-		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
@@ -74,14 +74,14 @@ public class CRDTUtility {
 	public static SequenceAtom genStopAtomLseq() {
 		
 		Position pMin = CGen.genPosition(CGen.genIdentifierMaxLseq());
-		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom);
 	}
 	
 	public static SequenceAtom genSequenceAtom(String message, Position p) {
 		
-		AtomIdentifier atom = CGen.genAtomIdentifier(p, Clock.counter);
+		AtomIdentifier atom = CGen.genAtomIdentifier(p, VersionVector.vv);
 		Clock.increment();
 		return CGen.genSequenceAtom(atom, message);
 

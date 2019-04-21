@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.project.Thread.ThreadManager;
+import com.project.clock.VersionVector;
 import com.project.controller.DocumentController;
 import com.project.controller.MessageController;
 import com.project.utils.CRDTFileGen;
@@ -47,7 +48,8 @@ public class Node {
     	System.out.println("[NODE] Initialising Node...");
     	
     	nodeInfo = new PeerData(Math.abs(UUID.randomUUID().getLeastSignificantBits()), hostname, localhost, CommunicationInfo.commPort);
-  	    	
+  	    VersionVector.init(nodeInfo.getUuid());
+    	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
    
