@@ -60,11 +60,11 @@ public class MessageController {
 	//adds the message to the recieved queue
 	//adds the atom in the message to the local crdt document
 
-	public void addToRecieved(Message message) {
+	public void addToRecieved(Message message) throws Exception {
 		
-		messagesRecieved.add(message);
-		//VersionVector.sync(message.getPeerData().getVectorClock());
+		messagesRecieved.add(message);		
 		DocumentController.handleRecievedMessage(message);
+		VersionVector.sync(message.getPeerData().getVectorClock());
 	}
 	
 	private boolean checkEmptySend() {

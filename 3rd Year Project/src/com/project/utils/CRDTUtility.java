@@ -148,7 +148,7 @@ public class CRDTUtility {
 		return 0;
 	}
 	
-	public static SequenceAtom searchVersionVector(ArrayList<SequenceAtom> array, SequenceAtom atom, int low, int high) {
+	public static int searchVersionVector(ArrayList<SequenceAtom> array, SequenceAtom atom) {
 		
 		for(int i = 0; i < array.size(); i++) {
 			
@@ -160,16 +160,15 @@ public class CRDTUtility {
 			int resultUpper = compareVector(atomclock, vclockQ);
 			
 			if(resultLower == 1 && resultUpper == -1) {
-				return array.get(i);
-				//return i + 1 for the actual thing
-			} else if(resultLower == 0 || resultUpper == 0) {
-				//either the lower one or the bottom one have the same vector clock
-				return array.get(i);				
-				//return i + 1 for the actual thing
+				return i;
 			}
+//			} else if(resultLower == 0 || resultUpper == 0) {
+//				//either the lower one or the bottom one have the same vector clock				
+//				return i;
+//			}
 		}
 		
-		return null;
+		return -1;
 	}
 	
 	public static int prefix(Position pos) {

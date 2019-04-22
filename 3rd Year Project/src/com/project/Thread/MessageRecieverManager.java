@@ -115,7 +115,7 @@ public class MessageRecieverManager implements Manager {
 					controller.removePeer(message.getPeerData().getUuid());					
 				}
 					
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (Exception e) {
 				System.out.println(e);
 				e.printStackTrace();
 			}

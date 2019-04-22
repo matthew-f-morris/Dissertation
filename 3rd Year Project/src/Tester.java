@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import com.project.clock.VersionVector;
 import com.project.crdt.CGen;
 import com.project.datatypes.VVPair;
 import com.project.network.Node;
@@ -16,27 +17,31 @@ public class Tester {
 	
 	public static void main(String[] args) {
 		
+		VersionVector.init(0L, 0);
+		
 		VVPair p = new VVPair(0L, 6);
-		VVPair q = new VVPair(1L, 7);
-		VVPair x = new VVPair(2L, 9);
+		VVPair q = new VVPair(4L, 8);
 		
 		List<VVPair> a = new ArrayList<VVPair>();
-		List<VVPair> b = new ArrayList<VVPair>();
 		
 		a.add(p);
 		a.add(q);
-		
-		b.add(q);
-		b.add(p);
-		b.add(x);
-		
+				
 		Collections.sort(a);
-		Collections.sort(b);
+		
+		try {
+			VersionVector.add(4L, 3);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+//		System.out.println("A: " + a.toString());
+//		System.out.println("B: " + VersionVector.vv);
+		
+		VersionVector.sync(a);
 		
 		System.out.println("A: " + a.toString());
-		System.out.println("B: " + b.toString());
-		
-		System.out.println("Result: " + CRDTUtility.compareVector(b, a));
+		System.out.println("B: " + VersionVector.vv);
 	}
 }
    

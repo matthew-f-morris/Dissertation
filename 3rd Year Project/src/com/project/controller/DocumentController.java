@@ -1,10 +1,13 @@
 package com.project.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.project.clock.VersionVector;
 import com.project.crdt.LogootCRDT;
 import com.project.crdt.LogootDocument;
+import com.project.datatypes.Position;
+import com.project.datatypes.Sequence;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTFileGen;
 import com.project.utils.CRDTUtility;
@@ -54,25 +57,20 @@ public class DocumentController {
 	}
 	
 	//allows the message controller to add any sequence atoms recieved from other sites
-	
-	public static void handleRecievedMessage(Message message) {
+
+	public static void handleRecievedMessage(Message message) throws Exception {
 		
-		System.out.println("[DOCUMENT CONTROLLER] Version Vector: " + VersionVector.vv.toString());
-		System.out.println("[DOCUMENT CONTROLLER] Message VV: " + message.getPeerData().getVectorClock());		
+		ArrayList<SequenceAtom> seq = doc.getSequence().arr;
 		
-		System.out.println("[DOCUMENT CONTROLLER] Recieved Vector Clock is bigger? " + CRDTUtility.compareVector(VersionVector.vv, message.getPeerData().getVectorClock()));	
+		int result = CRDTUtility.searchVersionVector(seq, message.getAtom());
 		
-		SequenceAtom atom = CRDTUtility.searchVersionVector(doc.getSequence().arr, message.getAtom(), 0, doc.getSequence().arr.size());
+		if(result == -1) {
+			System.err.println("[DOCUMENT CONTROLLER] Failed to handle recieved message");
 		
-		System.out.println("[DOCUMENT CONTROLLER] Result (should return an index): " + atom.toString());
-		
-		doc.insertIntoDocument(message.getAtom());
-		
-		//Check Version Vector
-		//Find position in sequence based on version vector
-		//Generate position [ SequenceAtom atom = LogootCRDT.generate()]
-		//CRDTUtility.insertSequenceAtom(document.arr, atom)
-		
+		} else {			
+			SequenceAtom atom = LogootCRDT.generate(message.getText(), new Position(seq.get(result).atomId.position.copy()), new Position(seq.get(result + 1).atomId.position.copy()), message.getPeerData().getUuid(), false, false, false, false);
+			CRDTUtility.insertSequenceAtom(doc.getSequence().arr, atom);
+		}		
 	}
 	
 	private static Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		
