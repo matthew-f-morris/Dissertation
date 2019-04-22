@@ -16,7 +16,7 @@ public class BroadcastManager implements Manager {
 	private Broadcaster broadcaster;
 	private Node node;
 	
-	private static int broadcastInterval = 5000;
+	private static int broadcastInterval = 1000;
 	
 	public BroadcastManager(Node node) {
 		this.node = node;
