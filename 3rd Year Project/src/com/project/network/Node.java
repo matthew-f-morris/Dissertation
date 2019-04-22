@@ -107,11 +107,19 @@ public class Node {
 		if(peers.containsKey(uuid)) {
 			peers.remove(uuid);
 			System.out.println("[NODE] -  Removed Peer: " + uuid + " at time " + timeStamp);
+			
+			for(VVPair pair : VersionVector.vv) {
+    			if(pair.uuid == uuid) {
+    				VersionVector.vv.remove(pair);
+    			}
+    		}
+			
 		} else {
 			System.err.println("Peer does not exist!");
 		}
 		
 		viewPeers();
+		System.out.println("[NODE] Version Vector: " + VersionVector.vv.toString());
 	}
 	
 	public void queueToSend(String message) {		
