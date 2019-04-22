@@ -2,6 +2,7 @@ package com.project.controller;
 
 import java.util.Arrays;
 
+import com.project.clock.VersionVector;
 import com.project.crdt.LogootCRDT;
 import com.project.crdt.LogootDocument;
 import com.project.datatypes.SequenceAtom;
@@ -57,9 +58,11 @@ public class DocumentController {
 	
 	public static void addMessage(Message message) {
 		
-		int result = CRDTUtility.searchVersionVector(doc.getSequence().arr, message.getAtom(), 0, doc.getSequence().arr.size());
+		System.out.println("[DOCUMENT CONTROLLER] Recieved Vector Clock is bigger? " + CRDTUtility.compareVector(VersionVector.vv, message.getPeerData().getVectorClock()));	
 		
-		System.out.println("[DOCUMENT CONTROLLER] Result (should return an index): " + result);
+		SequenceAtom atom = CRDTUtility.searchVersionVector(doc.getSequence().arr, message.getAtom(), 0, doc.getSequence().arr.size());
+		
+		System.out.println("[DOCUMENT CONTROLLER] Result (should return an index): " + atom.toString());
 		
 		doc.insertIntoDocument(message.getAtom());
 	}

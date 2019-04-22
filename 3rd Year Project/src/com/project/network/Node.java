@@ -13,12 +13,8 @@ import com.project.clock.VersionVector;
 import com.project.controller.DocumentController;
 import com.project.controller.MessageController;
 import com.project.datatypes.VVPair;
-import com.project.utils.CRDTFileGen;
 import com.project.utils.CommunicationInfo;
-import com.project.utils.MsgGen;
 import com.project.utils.PeerData;
-
-import javafx.application.Platform;
 
 public class Node {
 
@@ -154,7 +150,6 @@ public class Node {
 			
 			System.err.println("Node Not Joined To Network");
 			System.out.println(" --- NODE SHUTDOWN ---");
-			Platform.exit();
 			System.exit(0); 
 			
 		} else {
@@ -162,7 +157,6 @@ public class Node {
 			System.out.println(" --- NODE SHUTTING DOWN ---");
 			manager.leaveNetwork();
 			System.out.println(" --- NODE SHUTDOWN ---");
-			Platform.exit();
 			System.exit(0);
 		}	
 	}
