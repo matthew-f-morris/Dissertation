@@ -8,6 +8,7 @@ import com.project.clock.VersionVector;
 import com.project.network.MessageSender;
 import com.project.network.Node;
 import com.project.utils.AddressMessage;
+import com.project.utils.CRDTUtility;
 import com.project.utils.Message;
 import com.project.utils.PeerData;
 
@@ -63,6 +64,8 @@ public class MessageController {
 		
 		messagesRecieved.add(message);
 		VersionVector.sync(message.getPeerData().getVectorClock());
+		System.out.println("[MESSAGE CONTROLLER] Recieved Vector Clovk is bigger? " + CRDTUtility.compareVector(node.nodeInfo.getVectorClock(), message.getPeerData().getVectorClock()));
+		
 		DocumentController.addMessage(message);
 	}
 	

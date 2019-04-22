@@ -1,6 +1,7 @@
 package com.project.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.project.clock.Clock;
@@ -10,6 +11,7 @@ import com.project.datatypes.AtomIdentifier;
 import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
+import com.project.datatypes.VVPair;
 
 public class CRDTUtility {
 	
@@ -143,6 +145,22 @@ public class CRDTUtility {
 		return 0;
 	}
 	
+	public int searchVersionVector(ArrayList<SequenceAtom> array, SequenceAtom atom, int low, int high) {
+		
+		for(int i = 0; i < array.size(); i++) {
+			
+			List<VVPair> vclockP = array.get(i).atomId.clock;
+			List<VVPair> vclockQ = array.get(i + 1).atomId.clock;
+			List<VVPair> atomclock = atom.atomId.clock;
+			
+			if(compareVector(vclockP, atomclock) && compareVector(atomclock, vclockQ)) {
+				return i + 1;
+			}
+		}
+		
+		return -1;
+	}
+	
 	public static int prefix(Position pos) {
 		return pos.ids.get(0).position;
 	}
@@ -155,6 +173,43 @@ public class CRDTUtility {
 		
 		array.add(index, atom);
 		return array;
+	}
+		
+	public static boolean compareVector(List<VVPair> vectorA, List<VVPair> vectorB) {
+		
+		int size = Math.max(vectorA.size(), vectorB.size());
+		
+		for(int i = 0; i < size; i++) {
+
+			VVPair a;
+			VVPair b;
+			
+			try{
+				a = vectorA.get(i);
+			} catch(IndexOutOfBoundsException e) {
+				a = new VVPair(0L, 0);
+			}
+			
+			try{
+				b = vectorB.get(i);
+			} catch(IndexOutOfBoundsException e) {
+				b = new VVPair(0L, 0);
+			}
+			
+			if(!max(a, b)) {
+				return false;
+			}			
+		}
+		
+		return true;
+	}
+	
+	
+	public static boolean max(VVPair a, VVPair b) {
+		
+		if(b.clock > a.clock)
+			return true;
+		return false;
 	}
 	
 	public static void printIdentifier(Identifier ident) {		

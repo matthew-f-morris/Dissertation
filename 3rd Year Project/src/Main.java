@@ -37,7 +37,7 @@ public class Main {
 		if(redirect) {
 			System.setOut(System.out);
 			System.out.println(" // Ended Redirect //  ");
-		}		
+		}	
 	}
 	
 	private static void test(int exponent) {
