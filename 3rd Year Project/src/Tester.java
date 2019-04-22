@@ -10,8 +10,8 @@ public class Tester {
 	
 	public static void main(String[] args) {
 		
-		VVPair a = new VVPair(1L, 0);
-		VVPair b = new VVPair(2L, 0);
+		VVPair a = new VVPair(1L, 4);
+		VVPair b = new VVPair(2L, 3);
 		VVPair c = new VVPair(3L, 0);
 		
 		List<VVPair> p = new ArrayList<VVPair>();
@@ -23,11 +23,16 @@ public class Tester {
 		q.add(a);
 		p.add(b);
 		
-		System.out.println(q.toString());
+		p.add(new VVPair(4L, 7));
+		q.add(new VVPair(4L, 6));
 		
+		Collections.sort(p);
 		Collections.sort(q);
 		
-		System.out.println(q.toString());			
+		System.out.println(p.toString());
+		System.out.println(q.toString());
+		
+		System.out.println(CRDTUtility.compareVector(p, q));
 	}
 }
    

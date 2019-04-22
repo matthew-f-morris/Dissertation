@@ -6,6 +6,7 @@ import com.project.crdt.LogootCRDT;
 import com.project.crdt.LogootDocument;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTFileGen;
+import com.project.utils.CRDTUtility;
 import com.project.utils.Message;
 import com.project.utils.PeerData;
 
@@ -55,6 +56,11 @@ public class DocumentController {
 	//allows the message controller to add any sequence atoms recieved from other sites
 	
 	public static void addMessage(Message message) {
+		
+		int result = CRDTUtility.searchVersionVector(doc.getSequence().arr, message.getAtom(), 0, doc.getSequence().arr.size());
+		
+		System.out.println("[DOCUMENT CONTROLLER] Result (should return an index): " + result);
+		
 		doc.insertIntoDocument(message.getAtom());
 	}
 	

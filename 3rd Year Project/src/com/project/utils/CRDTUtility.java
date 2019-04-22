@@ -145,7 +145,7 @@ public class CRDTUtility {
 		return 0;
 	}
 	
-	public int searchVersionVector(ArrayList<SequenceAtom> array, SequenceAtom atom, int low, int high) {
+	public static int searchVersionVector(ArrayList<SequenceAtom> array, SequenceAtom atom, int low, int high) {
 		
 		for(int i = 0; i < array.size(); i++) {
 			
@@ -153,7 +153,13 @@ public class CRDTUtility {
 			List<VVPair> vclockQ = array.get(i + 1).atomId.clock;
 			List<VVPair> atomclock = atom.atomId.clock;
 			
-			if(compareVector(vclockP, atomclock) && compareVector(atomclock, vclockQ)) {
+			int resultLower = compareVector(vclockP, atomclock);
+			int resultUpper = compareVector(atomclock, vclockQ);
+			
+			if(resultLower == 1 && resultUpper == -1) {
+				return i + 1;
+			} else if(resultLower == 0 || resultUpper == 0) {
+				//either the lower one or the bottom one have the same vector clock
 				return i + 1;
 			}
 		}
@@ -175,9 +181,14 @@ public class CRDTUtility {
 		return array;
 	}
 		
-	public static boolean compareVector(List<VVPair> vectorA, List<VVPair> vectorB) {
+	public static int compareVector(List<VVPair> vectorA, List<VVPair> vectorB) {
+		
+		//returns 1 if B > A
+		//returns 0 if A = B
+		//returns -1 if B < A
 		
 		int size = Math.max(vectorA.size(), vectorB.size());
+		boolean allEqual = true;
 		
 		for(int i = 0; i < size; i++) {
 
@@ -196,20 +207,27 @@ public class CRDTUtility {
 				b = new VVPair(0L, 0);
 			}
 			
-			if(!max(a, b)) {
-				return false;
-			}			
+			int result = comparePair(a, b);
+			
+			if(result == -1) {
+				return -1;
+			} else if(result == 1)
+				allEqual = false;
 		}
 		
-		return true;
+		if(allEqual)
+			return 0;		
+		return 1;
 	}
 	
 	
-	public static boolean max(VVPair a, VVPair b) {
+	public static int comparePair(VVPair a, VVPair b) {
 		
 		if(b.clock > a.clock)
-			return true;
-		return false;
+			return 1;
+		else if(b.clock < a.clock)
+			return -1;
+		return 0;
 	}
 	
 	public static void printIdentifier(Identifier ident) {		

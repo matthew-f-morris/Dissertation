@@ -132,7 +132,9 @@ public class Main {
 				} else if(text.equals("PRINT_PEERS")){
 					node.viewPeers();
 				} else if(text.equals("PRINT_DATA")){
-					node.viewPeers();
+					node.printData();
+				} else if(text.equals("PRINT_VV")){
+					node.viewVersionVector();
 				} else {
 					node.queueToSend(text);
 				}

@@ -143,14 +143,28 @@ public class Node {
 		
 		System.out.println("[NODE] Number of peers: " + peers.size());	
 	}
+	
+	public void viewVersionVector() {
+		System.out.println("[NODE] Versio Vector: \n\n" + nodeInfo.getVectorClock().toString());
+	}	
 			
 	public void shutdown() {
 		
-		System.out.println(" --- NODE SHUTTING DOWN ---");
-		manager.leaveNetwork();
-		System.out.println(" --- NODE SHUTDOWN ---");
-		Platform.exit();
-		System.exit(0);
+		if(!joined) {
+			
+			System.err.println("Node Not Joined To Network");
+			System.out.println(" --- NODE SHUTDOWN ---");
+			Platform.exit();
+			System.exit(0); 
+			
+		} else {
+		
+			System.out.println(" --- NODE SHUTTING DOWN ---");
+			manager.leaveNetwork();
+			System.out.println(" --- NODE SHUTDOWN ---");
+			Platform.exit();
+			System.exit(0);
+		}	
 	}
 	
 	public void leaveNetwork() {
@@ -189,6 +203,7 @@ public class Node {
 		DocumentController.printDoc("", printDocSnippet);
 	}
 	
+
 	public void bypass(String str, long site) {
 		msgController.bypassSend(str, site);
 	}
