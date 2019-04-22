@@ -30,9 +30,12 @@ public class Main {
 		
 		node = new Node();
 		node.joinNetwork();
-		//node.queueToSend("TO ALL!");
 		
-		startScanner();
+		try {
+			testLAN(5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		if(redirect) {
 			System.setOut(System.out);
@@ -46,13 +49,37 @@ public class Main {
 			
 			System.out.println("NEXT TEST, I = " + i + "");
 			
-			runBasic("Basic", i, true, false);
+			runBasic("Basic", i, true, false);			
+			testWait(5000);
+			
 			runModified("Modified", i, true, true);
+			testWait(5000);
 			
 			//toFile, force, force boundary+ or boundary-
 			runLSEQ("LSEQ", i, true, false, false);
+			testWait(5000);
+			
 			runLSEQ("LSEQ force boundary -", i, true, true, false);
+			testWait(5000);
+			
 			runLSEQ("LSEQ force boundary +", i, true, true, true);
+			testWait(5000);
+		}		
+	}
+		
+	private static void testLAN(int exponent) throws InterruptedException {
+		
+		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
+			
+			System.out.println("NEXT TEST, I = " + i + "");
+			
+			runBasicLAN("LAN Basic", i, true, false);
+			runModifiedLAN("LAN Modified", i, true, true);
+			
+			//toFile, force, force boundary+ or boundary-
+			runLSEQLAN("LAN LSEQ", i, true, false, false);
+			runLSEQLAN("LAN LSEQ force boundary -", i, true, true, false);
+			runLSEQLAN("LAN LSEQ force boundary +", i, true, true, true);
 		}		
 	}
 	
@@ -99,6 +126,64 @@ public class Main {
 			DocumentController.printDoc(title, true);
 		
 		DocumentController.printStrategy();
+	}
+	
+	private static void runBasicLAN(String title, int num, Boolean toFile, Boolean modify) throws InterruptedException {
+		
+		DocumentController.modifyDoc(modify);
+		
+		for(int i = 0; i < num; i++) {		
+			node.queueToSend(MsgGen.getMsg());
+			Thread.sleep(350);
+		}		
+		
+		DocumentController.printDocStats();	
+		
+		if(toFile)
+			DocumentController.printDoc(title, true);
+		
+	}
+	
+	private static void runModifiedLAN(String title, int num, Boolean toFile, Boolean modify) throws InterruptedException {
+		
+		DocumentController.modifyDoc(modify);
+		
+		for(int i = 0; i < num; i++) {		
+			node.queueToSend(MsgGen.getMsg());
+			Thread.sleep(350);
+		}
+		
+		DocumentController.printDocStats();
+		
+		if(toFile)
+			DocumentController.printDoc(title, true);
+	}
+	
+	private static void runLSEQLAN(String title, int num, Boolean toFile, Boolean force, Boolean boundaryPlus) throws InterruptedException {
+		
+		DocumentController.lseqForce(force, boundaryPlus);
+		DocumentController.setLseq(true);
+		
+		for(int i = 0; i < num; i++) {		
+			node.queueToSend(MsgGen.getMsg());
+			Thread.sleep(350);
+		}
+		
+		DocumentController.printDocStats();	
+		
+		if(toFile)
+			DocumentController.printDoc(title, true);
+		
+		DocumentController.printStrategy();
+	}
+	
+	private static void testWait(int time) {
+		
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void startScanner() {
