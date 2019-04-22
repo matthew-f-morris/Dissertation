@@ -1,9 +1,9 @@
 package com.project.clock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.project.datatypes.SequenceAtom;
 import com.project.datatypes.VVPair;
 
 public class VersionVector {
@@ -23,8 +23,10 @@ public class VersionVector {
 		
 		if(sanityCheck(clock) == -1)		
 			throw new Exception("VV clock seet to invalid value!");			
-		else 	
+		else {	
 			vv.add(new VVPair(siteId, clock));
+			Collections.sort(vv);
+		}
 	}
 	
 	private static int sanityCheck(int check) {	
