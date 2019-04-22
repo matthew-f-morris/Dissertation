@@ -55,7 +55,7 @@ public class CRDTUtility {
 		Position pMin = CGen.genPosition(CGen.genIdentifier(p, siteId));
 		AtomIdentifier atom = CGen.genAtomIdentifier(pMin, VersionVector.copy());
 		
-		VersionVector.increment(siteId);
+		VersionVector.increment();
 		
 		return CGen.genSequenceAtom(atom);
 	}

@@ -47,7 +47,7 @@ public class Node {
     	
     	nodeInfo = new PeerData(Math.abs(UUID.randomUUID().getLeastSignificantBits()), hostname, localhost, CommunicationInfo.commPort);
   	    VersionVector.init(nodeInfo.getUuid(), 0);
-  	    nodeInfo.setVersionVector(VersionVector.vv);
+  	    nodeInfo.setVersionVector();
     	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
@@ -73,6 +73,8 @@ public class Node {
 			
 			PeerData peer = new PeerData(uuid, hostname, address, port);
     		this.peers.put(uuid, peer);
+    		
+    		System.out.println("[NODE]: " + clock.toString());
     		
     		VVPair newPeer = null;
     		

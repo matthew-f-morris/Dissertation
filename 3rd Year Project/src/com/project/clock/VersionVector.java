@@ -13,10 +13,11 @@ public class VersionVector {
 	
 	public static void init(long siteId, int initClock) {
 	
+		VersionVector.siteId = siteId;
+		
 		vv = new ArrayList<VVPair>();
 		vv.add(new VVPair(siteId, initClock));
-		
-		VersionVector.siteId = siteId;
+				
 	}
 	
 	public static void add(long siteId, int clock) throws Exception {
@@ -138,7 +139,6 @@ public class VersionVector {
 			return s.substring(0, s.length()-2);
 		}
 		
-		return "Empty Sequence";		
-		
+		return "Empty Sequence";			
 	}
 }

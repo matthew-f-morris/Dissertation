@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.project.clock.Clock;
+import com.project.clock.VersionVector;
 import com.project.datatypes.VVPair;
 
 public class PeerData implements Serializable {
@@ -34,6 +35,7 @@ public class PeerData implements Serializable {
     	System.out.println("	Hostname: " + hostname);
     	System.out.println("	Port: " + port);
     	System.out.println("	IP: " + address.getHostAddress() + "\n");
+    	System.out.println("	VV: " + versionVector.toString());
     }
 
     public long getUuid() {
@@ -56,7 +58,7 @@ public class PeerData implements Serializable {
 		return versionVector;
 	}
 	
-	public void setVersionVector(List<VVPair> versionVector) {
-		this.versionVector = versionVector;
+	public void setVersionVector() {
+		versionVector = VersionVector.vv;
 	}
 }

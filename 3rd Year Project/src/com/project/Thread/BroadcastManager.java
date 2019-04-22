@@ -61,15 +61,15 @@ public class BroadcastManager implements Manager {
 
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
-
-				oos.flush();
-				oos.writeObject(node.nodeInfo);
-				oos.flush();
-				oos.close();
-
-				byte[] messageByte = bos.toByteArray();
-
+				
 				while (isRunning) {
+				
+					oos.flush();
+					oos.writeObject(node.nodeInfo);
+					oos.flush();
+					oos.close();
+	
+					byte[] messageByte = bos.toByteArray();				
 
 					//System.out.println("[PEER DISCOVERY] Broadcasting packet...");
 					socket.send(new DatagramPacket(messageByte, messageByte.length, address, CommunicationInfo.broadcastPort));

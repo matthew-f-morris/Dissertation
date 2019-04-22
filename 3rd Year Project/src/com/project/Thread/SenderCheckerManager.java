@@ -60,6 +60,7 @@ public class SenderCheckerManager implements Manager{
 					Message toSend = controller.messagesToSend.removeLast();
 					for (PeerData peer : controller.peers.values()) {						
 						if(!(peer.getUuid() == controller.node.nodeInfo.getUuid())){							
+							
 							boolean sent = controller.sender.sendMessage(peer.getAddress(), toSend);
 							
 							if(!sent) {

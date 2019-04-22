@@ -86,12 +86,14 @@ public class LogootDocument {
 	
 	public boolean insertIntoDocument(SequenceAtom atom) {
 		
-		try {									
+		try {		
+			
 			boolean success = CRDTUtility.insertSequenceAtom(document.arr, atom);
 			
 			if(success)
 				VersionVector.increment();
-			return true;			
+			return true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
