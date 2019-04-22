@@ -57,6 +57,9 @@ public class DocumentController {
 	
 	public static void handleRecievedMessage(Message message) {
 		
+		System.out.println("[DOCUMENT CONTROLLER] Version Vector: " + VersionVector.vv.toString());
+		System.out.println("[DOCUMENT CONTROLLER] Message VV: " + message.getPeerData().getVectorClock());		
+		
 		System.out.println("[DOCUMENT CONTROLLER] Recieved Vector Clock is bigger? " + CRDTUtility.compareVector(VersionVector.vv, message.getPeerData().getVectorClock()));	
 		
 		SequenceAtom atom = CRDTUtility.searchVersionVector(doc.getSequence().arr, message.getAtom(), 0, doc.getSequence().arr.size());

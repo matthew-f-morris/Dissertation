@@ -211,7 +211,7 @@ public class CRDTUtility {
 			} catch(IndexOutOfBoundsException e) {
 				b = new VVPair(0L, 0);
 			}
-			
+						
 			int result = comparePair(a, b);
 			
 			if(result == -1) {

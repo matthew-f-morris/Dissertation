@@ -16,51 +16,27 @@ public class Tester {
 	
 	public static void main(String[] args) {
 		
-		node = new Node();
-		node.initThreads();
-		startScanner();
-		//node.bypass(MsgGen.getMsg(), MsgGen.getSite());
-	}
-	
-	private static void startScanner() {
+		VVPair p = new VVPair(0L, 6);
+		VVPair q = new VVPair(1L, 7);
+		VVPair x = new VVPair(2L, 9);
 		
-		scanner = new Scanner(System.in);
-		InputScanner input = new InputScanner();
-		Thread inputThread = new Thread(input);
-		inputThread.setName("INPUT SCANNER");
-		inputThread.start();
-	}
-	
-	static class InputScanner extends Thread {
+		List<VVPair> a = new ArrayList<VVPair>();
+		List<VVPair> b = new ArrayList<VVPair>();
 		
-		boolean isRunning = true;
+		a.add(p);
+		a.add(q);
 		
-		public void run() {
-			
-			while(isRunning) {	
-				
-				String text = scanner.nextLine();
-				
-				if(text.equals("LEAVE")) {
-					node.leaveNetwork();
-				} else if(text.equals("JOIN")){
-					node.joinNetwork();
-				} else if(text.equals("SHUTDOWN")) {
-					node.shutdown();
-					isRunning = false;
-				} else if(text.equals("PRINT_CRDT")){
-					node.print(true);
-				} else if(text.equals("PRINT_PEERS")){
-					node.viewPeers();
-				} else if(text.equals("PRINT_DATA")){
-					node.printData();
-				} else if(text.equals("PRINT_VV")){
-					node.viewVersionVector();
-				} else {
-					node.queueToSend(text);
-				}
-			}
-		}
+		b.add(q);
+		b.add(p);
+		b.add(x);
+		
+		Collections.sort(a);
+		Collections.sort(b);
+		
+		System.out.println("A: " + a.toString());
+		System.out.println("B: " + b.toString());
+		
+		System.out.println("Result: " + CRDTUtility.compareVector(b, a));
 	}
 }
    
