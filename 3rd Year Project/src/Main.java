@@ -13,6 +13,7 @@ public class Main {
 	static Scanner scanner;
 	static Node node;
 	private static Boolean redirect = false;
+	private static int pause = 1000;
 
 	public static void main(String[] args) {		
 			
@@ -30,6 +31,8 @@ public class Main {
 		
 		node = new Node();
 		node.joinNetwork();
+		
+		testWait(5000);
 		
 		try {
 			testLAN(5);
@@ -63,7 +66,7 @@ public class Main {
 			testWait(5000);
 			
 			runLSEQ("LSEQ force boundary +", i, true, true, true);
-			testWait(5000);
+			
 		}		
 	}
 		
@@ -74,12 +77,20 @@ public class Main {
 			System.out.println("NEXT TEST, I = " + i + "");
 			
 			runBasicLAN("LAN Basic", i, true, false);
+			testWait(5000);
+			
 			runModifiedLAN("LAN Modified", i, true, true);
+			testWait(5000);
 			
 			//toFile, force, force boundary+ or boundary-
 			runLSEQLAN("LAN LSEQ", i, true, false, false);
+			testWait(5000);
+			
 			runLSEQLAN("LAN LSEQ force boundary -", i, true, true, false);
+			testWait(5000);
+			
 			runLSEQLAN("LAN LSEQ force boundary +", i, true, true, true);
+			testWait(5000);
 		}		
 	}
 	
@@ -134,7 +145,7 @@ public class Main {
 		
 		for(int i = 0; i < num; i++) {		
 			node.queueToSend(MsgGen.getMsg());
-			Thread.sleep(350);
+			Thread.sleep(pause);
 		}		
 		
 		DocumentController.printDocStats();	
@@ -150,7 +161,7 @@ public class Main {
 		
 		for(int i = 0; i < num; i++) {		
 			node.queueToSend(MsgGen.getMsg());
-			Thread.sleep(350);
+			Thread.sleep(pause);
 		}
 		
 		DocumentController.printDocStats();
@@ -166,7 +177,7 @@ public class Main {
 		
 		for(int i = 0; i < num; i++) {		
 			node.queueToSend(MsgGen.getMsg());
-			Thread.sleep(350);
+			Thread.sleep(pause);
 		}
 		
 		DocumentController.printDocStats();	
