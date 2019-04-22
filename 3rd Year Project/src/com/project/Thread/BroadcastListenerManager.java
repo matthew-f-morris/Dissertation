@@ -75,6 +75,7 @@ public class BroadcastListenerManager implements Manager {
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(bis));
 
 					PeerData data = (PeerData) ois.readObject();
+					System.out.println("[BROADCAST LISTENER MANAGER] Recieved Vector Clock" + data.getVectorClock().toString());
 					node.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort(), data.getVectorClock());
 					ois.close();
 
