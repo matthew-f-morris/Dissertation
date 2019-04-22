@@ -70,28 +70,23 @@ public class Main {
 		}		
 	}
 		
-	private static void testLAN(int exponent) throws InterruptedException {
+	private static void testLAN(int i) throws InterruptedException {
 		
-		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
-			
-			System.out.println("NEXT TEST, I = " + i + "");
-			
-			runBasicLAN("LAN Basic", i, true, false);
-			testWait(5000);
-			
-			runModifiedLAN("LAN Modified", i, true, true);
-			testWait(5000);
-			
-			//toFile, force, force boundary+ or boundary-
-			runLSEQLAN("LAN LSEQ", i, true, false, false);
-			testWait(5000);
-			
-			runLSEQLAN("LAN LSEQ force boundary -", i, true, true, false);
-			testWait(5000);
-			
-			runLSEQLAN("LAN LSEQ force boundary +", i, true, true, true);
-			testWait(5000);
-		}		
+		runBasicLAN("LAN Basic", i, true, false);
+		testWait(5000);
+		
+//		runModifiedLAN("LAN Modified", i, true, true);
+//		testWait(5000);
+//		
+//		//toFile, force, force boundary+ or boundary-
+//		runLSEQLAN("LAN LSEQ", i, true, false, false);
+//		testWait(5000);
+//		
+//		runLSEQLAN("LAN LSEQ force boundary -", i, true, true, false);
+//		testWait(5000);
+//		
+//		runLSEQLAN("LAN LSEQ force boundary +", i, true, true, true);
+//		testWait(5000);	
 	}
 	
 	private static void runBasic(String title, int num, Boolean toFile, Boolean modify) {
