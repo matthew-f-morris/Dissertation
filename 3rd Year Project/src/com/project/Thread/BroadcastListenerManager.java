@@ -61,23 +61,25 @@ public class BroadcastListenerManager implements Manager {
 		public void run() {
 
 			System.out.println("[BROADCAST LISTENER] Listening for broadcasting peers...");
-			byte[] message = new byte[1500];
 
+			byte[] message = new byte[1500];			
+			
 			try {
-
+				
 				DatagramPacket p = new DatagramPacket(message, message.length);
 
 				while (isRunning) {
-																
+										
 					socket.receive(p);
 
 					ByteArrayInputStream bis = new ByteArrayInputStream(message);
 					ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(bis));
 
 					PeerData data = (PeerData) ois.readObject();
-					System.out.println("[BROADCAST LISTENER MANAGER] Recieved Vector Clock: " + data.getVectorClock().toString());
+												
 					node.addPeer(data.getUuid(), data.getHostname(), data.getAddress(), data.getPort(), data.getVectorClock());
 					ois.close();
+					bis.close();
 
 				}
 

@@ -59,16 +59,19 @@ public class BroadcastManager implements Manager {
 
 				socket = new DatagramSocket();
 				InetAddress address = InetAddress.getByName(CommunicationInfo.broadcastAddress);
-
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
 								
-				while (isRunning) {
-
+				while (isRunning) {					
+								
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
+					
 					oos.flush();
+					bos.flush();
 					oos.writeObject(node.getNodeInfo());
 					oos.flush();
-					oos.close();
+					bos.flush();
+					oos.close();					
+					bos.close();
 	
 					byte[] messageByte = bos.toByteArray();				
 
@@ -78,6 +81,7 @@ public class BroadcastManager implements Manager {
 					try {
 						Thread.sleep(broadcastInterval);
 					}
+					
 					catch (InterruptedException e) {
 						System.out.println(e);
 						e.printStackTrace();

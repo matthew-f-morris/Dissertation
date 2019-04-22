@@ -48,6 +48,7 @@ public class VersionVector {
 			}
 		}
 		
+		System.out.println("[VERSION VECTOR no args]: " + vv.toString());		
 		return found;
 	}
 	
@@ -61,6 +62,8 @@ public class VersionVector {
 				found = true;
 			}
 		}
+		
+		System.out.println("[VERSION VECTOR args]: " + vv.toString());
 		
 		if(!found) {
 			System.err.println("Failed To Find Replica's clock to increment");
