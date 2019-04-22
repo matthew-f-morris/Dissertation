@@ -63,9 +63,8 @@ public class MessageController {
 	public void addToRecieved(Message message) {
 		
 		messagesRecieved.add(message);
-		VersionVector.sync(message.getPeerData().getVectorClock());
-				
-		DocumentController.addMessage(message);
+		//VersionVector.sync(message.getPeerData().getVectorClock());
+		DocumentController.handleRecievedMessage(message);
 	}
 	
 	private boolean checkEmptySend() {

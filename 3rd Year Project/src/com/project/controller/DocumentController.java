@@ -23,8 +23,7 @@ public class DocumentController {
 		DocumentController.siteId = siteId;
 		doc = new LogootDocument(siteId);
 		doc.modify(false);
-		doc.setLseq(false);
-		
+		doc.setLseq(false);		
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities
@@ -37,7 +36,7 @@ public class DocumentController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+			
 		return null;
 	}
 	
@@ -56,7 +55,7 @@ public class DocumentController {
 	
 	//allows the message controller to add any sequence atoms recieved from other sites
 	
-	public static void addMessage(Message message) {
+	public static void handleRecievedMessage(Message message) {
 		
 		System.out.println("[DOCUMENT CONTROLLER] Recieved Vector Clock is bigger? " + CRDTUtility.compareVector(VersionVector.vv, message.getPeerData().getVectorClock()));	
 		
@@ -65,6 +64,12 @@ public class DocumentController {
 		System.out.println("[DOCUMENT CONTROLLER] Result (should return an index): " + atom.toString());
 		
 		doc.insertIntoDocument(message.getAtom());
+		
+		//Check Version Vector
+		//Find position in sequence based on version vector
+		//Generate position [ SequenceAtom atom = LogootCRDT.generate()]
+		//CRDTUtility.insertSequenceAtom(document.arr, atom)
+		
 	}
 	
 	private static Message genMessage(PeerData nodeInfo, SequenceAtom atom) {		

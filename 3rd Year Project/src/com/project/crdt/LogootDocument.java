@@ -70,15 +70,14 @@ public class LogootDocument {
 		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify, setLseq, force, boundaryPlus);
 		endTime = System.nanoTime();
 		totalAddTime += endTime - startTime;
+
+		startTime = System.nanoTime();
+		boolean success = CRDTUtility.insertSequenceAtom(document.arr, atom);
 		
-		VersionVector.increment(site);
-		
-		if(site == siteId) {
-			Clock.increment();
+		if(success) {
+			VersionVector.increment();
 		}
 		
-		startTime = System.nanoTime();
-		CRDTUtility.insertSequenceAtom(document.arr, atom);
 		endTime = System.nanoTime();
 		lastInsertTime = endTime - startTime;
 		totalInsertTime += endTime - startTime;
@@ -89,7 +88,10 @@ public class LogootDocument {
 	public boolean insertIntoDocument(SequenceAtom atom) {
 		
 		try {									
-			CRDTUtility.insertSequenceAtom(document.arr, atom);
+			boolean success = CRDTUtility.insertSequenceAtom(document.arr, atom);
+			
+			if(success)
+				VersionVector.increment();
 			return true;			
 		} catch (Exception e) {
 			e.printStackTrace();

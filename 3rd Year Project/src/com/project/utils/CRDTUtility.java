@@ -97,7 +97,7 @@ public class CRDTUtility {
 
 	}
 	
-	public static void insertSequenceAtom(ArrayList<SequenceAtom> array, SequenceAtom add) throws Exception {
+	public static boolean insertSequenceAtom(ArrayList<SequenceAtom> array, SequenceAtom add) throws Exception {
 
 		int size = array.size();
 		
@@ -114,9 +114,12 @@ public class CRDTUtility {
 				insert(array, add, i + 1);
 			else if(l == -1 && u == 1)
 				continue;
-			else if(l == 1)
+			else if(l == 1) {
 				throw new Exception("The document atoms are not in a valid order!");
+			}	
 		}
+		
+		return true;
 	}
 	
 	public static int comparePosition(Position p, Position q) {
