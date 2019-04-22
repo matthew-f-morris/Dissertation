@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import com.project.clock.VersionVector;
 import com.project.network.Node;
 import com.project.utils.CommunicationInfo;
 
@@ -61,11 +62,11 @@ public class BroadcastManager implements Manager {
 
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(bos));
-				
+								
 				while (isRunning) {
-				
+
 					oos.flush();
-					oos.writeObject(node.nodeInfo);
+					oos.writeObject(node.getNodeInfo());
 					oos.flush();
 					oos.close();
 	

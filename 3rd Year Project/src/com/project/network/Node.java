@@ -191,6 +191,10 @@ public class Node {
 		return joined;
 	}
 	
+	public PeerData getNodeInfo() {
+		return nodeInfo;
+	}
+	
 	public void printData() {
 		nodeInfo.printData();
 	}
