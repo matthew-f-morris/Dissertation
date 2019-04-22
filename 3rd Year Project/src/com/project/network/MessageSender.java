@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import com.project.controller.MessageController;
+import com.project.utils.AddressMessage;
 import com.project.utils.Message;
 
 public class MessageSender {
@@ -20,23 +21,30 @@ public class MessageSender {
 	
 	public boolean sendMessage(InetAddress address, Message message) {
 		
-		System.out.println("[MESSAGE SENDER] Sending Message...");
+		if(controller.toResend.size() > 0) {
+			controller.toResend.add(new AddressMessage(address, message));
 		
-		try {
+		} else {
+		
+			System.out.println("[MESSAGE SENDER] Sending Message...");
 			
-			Socket socket = new Socket();
-			socket.connect(new InetSocketAddress(address,  commPort), 1000);
+			try {
+				
+				Socket socket = new Socket();
+				socket.connect(new InetSocketAddress(address,  commPort), 1000);
+				
+				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());			
+				oos.writeObject(message);
+				socket.close();
+				
+			} catch (IOException e) {
+				System.out.println(e);
+				return false;
+			}
 			
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());			
-			oos.writeObject(message);
-			socket.close();
-			
-		} catch (IOException e) {
-			System.out.println(e);
-			return false;
+			System.out.println("[MESSAGE SENDER] Message Sent!");
 		}
 		
-		System.out.println("[MESSAGE SENDER] Message Sent!");
 		return true;
 	}
 	
