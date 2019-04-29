@@ -10,6 +10,7 @@ import com.project.datatypes.Identifier;
 import com.project.datatypes.Position;
 import com.project.datatypes.SequenceAtom;
 import com.project.utils.CRDTUtility;
+import com.project.utils.NodeQuerier;
 
 //The main algorithm for the logoot crdt implementation
 
@@ -72,7 +73,7 @@ public class LogootCRDT {
 				if(interval > 1) {
 
 					if(modify)
-						build.add(CGen.genIdentifier(posP.ids.get(0).position + 1, siteId));					
+						build.add(CGen.genIdentifier(posP.ids.get(0).position + NodeQuerier.currentPeerNumber() , siteId));					
 					else	
 						build.add(CGen.genIdentifier(CRDTUtility.randomInt(posP.ids.get(0).position, posQ.ids.get(0).position), siteId));
 					

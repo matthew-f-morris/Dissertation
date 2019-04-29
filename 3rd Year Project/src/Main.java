@@ -31,14 +31,7 @@ public class Main {
 		
 		node = new Node();
 		node.joinNetwork();
-		
-		testWait(5000);
-		
-		try {
-			testLAN(5);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		startScanner();
 		
 		if(redirect) {
 			System.setOut(System.out);
