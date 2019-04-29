@@ -1,6 +1,7 @@
 package com.project.crdt;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.project.clock.Clock;
 import com.project.datatypes.Position;
@@ -27,6 +28,7 @@ public class LogootDocument {
 	private Boolean boundaryPlus = false;
 	
 	LogootCRDT logoot = new LogootCRDT(boundary);
+	public List<String> csv = new ArrayList<String>();
 	
 	public LogootDocument(long siteId) {
 		
@@ -65,18 +67,18 @@ public class LogootDocument {
 		long startTime;
 		long endTime;		
 			
-		startTime = System.nanoTime();		
+		startTime = System.nanoTime();	
 		SequenceAtom atom = LogootCRDT.generate(message, new Position(posP.copy()), new Position(posQ.copy()), site, modify, setLseq, force, boundaryPlus);
-		endTime = System.nanoTime();
-		totalAddTime += endTime - startTime;
+		endTime = System.nanoTime();	
+		totalAddTime += (endTime - startTime);
 		
 		Clock.increment();
 		
-		startTime = System.nanoTime();
+		startTime = System.nanoTime();	
 		CRDTUtility.insertSequenceAtom(document.arr, atom);
-		endTime = System.nanoTime();
-		lastInsertTime = endTime - startTime;
-		totalInsertTime += endTime - startTime;
+		endTime = System.nanoTime();	
+		lastInsertTime = (endTime - startTime);
+		totalInsertTime += (endTime - startTime);
 		
 		return atom;
 	}
@@ -111,12 +113,18 @@ public class LogootDocument {
 	}
 	
 	public void clear() {
+		totalAddTime = 0L;
+		totalInsertTime = 0L;
+		lastInsertTime = 0L;
 		document.arr.clear();
 		initDocument();
 		setLseq(false);
 	}
 	
 	public void clearLSEQ() {
+		totalAddTime = 0L;
+		totalInsertTime = 0L;
+		lastInsertTime = 0L;
 		document.arr.clear();
 		initDocumentLSEQ();
 		setLseq(true);
@@ -202,38 +210,48 @@ public class LogootDocument {
 		}
 	}
 	
-	public void printInfo() {
+	public ArrayList<String> printInfo() {
 		
 		int sizeMax = getSizeOfPos(getMaxPosition());
 		
-		System.out.println("---- DATA ----");
-		System.out.println("Doc Size (Excluding Start/Stop): " + docSize());
+		ArrayList<String> strings = new ArrayList<String>();
+		
+		csv.add(docSize() + ", " + getSizeOfPos(getMaxPosition()) + ", " + getAverageIdLength() + ", " + (float) totalAddTime / 1000000 + ", " + (float) totalAddTime / (docSize() * 1000000) + ", " + (float) totalInsertTime / 1000000 +  ", " + (float) totalInsertTime / (docSize() * 1000000));
+		
+		strings.add("---- DATA ----");
+		strings.add("Doc Size (Excluding Start/Stop): " + docSize());
 		
 		if(sizeMax > 30)
-			System.out.println("Max Position ID: ID is too big to print!");
+			strings.add("Max Position ID: ID is too big to print!");
 		else		
-			System.out.println("Max Position ID: " + getMaxPosition().toString());
+			strings.add("Max Position ID: " + getMaxPosition().toString());
 		
-		System.out.println("Max Position ID Size: " + getSizeOfPos(getMaxPosition()));
-		System.out.println("Average Position ID size: " + getAverageIdLength());
-		System.out.println("Size of Document in Bytes: " + 0);
-		System.out.println("Total time taken to add messages (ms): " + (float) totalAddTime / 1000000);
-		System.out.println("Average time taken to add messages (ms): " + (float) totalAddTime / (docSize() * 1000000));
-		System.out.println("Total time taken to insert messages (ms): " + (float) totalInsertTime / 1000000);	
-		System.out.println("Average time taken to insert messages (ms): " + (float) totalInsertTime / (docSize() * 1000000));
-		System.out.println("Time taken for last addition (ms): " + (float) lastInsertTime / 1000000);
-		System.out.println("");
+		strings.add("Max Position ID Size: " + getSizeOfPos(getMaxPosition()));
+		strings.add("Average Position ID size: " + getAverageIdLength());
+		strings.add("Size of Document in Bytes: " + 0);
+		strings.add("Total time taken to add messages (ms): " + (float) totalAddTime / 1000000);
+		strings.add("Average time taken to add messages (ms): " + (float) totalAddTime / (docSize() * 1000000));
+		strings.add("Total time taken to insert messages (ms): " + (float) totalInsertTime / 1000000);	
+		strings.add("Average time taken to insert messages (ms): " + (float) totalInsertTime / (docSize() * 1000000));
+		strings.add("Time taken for last addition (ms): " + (float) lastInsertTime / 1000000);
+		strings.add("");
+
+		return strings;
+
 	}
 	
 	public ArrayList<String> getStringList() {
 
 		ArrayList<String> strings = new ArrayList<String>();
+		ArrayList<String> data = printInfo();
 		
 		for(SequenceAtom atom : document.arr) {
 			strings.add(atom.toString() + "");
 		}
 		
-		return strings;
+		data.addAll(strings);
+		data.addAll(csv);
+		return data;
 	}
 	
 	public Boolean getModify() {

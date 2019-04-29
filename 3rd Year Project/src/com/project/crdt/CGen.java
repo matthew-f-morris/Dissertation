@@ -20,7 +20,16 @@ public class CGen {
 	private static int checkValue(int x) throws Exception {
 		
 		if(x < 1 || x >= MAX_POSITION) {
-			System.err.println("Invalid Integer Value");
+			System.err.println("Invalid Integer Value: " + x);
+			return -1;
+		} else
+			return x;
+	}
+	
+	private static int checkValueLSEQ(int x) throws Exception {
+		
+		if(x < 1 || x >= Integer.MAX_VALUE) {
+			System.err.println("Invalid Integer Value: " + x);
 			return -1;
 		} else
 			return x;
@@ -36,7 +45,7 @@ public class CGen {
 
 	public static Identifier genIdentifierLseq(int p, long siteId) throws Exception {
 		
-		if(checkValue(p) == -1) {
+		if(checkValueLSEQ(p) == -1) {
 			throw new Exception("LSEQ Identifier Generation Failed!");
 		} else		
 			return new Identifier(p, siteId);

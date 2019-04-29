@@ -91,17 +91,17 @@ public class CRDTUtility {
 
 		int size = array.size();
 		
-		for(int i = 0; i < size - 1; i++) {
+		for(int i = size - 1; i > 0; i--) {
 			
 			Position pos = add.atomId.position;
-			Position prev = array.get(i).atomId.position;
-			Position next = array.get(i + 1).atomId.position;
+			Position prev = array.get(i - 1).atomId.position;
+			Position next = array.get(i).atomId.position;
 			
 			int l = comparePosition(prev, pos);
 			int u = comparePosition(pos, next);
 			
 			if(l == -1 && u == -1)
-				insert(array, add, i + 1);
+				insert(array, add, i);
 			else if(l == -1 && u == 1)
 				continue;
 			else if(l == 1)

@@ -36,8 +36,8 @@ public class MessageController {
 		this.peers = peers;
 //		this.uuid = uuid;
 		
-		sender = new MessageSender(this);
 		DocumentController.init(uuid);
+		sender = new MessageSender(this);
 	}
 
 	//adds messages to the 'To-Send' queue so to speak

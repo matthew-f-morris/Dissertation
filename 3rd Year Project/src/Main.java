@@ -31,14 +31,7 @@ public class Main {
 		
 		node = new Node();
 		node.joinNetwork();
-		
-		testWait(5000);
-		
-		try {
-			testLAN(5);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		startScanner();
 		
 		if(redirect) {
 			System.setOut(System.out);
@@ -48,26 +41,96 @@ public class Main {
 	
 	private static void test(int exponent) {
 		
-		for(int i = 1; i < Math.pow(2, exponent); i=i*2) {
-			
-			System.out.println("NEXT TEST, I = " + i + "");
-			
-			runBasic("Basic", i, true, false);			
-			testWait(5000);
-			
-			runModified("Modified", i, true, true);
-			testWait(5000);
-			
-			//toFile, force, force boundary+ or boundary-
-			runLSEQ("LSEQ", i, true, false, false);
-			testWait(5000);
-			
-			runLSEQ("LSEQ force boundary -", i, true, true, false);
-			testWait(5000);
-			
-			runLSEQ("LSEQ force boundary +", i, true, true, true);
-			
-		}		
+//		System.out.println("BASIC");
+//		for(int i = 10; i < 100; i+=15) {						
+//			runBasic("BasicS " + i, i, true, false);
+//		}
+//		
+//		for(int i = 100; i < 1600; i+=100) {						
+//			runBasic("BasicS " + i, i, true, false);
+//		}
+		
+		DocumentController.clearCSV();
+//		
+//		System.out.println("BASIC");
+//		for(int i = 10; i < 100; i+=15) {						
+//			runModified("ModS " + i, i, true, true);
+//		}
+//		
+//		for(int i = 100; i < 2100; i+=100) {			
+//			runModified("ModS " + i, i, true, true);
+//		}
+//		
+//		for(int i = 2000; i < 26000; i+=1000) {			
+//			runModified("ModS " + i, i, true, true);
+//		}
+		
+		DocumentController.clearCSV();
+		
+//		System.out.println("BASIC");
+//		for(int i = 10; i < 100; i+=15) {						
+//			runLSEQ("LSEQS " + i, i, true, false, false);
+//		}
+//		
+//		for(int i = 100; i < 1900; i+=100) {				
+//			runLSEQ("LSEQS " + i, i, true, false, false);
+//		}
+		
+		DocumentController.clearCSV();
+		
+		System.out.println("BASIC");
+		for(int i = 10; i < 85; i+=2) {						
+			runLSEQ("LSEQS- " + i, i, true, true, false);
+		}
+		
+//		for(int i = 100; i < 1900; i+=100) {				
+//			runLSEQ("LSEQS- " + i, i, true, true, false);
+//		}
+//		
+//		DocumentController.clearCSV();
+//		
+//		System.out.println("BASIC");
+//		for(int i = 10; i < 100; i+=15) {						
+//			runLSEQ("LSEQS++ " + i, i, true, true, true);
+//		}
+//		
+//		for(int i = 100; i < 1900; i+=100) {				
+//			runLSEQ("LSEQS++ " + i, i, true, true, true);
+//		}
+		
+		DocumentController.clearCSV();
+
+		
+//		System.out.println("MODIFIED");
+//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
+//			runModified("ModR " + i, i, true, true);
+//		}
+//	
+//		DocumentController.clearCSV();
+//		
+//		System.out.println("LSEQ ");
+//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
+//			//toFile, force, force boundary+ or boundary-
+//			runLSEQ("LSEQR " + i, i, true, false, false);
+//		}
+//		
+//		DocumentController.clearCSV();
+//		
+//		System.out.println("LSEQ-");
+//		for(int i = 1; i < Math.pow(2, 7); i=i*2) {
+//			runLSEQ("LSEQR- " + i, i, true, true, false);
+//		}
+		
+//		DocumentController.clearCSV();
+//		
+//		System.out.println("LSEQ+");
+//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
+//			runLSEQ("LSEQR+ " + i, i, true, true, true);
+//		}	
+		
+		DocumentController.clearCSV();
+		
+		System.out.println("\n\n\n FINISHED");
 	}
 		
 	private static void testLAN(int i) throws InterruptedException {
@@ -94,10 +157,10 @@ public class Main {
 		DocumentController.modifyDoc(modify);
 		
 		for(int i = 0; i < num; i++) {		
-			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+			node.bypass("[TEST]", MsgGen.getSite());
 		}		
 		
-		DocumentController.printDocStats();	
+//		DocumentController.printDocStats();	
 		
 		if(toFile)
 			DocumentController.printDoc(title, true);
@@ -108,10 +171,8 @@ public class Main {
 		DocumentController.modifyDoc(modify);
 		
 		for(int i = 0; i < num; i++) {		
-			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+			node.bypass("[TEST]", MsgGen.getSite());
 		}
-		
-		DocumentController.printDocStats();
 		
 		if(toFile)
 			DocumentController.printDoc(title, true);
@@ -123,10 +184,8 @@ public class Main {
 		DocumentController.setLseq(true);
 		
 		for(int i = 0; i < num; i++) {		
-			node.bypass(MsgGen.getMsg(), MsgGen.getSite());
+			node.bypass("[TEST]", MsgGen.getSite());
 		}
-		
-		DocumentController.printDocStats();	
 		
 		if(toFile)
 			DocumentController.printDoc(title, true);
@@ -143,8 +202,6 @@ public class Main {
 			Thread.sleep(pause);
 		}		
 		
-		DocumentController.printDocStats();	
-		
 		if(toFile)
 			DocumentController.printDoc(title, true);
 		
@@ -159,8 +216,6 @@ public class Main {
 			Thread.sleep(pause);
 		}
 		
-		DocumentController.printDocStats();
-		
 		if(toFile)
 			DocumentController.printDoc(title, true);
 	}
@@ -174,9 +229,7 @@ public class Main {
 			node.queueToSend(MsgGen.getMsg());
 			Thread.sleep(pause);
 		}
-		
-		DocumentController.printDocStats();	
-		
+
 		if(toFile)
 			DocumentController.printDoc(title, true);
 		

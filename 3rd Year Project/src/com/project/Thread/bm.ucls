@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.project.crdt.LogootDocument" project="3rd Year Project" 
-    file="/3rd Year Project/src/com/project/crdt/LogootDocument.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="625" y="308"/>    
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="com.project.Thread.BroadcastManager" project="3rd Year Project" 
+    file="/3rd Year Project/src/com/project/Thread/BroadcastManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="157" x="268" y="479"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.project.crdt.LogootCRDT" project="3rd Year Project" 
-    file="/3rd Year Project/src/com/project/crdt/LogootCRDT.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="987" y="811"/>    
+  <class id="2" language="java" name="com.project.Thread.BroadcastManager.Broadcaster" project="3rd Year Project" 
+    file="/3rd Year Project/src/com/project/Thread/BroadcastManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="539" y="579"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="3">    
+  <nesting id="3">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <association id="4">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="4" name="logoot">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <attribute id="5" name="broadcaster">        
+        <position height="18" width="67" x="492" y="482"/>      
       </attribute>      
-      <multiplicity id="5" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="6" minimum="0" maximum="1">        
+        <position height="0" width="0" x="200" y="-205"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    

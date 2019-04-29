@@ -27,7 +27,7 @@ public class Node {
 	
     private ThreadManager manager;
     private MessageController msgController;
-    
+        
     public String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     
     public Node() {
@@ -50,7 +50,7 @@ public class Node {
   	    	
     	peers = new ConcurrentHashMap<Long, PeerData>();
     	peers.put(nodeInfo.getUuid(), nodeInfo);
-   
+  
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());     	
     	manager = new ThreadManager(this, msgController);
     	    	
@@ -123,6 +123,7 @@ public class Node {
 		
 		System.out.println(" --- NODE SHUTTING DOWN ---");
 		manager.leaveNetwork();
+		msgController.sendLeaveMessage();
 		System.out.println(" --- NODE SHUTDOWN ---");
 		Platform.exit();
 		System.exit(0);
@@ -134,6 +135,7 @@ public class Node {
 			System.err.println("Node Not Joined To Network");
 		} else {
 			
+			msgController.sendLeaveMessage();
 			manager.leaveNetwork();
 			joined = false;
 			System.out.println("\n --- NODE LEFT NETWORK ---\n");

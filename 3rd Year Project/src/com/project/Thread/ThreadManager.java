@@ -39,15 +39,31 @@ public class ThreadManager {
 		for(Manager m : subManagers) {
 			m.start();
 		}
+		
+		while(!checkRunning()) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	public void leaveNetwork() {
+	public Boolean leaveNetwork() {
 		
 		for(Manager m : subManagers) {
 			m.stop();
 		}
-				
-		controller.sendLeaveMessage();
+		
+		while(!checkStopped()) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return true;
 	}
 	
 	public Boolean checkStopped() {

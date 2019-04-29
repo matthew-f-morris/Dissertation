@@ -22,7 +22,6 @@ public class DocumentController {
 		doc = new LogootDocument(siteId);
 		doc.modify(false);
 		doc.setLseq(false);
-		
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities
@@ -116,4 +115,8 @@ public class DocumentController {
 		System.out.println(Arrays.asList(LogootCRDT.getStrategy()));
 		System.out.println("----------------");
 	}
+		
+	public static void clearCSV() {
+		doc.csv.clear();
+	} 
 }

@@ -1,21 +1,18 @@
-package com.project.tests;
+package com.project.testsThreads;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.project.Thread.BroadcastListenerManager;
+import com.project.Thread.ResenderManager;
+import com.project.Thread.SenderCheckerManager;
 import com.project.network.Node;
 
-class BroadcastListenerManagerTest {
+class SenderCheckerManagerTest {
 
 	private static Node node = new Node();
-	private static BroadcastListenerManager test = new BroadcastListenerManager(node);
+	private static SenderCheckerManager test = new SenderCheckerManager(node.getMessageController());
 	
 	@Test
 	@DisplayName("Test Gen Broadcast Listener Manager")

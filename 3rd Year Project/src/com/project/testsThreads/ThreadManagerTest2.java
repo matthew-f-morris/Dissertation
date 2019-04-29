@@ -1,4 +1,4 @@
-package com.project.tests;
+package com.project.testsThreads;
 
 import static org.junit.jupiter.api.Assertions.*;
 

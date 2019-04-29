@@ -1,4 +1,4 @@
-package com.project.tests;
+package com.project.testsThreads;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,8 +34,26 @@ class BroadcastManagerTest {
 		test.start();
 		starts = test.threadState();
 		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		test.stop();
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		stops = !test.threadState();
+		
+		System.out.println("Starts: " + starts);
+		System.out.println("Stops: " + stops);
 		
 		assertEquals(true, starts && stops);
 	}

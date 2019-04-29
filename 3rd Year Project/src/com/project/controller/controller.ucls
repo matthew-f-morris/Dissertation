@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="com.project.controller.MessageController" project="3rd Year Project" 
     file="/3rd Year Project/src/com/project/controller/MessageController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="405" width="357" x="649" y="80"/>    
+    <position height="-1" width="-1" x="724" y="261"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

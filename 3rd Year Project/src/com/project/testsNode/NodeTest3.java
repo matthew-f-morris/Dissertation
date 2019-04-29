@@ -1,11 +1,11 @@
-package com.project.tests;
+package com.project.testsNode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import com.project.Thread.ThreadManager;
 import com.project.controller.MessageController;
 import com.project.network.Node;
 
-class NodeTest1 {
+class NodeTest3 {
 
 	static Node node = new Node();
 	static ThreadManager manager = node.getThreadManager();
@@ -23,16 +23,17 @@ class NodeTest1 {
 	static void setUpBeforeClass() throws Exception {
 		node.initThreads();
 	}
-	
+
 	@Test
-	@DisplayName("Test Node Initialize")
-	void testInit() {
+	@DisplayName("Test Adding New Peer")
+	void testAddPeer() throws UnknownHostException {
+		
+		node.addPeer(999L, "Dave", InetAddress.getLocalHost(), 2020);
 		
 		assertAll("Node Properties",
-			() -> assertTrue(manager.checkRunning(), "Threads Stoped when they shouldnt have"),
-			() -> assertTrue(ctrl.messagesRecieved.size() == 0, "Recieved Messages should be empty"),
-			() -> assertTrue(ctrl.messagesToSend.size() == 0, "Messages to send should be empty"),
+			() -> assertTrue(!manager.checkStopped(), "Threads started up when they shouldnt have"),
+			() -> assertTrue(node.getPeers().size() == 2),
 			() -> assertTrue(node.isJoined(), "Failed To Join")
-		);	
+		);				
 	}
 }
