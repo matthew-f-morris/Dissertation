@@ -13,6 +13,7 @@ import com.project.controller.MessageController;
 import com.project.utils.CRDTFileGen;
 import com.project.utils.CommunicationInfo;
 import com.project.utils.MsgGen;
+import com.project.utils.NodeQuerier;
 import com.project.utils.PeerData;
 
 import javafx.application.Platform;
@@ -53,7 +54,8 @@ public class Node {
   
     	msgController = new MessageController(this, peers, nodeInfo.getUuid());     	
     	manager = new ThreadManager(this, msgController);
-    	    	
+    	NodeQuerier querier = new NodeQuerier(this);
+    	
     	try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -83,7 +85,7 @@ public class Node {
 		
 		if(peers.containsKey(uuid)) {
 			peers.remove(uuid);
-			System.out.println("[NODE] -  Removed Peer: " + uuid + " at time " + timeStamp);
+			System.out.println("[NODE] Peer left the network: " + uuid + " at time " + timeStamp);
 		} else {
 			System.err.println("Peer does not exist!");
 		}
@@ -117,6 +119,10 @@ public class Node {
 		}); 
 		
 		System.out.println("[NODE] Number of peers: " + peers.size());	
+	}
+	
+	public int getNumberOfPeers() {
+		return peers.size();
 	}
 			
 	public void shutdown() {
