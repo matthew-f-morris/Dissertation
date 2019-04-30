@@ -35,7 +35,7 @@ public class CRDTFileGen {
 			FileWriter writer = null;
 			
 			try {
-				writer = new FileWriter("output-" + name + ".txt");
+				writer = new FileWriter(name + ".txt");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

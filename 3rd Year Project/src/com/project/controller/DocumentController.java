@@ -20,8 +20,9 @@ public class DocumentController {
 		
 		DocumentController.siteId = siteId;
 		doc = new LogootDocument(siteId);
-		doc.modify(true);
-		doc.setLseq(false);		
+		doc.modify(false);
+		doc.lseqForce(false, false);
+		doc.setLseq(true);		
 	}
 	
 	//allows the message controller to add a new message to the document using the CRDT facilities

@@ -30,8 +30,10 @@ public class Main {
 		}
 		
 		node = new Node();
-		node.joinNetwork();
-		startScanner();
+//		node.joinNetwork();
+//		startScanner();
+		
+		test();		
 		
 		if(redirect) {
 			System.setOut(System.out);
@@ -39,94 +41,64 @@ public class Main {
 		}		
 	}
 	
-	private static void test(int exponent) {
+	private static void test() {
 		
-//		System.out.println("BASIC");
-//		for(int i = 10; i < 100; i+=15) {						
-//			runBasic("BasicS " + i, i, true, false);
-//		}
-//		
+		System.out.println("Logoot Random");
+		for(int i = 10; i < 100; i+=15) {						
+			runBasic("logoot\\test " + i, i, true, false);
+		}
+		
 //		for(int i = 100; i < 1600; i+=100) {						
 //			runBasic("BasicS " + i, i, true, false);
 //		}
 		
 		DocumentController.clearCSV();
-//		
-//		System.out.println("BASIC");
-//		for(int i = 10; i < 100; i+=15) {						
-//			runModified("ModS " + i, i, true, true);
-//		}
-//		
+		
+		System.out.println("Logoot Boundary+");
+		for(int i = 10; i < 100; i+=15) {						
+			runModified("logootBoundary+\\test " + i, i, true, true);
+		}
+		
 //		for(int i = 100; i < 2100; i+=100) {			
 //			runModified("ModS " + i, i, true, true);
 //		}
-//		
+		
 //		for(int i = 2000; i < 26000; i+=1000) {			
 //			runModified("ModS " + i, i, true, true);
 //		}
 		
 		DocumentController.clearCSV();
 		
-//		System.out.println("BASIC");
-//		for(int i = 10; i < 100; i+=15) {						
-//			runLSEQ("LSEQS " + i, i, true, false, false);
-//		}
-//		
+		System.out.println("LSEQ");
+		for(int i = 10; i < 100; i+=15) {						
+			runLSEQ("lseq\\test " + i, i, true, false, false);
+		}
+		
 //		for(int i = 100; i < 1900; i+=100) {				
 //			runLSEQ("LSEQS " + i, i, true, false, false);
 //		}
 		
 		DocumentController.clearCSV();
 		
-		System.out.println("BASIC");
-		for(int i = 10; i < 85; i+=2) {						
-			runLSEQ("LSEQS- " + i, i, true, true, false);
+		System.out.println("LSEQ force Boundary-");
+		for(int i = 10; i < 85; i+=15) {						
+			runLSEQ("lseq-\\test " + i, i, true, true, false);
 		}
 		
 //		for(int i = 100; i < 1900; i+=100) {				
 //			runLSEQ("LSEQS- " + i, i, true, true, false);
 //		}
-//		
-//		DocumentController.clearCSV();
-//		
-//		System.out.println("BASIC");
-//		for(int i = 10; i < 100; i+=15) {						
-//			runLSEQ("LSEQS++ " + i, i, true, true, true);
-//		}
-//		
+		
+		DocumentController.clearCSV();
+		
+		System.out.println("LSEQ force Boundary+");
+		for(int i = 10; i < 100; i+=15) {						
+			runLSEQ("lseq+\\test " + i, i, true, true, true);
+		}
+		
 //		for(int i = 100; i < 1900; i+=100) {				
 //			runLSEQ("LSEQS++ " + i, i, true, true, true);
 //		}
-		
-		DocumentController.clearCSV();
-
-		
-//		System.out.println("MODIFIED");
-//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
-//			runModified("ModR " + i, i, true, true);
-//		}
-//	
-//		DocumentController.clearCSV();
-//		
-//		System.out.println("LSEQ ");
-//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
-//			//toFile, force, force boundary+ or boundary-
-//			runLSEQ("LSEQR " + i, i, true, false, false);
-//		}
-//		
-//		DocumentController.clearCSV();
-//		
-//		System.out.println("LSEQ-");
-//		for(int i = 1; i < Math.pow(2, 7); i=i*2) {
-//			runLSEQ("LSEQR- " + i, i, true, true, false);
-//		}
-		
-//		DocumentController.clearCSV();
-//		
-//		System.out.println("LSEQ+");
-//		for(int i = 1; i < Math.pow(2, 12); i=i*2) {
-//			runLSEQ("LSEQR+ " + i, i, true, true, true);
-//		}	
 		
 		DocumentController.clearCSV();
 		
